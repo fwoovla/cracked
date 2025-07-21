@@ -9,29 +9,29 @@ ifndef verbose
 endif
 
 ifeq ($(config),debug)
-  hello_config = debug
+  cracked_config = debug
 
 else ifeq ($(config),release)
-  hello_config = release
+  cracked_config = release
 
 else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := hello
+PROJECTS := cracked
 
 .PHONY: all clean help $(PROJECTS) 
 
 all: $(PROJECTS)
 
-hello:
-ifneq (,$(hello_config))
-	@echo "==== Building hello ($(hello_config)) ===="
-	@${MAKE} --no-print-directory -C . -f hello.make config=$(hello_config)
+cracked:
+ifneq (,$(cracked_config))
+	@echo "==== Building cracked ($(cracked_config)) ===="
+	@${MAKE} --no-print-directory -C . -f cracked.make config=$(cracked_config)
 endif
 
 clean:
-	@${MAKE} --no-print-directory -C . -f hello.make clean
+	@${MAKE} --no-print-directory -C . -f cracked.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -43,6 +43,6 @@ help:
 	@echo "TARGETS:"
 	@echo "   all (default)"
 	@echo "   clean"
-	@echo "   hello"
+	@echo "   cracked"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

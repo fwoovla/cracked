@@ -39,26 +39,32 @@ define PREBUILDCMDS
 endef
 define PRELINKCMDS
 endef
-define POSTBUILDCMDS
-endef
 
 ifeq ($(config),debug)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/hello
+TARGET = $(TARGETDIR)/cracked
 OBJDIR = obj/Debug
 DEFINES += -DDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -g
 ALL_LDFLAGS += $(LDFLAGS)
+define POSTBUILDCMDS
+	@echo Running postbuild commands
+	cp -r assets "bin/Debug/assets"
+endef
 
 else ifeq ($(config),release)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/hello
+TARGET = $(TARGETDIR)/cracked
 OBJDIR = obj/Release
 DEFINES += -DNDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -O2
 ALL_LDFLAGS += $(LDFLAGS) -s
+define POSTBUILDCMDS
+	@echo Running postbuild commands
+	cp -r assets "bin/Release/assets"
+endef
 
 endif
 
@@ -72,9 +78,17 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/game.o
+GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/scenemanager.o
+GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/utils.o
+OBJECTS += $(OBJDIR)/game.o
+OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/scenemanager.o
+OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/utils.o
 
 # Rules
@@ -85,7 +99,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking hello
+	@echo Linking cracked
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -106,7 +120,7 @@ else
 endif
 
 clean:
-	@echo Cleaning hello
+	@echo Cleaning cracked
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -139,6 +153,18 @@ endif
 # File Rules
 # #############################################
 
+$(OBJDIR)/game.o: src/core/game.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/scenemanager.o: src/core/scenemanager.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/gamescene.o: src/gameplay/levelscenes/gamescene.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/titlescene.o: src/gameplay/levelscenes/titlescene.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
