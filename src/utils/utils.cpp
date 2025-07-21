@@ -27,6 +27,7 @@ void Timer::Update() {
     }
     elapsed_time += GetFrameTime();
     if(elapsed_time >= wait_time) {
+        EmitSignal(END_GAME);
         active = false;
         finished = true;
     }
@@ -45,3 +46,29 @@ double Timer::TimeRemaining()
 double Timer::TimeElapsed() {
     return elapsed_time;
 }
+
+double Timer::GetWaitTime() {
+    return wait_time;;
+}
+
+void Timer::EmitSignal(SIGNAL signal){
+    for(int i = 0; i < observers.size(); i++) {
+        observers[i]->OnSignal(signal);
+    }
+}
+
+
+
+SignalObserver::SignalObserver() {
+    
+}
+
+SignalEmiter::SignalEmiter() {
+
+}
+
+void SignalEmiter::AddObserver(SignalObserver &_observer)
+{
+    observers.push_back(&_observer);
+}
+

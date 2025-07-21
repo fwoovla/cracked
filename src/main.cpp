@@ -1,27 +1,22 @@
 #include <stdio.h>
 #include <raylib.h>
+#include "globals.h"
 #include "utils/utils.h"
+#include "core/game.h"
 
-int main(void) {
-   
-   Timer timer(5.0);
+int main(int argc, char *argv[]) {
 
-   InitWindow(300, 300, "cracked");
-   Vector2 newvec;
-   puts("Hello, you?");
+   gameSettings game_settings;
+   game_settings.show_debug = true;
+   game_settings.window_size = {1280, 720};
 
+   InitWindow(game_settings.window_size.x, game_settings.window_size.y, "cracked");
+   SetTargetFPS(60);
 
+   Game game(game_settings);
+   game.StartGame();
 
-   while(!WindowShouldClose()) {
-      timer.Update();
-      if(timer.IsDone()) {
-         return 0;
-      }
-      BeginDrawing();
-      ClearBackground(RAYWHITE);
-      DrawText(TextFormat("%i", (int)timer.TimeRemaining()), 20, 200, 30, BLACK);
-      DrawText(TextFormat("%i", (int)timer.TimeElapsed()), 60, 200, 30, BLACK);
-      EndDrawing();
-   }
+   TraceLog(LOG_INFO, "GAME OVER");
+
    return 0;
 }
