@@ -3,6 +3,6 @@
 
 int main(void) {
    Vector2 newvec;
-   puts("Hello, wdssdfsadasdsdfsasdorld?");
+   puts("Hello, me?");
    return 0;
 }
