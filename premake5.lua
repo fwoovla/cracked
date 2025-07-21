@@ -10,6 +10,10 @@ project "hello"
           "**.h",
           "**.cpp",
          }
+   
+   links {
+      "raylib"
+   }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
