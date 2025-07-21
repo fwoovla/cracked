@@ -1,7 +1,7 @@
-workspace "HelloWorld"
+workspace "Cracked"
    configurations { "Debug", "Release" }
 
-project "hello"
+project "cracked"
    kind "ConsoleApp"
    language "C++"
    targetdir "bin/%{cfg.buildcfg}"
@@ -14,6 +14,10 @@ project "hello"
    links {
       "raylib"
    }
+
+   postbuildcommands {
+        'cp -r assets "%{cfg.targetdir}/assets"'
+    } 
 
    filter "configurations:Debug"
       defines { "DEBUG" }
