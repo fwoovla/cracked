@@ -1,27 +1,30 @@
 #pragma once
-
 #include "bacescene.h"
+#include "sprite.h"
 
-class TitleScene : public  BaseScene{
+class TitleScene : public  BaseScene, public SignalObserver {
     public:
     TitleScene();
+    SCENE_ID Update() override;
+    void Draw() override;
+    void Destroy() override;
+    void OnSignal(SIGNAL signal);
 
-    SCENE_ID TickScene() override;
-    void DrawScene() override;
-    void DestroyScene() override;
-
-    private:
-
-    Texture2D logo;
-
+    Sprite logo;
+    BaseUILayer *ui;
+    Button play_button;
 };
-class GameScene : public  BaseScene{
+
+
+class GameScene : public  BaseScene, public SignalObserver {
     public:
     GameScene();
+    SCENE_ID Update() override;
+    void Draw() override;
+    void Destroy() override;
+    void OnSignal(SIGNAL signal);
 
-    SCENE_ID TickScene() override;
-    void DrawScene() override;
-    void DestroyScene() override;
 
-    private:
+    //Timer timer;
+
 };

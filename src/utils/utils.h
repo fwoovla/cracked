@@ -8,7 +8,6 @@
 class SignalObserver {
 
     public:
-    SignalObserver();
     virtual void OnSignal(SIGNAL signal) = 0;
 
     private:
@@ -17,11 +16,10 @@ class SignalObserver {
 
 class SignalEmiter {
     public:
-    SignalEmiter();
-    void AddObserver(SignalObserver &_observer);
-    virtual void EmitSignal(SIGNAL signal) = 0;
+    void ConnectSignalTo(SignalObserver *_observer);
+    void EmitSignal(SIGNAL signal);
 
-    std::vector<SignalObserver *> observers;
+    std::vector< SignalObserver * > observers;
 
     private:
 
@@ -38,8 +36,6 @@ class Timer : public SignalEmiter{
     double TimeElapsed();
     double GetWaitTime();
     
-    void EmitSignal(SIGNAL signal) override;
-
     private:
 
     double wait_time; //in seconds
@@ -47,3 +43,9 @@ class Timer : public SignalEmiter{
     bool active;
     bool finished;
 };
+
+
+
+
+
+

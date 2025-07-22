@@ -80,15 +80,19 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
+GENERATED += $(OBJDIR)/gameuilayer.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/scenemanager.o
 GENERATED += $(OBJDIR)/titlescene.o
+GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
+OBJECTS += $(OBJDIR)/gameuilayer.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/scenemanager.o
 OBJECTS += $(OBJDIR)/titlescene.o
+OBJECTS += $(OBJDIR)/titleuilayer.o
 OBJECTS += $(OBJDIR)/utils.o
 
 # Rules
@@ -162,7 +166,13 @@ $(OBJDIR)/scenemanager.o: src/core/scenemanager.cpp
 $(OBJDIR)/gamescene.o: src/gameplay/levelscenes/gamescene.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/gameuilayer.o: src/gameplay/levelscenes/gameuilayer.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/titlescene.o: src/gameplay/levelscenes/titlescene.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/titleuilayer.o: src/gameplay/levelscenes/titleuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.cpp

@@ -1,9 +1,12 @@
 #include "game.h"
 
-Game::Game(gameSettings &_game_settings) : SignalObserver() {
+
+Game::Game(gameSettings &_game_settings){
     game_settings = _game_settings;
     running = false;
     scene_manager = new SceneManager();
+    
+    
 }
 
 Game::~Game() {
@@ -12,7 +15,7 @@ Game::~Game() {
 
 void Game::StartGame() {
 
-    
+
 
     running = true;
 
@@ -41,8 +44,4 @@ void Game::StartGame() {
     }
 }
 
-void Game::OnSignal(SIGNAL signal) {
-    if(signal == END_GAME){
-        running = false;
-    }
-}
+

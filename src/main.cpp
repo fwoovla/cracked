@@ -4,6 +4,8 @@
 #include "utils/utils.h"
 #include "core/game.h"
 
+
+
 int main(int argc, char *argv[]) {
 
    gameSettings game_settings;

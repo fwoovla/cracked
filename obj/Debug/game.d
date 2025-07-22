@@ -52,7 +52,9 @@ obj/Debug/game.o: src/core/game.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/core/scenemanager.h src/core/scenes.h src/core/bacescene.h
+ src/core/scenemanager.h src/core/scenes.h src/core/bacescene.h \
+ src/core/uilayers.h src/core/baseuilayer.h src/core/button.h \
+ src/core/sprite.h
 /usr/include/stdc-predef.h:
 src/core/game.h:
 src/core/../globals.h:
@@ -122,3 +124,7 @@ src/core/../utils/utils.h:
 src/core/scenemanager.h:
 src/core/scenes.h:
 src/core/bacescene.h:
+src/core/uilayers.h:
+src/core/baseuilayer.h:
+src/core/button.h:
+src/core/sprite.h:

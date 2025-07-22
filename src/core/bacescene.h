@@ -1,13 +1,19 @@
 #pragma once
 #include <raylib.h>
 #include "../globals.h"
+#include "uilayers.h"
+#include "../utils/utils.h"
 
-class BaseScene {
+class BaseScene  {
     public:
 
-    virtual SCENE_ID TickScene() = 0;
-    virtual void DrawScene() = 0;
-    virtual void DestroyScene() = 0;
+    virtual SCENE_ID Update() = 0;
+    virtual void Draw() = 0;
+    virtual void Destroy() = 0;
+    //virtual void OnSignal() = 0;
+    
 
     SCENE_ID scene_id;
+    SCENE_ID return_scene;
+    
 };

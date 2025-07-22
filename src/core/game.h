@@ -3,14 +3,12 @@
 #include "../utils/utils.h"
 #include "scenemanager.h"
 
-class Game : public SignalObserver {
+class Game{
     public:
     Game(gameSettings &_game_settings);
     ~Game();
     void StartGame();
-
-    void OnSignal(SIGNAL signal) override;
-    
+  
     private:
     gameSettings game_settings;
     bool running;

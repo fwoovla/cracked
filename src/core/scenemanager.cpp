@@ -1,7 +1,9 @@
 #include "scenemanager.h"
 
 SceneManager::SceneManager() {
+    //g_scenemanager = this;
     current_scene = new TitleScene();
+    
 }
 
 void SceneManager::UpdateScene() {
@@ -10,26 +12,25 @@ void SceneManager::UpdateScene() {
     }
     SCENE_ID new_scene = NO_SCENE;
     
-    new_scene = current_scene->TickScene();
+    new_scene = current_scene->Update();
     switch (new_scene) {
         case NO_SCENE:
             break;
-    
-        case TITLE_SCENE:
-            ChangeSceneTo(new_scene);
 
         default:
-            break;
+            ChangeSceneTo(new_scene);
     }
 
 }
 
 void SceneManager::DrawScene() {
-    current_scene->DrawScene();
+    current_scene->Draw();
 
 }
 
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
+    
+    current_scene->Destroy();
     delete(current_scene);
 
     switch (new_scene) {
@@ -46,3 +47,4 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
     }
 
 }
+

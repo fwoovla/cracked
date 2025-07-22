@@ -1,11 +1,10 @@
-obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
- /usr/include/stdc-predef.h src/gameplay/levelscenes/../../core/scenes.h \
- src/gameplay/levelscenes/../../core/bacescene.h \
+obj/Debug/gameuilayer.o: src/gameplay/levelscenes/gameuilayer.cpp \
+ /usr/include/stdc-predef.h \
+ src/gameplay/levelscenes/../../core/uilayers.h \
+ src/gameplay/levelscenes/../../core/baseuilayer.h \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  src/gameplay/levelscenes/../../core/../globals.h \
- src/gameplay/levelscenes/../../core/uilayers.h \
- src/gameplay/levelscenes/../../core/baseuilayer.h \
  src/gameplay/levelscenes/../../core/button.h \
  src/gameplay/levelscenes/../../core/../utils/utils.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
@@ -57,16 +56,13 @@ obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
  /usr/include/c++/13/bits/memory_resource.h /usr/include/c++/13/cstddef \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
- /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/gameplay/levelscenes/../../core/sprite.h
+ /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple
 /usr/include/stdc-predef.h:
-src/gameplay/levelscenes/../../core/scenes.h:
-src/gameplay/levelscenes/../../core/bacescene.h:
+src/gameplay/levelscenes/../../core/uilayers.h:
+src/gameplay/levelscenes/../../core/baseuilayer.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 src/gameplay/levelscenes/../../core/../globals.h:
-src/gameplay/levelscenes/../../core/uilayers.h:
-src/gameplay/levelscenes/../../core/baseuilayer.h:
 src/gameplay/levelscenes/../../core/button.h:
 src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/vector:
@@ -129,4 +125,3 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
-src/gameplay/levelscenes/../../core/sprite.h:
