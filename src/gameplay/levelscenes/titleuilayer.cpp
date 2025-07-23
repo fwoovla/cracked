@@ -6,7 +6,7 @@ TitleUiLayer::TitleUiLayer() {
     CreateButton(start_button, screen_center, {200, 100}, GREEN );
     start_button.default_color = DARKGREEN;
 
-    CreateButton(quit_button, { (float)GetScreenWidth() - 30, (float)GetScreenHeight() + 10 }, {200, 100}, RED );
+    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED );
     quit_button.default_color = GRAY;
     
 }

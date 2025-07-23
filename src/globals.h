@@ -4,6 +4,10 @@
 
 
 #define MAX_SIGNAL_CONNECTIONS 256
+#define LEVEL_SIZE 64
+#define TILE_SIZE 32
+#define PLAYER_SPEED 200
+#define PLAYER_SIZE 30
 
 enum SIGNAL {
     END_GAME,
@@ -13,6 +17,7 @@ enum SIGNAL {
 
 enum SCENE_ID {
     NO_SCENE,
+    SPLASH_SCENE,
     TITLE_SCENE,
     GAME_SCENE,
 };
@@ -23,6 +28,6 @@ struct  gameSettings {
 };
 
 
-
+extern gameSettings settings;
 
 //inline SceneManager *scenemanager;

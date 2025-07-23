@@ -27,7 +27,7 @@ class SignalEmiter {
 
 class Timer : public SignalEmiter{
     public:
-    Timer(double _wait_time);
+    Timer(double _wait_time, bool _autostart, bool _one_shot);
     void Start();
     void Stop();
     void Update(); //false if finished
@@ -42,6 +42,8 @@ class Timer : public SignalEmiter{
     double elapsed_time;
     bool active;
     bool finished;
+    bool one_shot;
+    bool autostart;
 };
 
 

@@ -5,7 +5,6 @@
 
 class SceneManager{
     public:
-    
     SceneManager();
     ~SceneManager(){};
     void UpdateScene();
@@ -14,6 +13,7 @@ class SceneManager{
     
     
     BaseScene *current_scene;
+
     private:
 
 };

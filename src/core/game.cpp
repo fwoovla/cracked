@@ -1,11 +1,11 @@
 #include "game.h"
 
 
-Game::Game(gameSettings &_game_settings){
-    game_settings = _game_settings;
+Game::Game(){
+    TraceLog(LOG_INFO, "GAME-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
+
     running = false;
-    scene_manager = new SceneManager();
-    
+    scene_manager = new SceneManager;
     
 }
 
@@ -14,15 +14,10 @@ Game::~Game() {
 }
 
 void Game::StartGame() {
-
-
-
     running = true;
-
 
     while(running) {
 
-        
         scene_manager->UpdateScene();
         scene_manager->DrawScene();
 

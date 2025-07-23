@@ -1,12 +1,16 @@
 #include "scenemanager.h"
 
+
+
 SceneManager::SceneManager() {
     //g_scenemanager = this;
-    current_scene = new TitleScene();
-    
+    //game_settings = _game_settings;
+    TraceLog(LOG_INFO, "                                        SCENEMANAGER-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
+    current_scene = new SplashScreen();
 }
 
-void SceneManager::UpdateScene() {
+void SceneManager::UpdateScene()
+{
     if(current_scene == nullptr){
         return;
     }
@@ -20,7 +24,6 @@ void SceneManager::UpdateScene() {
         default:
             ChangeSceneTo(new_scene);
     }
-
 }
 
 void SceneManager::DrawScene() {
@@ -34,17 +37,20 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
     delete(current_scene);
 
     switch (new_scene) {
+        case SPLASH_SCENE:
+            current_scene = new SplashScreen();
+            break;
+
         case TITLE_SCENE:
             current_scene = new TitleScene();
             break;
     
         case GAME_SCENE:
-            current_scene = new GameScene();
+            current_scene = new GameScene("../assets/level1.png");
             break;
 
         default:
             break;
     }
-
 }
 

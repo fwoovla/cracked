@@ -1,11 +1,13 @@
 #include "utils.h"
 
-Timer::Timer(double _wait_time) {
+Timer::Timer(double _wait_time, bool _autostart, bool _one_shot) {
     wait_time = _wait_time;
     active = false;
     finished = false;
     elapsed_time = 0.0;
-    bool autostart = true;
+    one_shot = _one_shot;
+    autostart = _autostart;
+
 
     if(autostart) {
         Start();
@@ -30,6 +32,12 @@ void Timer::Update() {
         EmitSignal(TIMER_TIMEOUT);
         active = false;
         finished = true;
+        if(!one_shot) {
+            elapsed_time = 0.0;
+            active = true;
+            finished = false;
+            Start();
+        }
     }
 }
 
@@ -64,7 +72,9 @@ void SignalEmiter::ConnectSignalTo(SignalObserver *_observer)
 void SignalEmiter::EmitSignal(SIGNAL signal) {
     for(int i = 0; i < observers.size(); i++) {
         observers[i]->OnSignal(signal);
+
     }
+
 }
 
 

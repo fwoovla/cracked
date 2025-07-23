@@ -23,5 +23,7 @@ class GameUILayer : public BaseUILayer {
     void Destroy() override;
     
     private:
+    
+    Button quit_button;
 
 };

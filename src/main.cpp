@@ -4,18 +4,19 @@
 #include "utils/utils.h"
 #include "core/game.h"
 
-
+gameSettings settings = {
+   .window_size = {1280, 720},
+   .show_debug = true,
+};
 
 int main(int argc, char *argv[]) {
 
-   gameSettings game_settings;
-   game_settings.show_debug = true;
-   game_settings.window_size = {1280, 720};
 
-   InitWindow(game_settings.window_size.x, game_settings.window_size.y, "cracked");
+
+   InitWindow(settings.window_size.x, settings.window_size.y, "cracked");
    SetTargetFPS(60);
 
-   Game game(game_settings);
+   Game game;
    game.StartGame();
 
    TraceLog(LOG_INFO, "GAME OVER");
