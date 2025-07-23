@@ -3,9 +3,6 @@
 char level1_data[] = "assets/level1.png";
 
 SceneManager::SceneManager() {
-    //g_scenemanager = this;
-    //game_settings = _game_settings;
-    TraceLog(LOG_INFO, "SCENEMANAGER-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
     current_scene = new SplashScreen();
 }
 

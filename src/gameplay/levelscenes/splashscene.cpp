@@ -14,8 +14,6 @@ SplashScreen::SplashScreen() {
     Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2 };
     LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
     ScaleSprite(logo, {2.0,2.0});
-
-    TraceLog(LOG_INFO, "SPLASH-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
 }
 
 

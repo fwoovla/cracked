@@ -1,13 +1,9 @@
-obj/Debug/titlescene.o: src/gameplay/levelscenes/titlescene.cpp \
- /usr/include/stdc-predef.h src/gameplay/levelscenes/../../core/scenes.h \
- src/gameplay/levelscenes/../../core/bacescene.h \
- /usr/local/include/raylib.h \
+obj/Debug/player.o: src/gameplay/entities/player.cpp \
+ /usr/include/stdc-predef.h src/gameplay/entities/../../core/entities.h \
+ src/gameplay/entities/../../core/entity.h /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/gameplay/levelscenes/../../core/../globals.h \
- src/gameplay/levelscenes/../../core/uilayers.h \
- src/gameplay/levelscenes/../../core/baseuilayer.h \
- src/gameplay/levelscenes/../../core/button.h \
- src/gameplay/levelscenes/../../core/../utils/utils.h \
+ src/gameplay/entities/../../core/../globals.h \
+ src/gameplay/entities/../../core/../utils/utils.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -58,20 +54,18 @@ obj/Debug/titlescene.o: src/gameplay/levelscenes/titlescene.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/gameplay/levelscenes/../../core/sprite.h \
- src/gameplay/levelscenes/../../core/entities.h \
- src/gameplay/levelscenes/../../core/entity.h \
- src/gameplay/levelscenes/../../core/drawable.h
+ src/gameplay/entities/../../core/drawable.h \
+ src/gameplay/entities/../../core/uilayers.h \
+ src/gameplay/entities/../../core/baseuilayer.h \
+ src/gameplay/entities/../../core/button.h \
+ src/gameplay/entities/../../core/sprite.h
 /usr/include/stdc-predef.h:
-src/gameplay/levelscenes/../../core/scenes.h:
-src/gameplay/levelscenes/../../core/bacescene.h:
+src/gameplay/entities/../../core/entities.h:
+src/gameplay/entities/../../core/entity.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/gameplay/levelscenes/../../core/../globals.h:
-src/gameplay/levelscenes/../../core/uilayers.h:
-src/gameplay/levelscenes/../../core/baseuilayer.h:
-src/gameplay/levelscenes/../../core/button.h:
-src/gameplay/levelscenes/../../core/../utils/utils.h:
+src/gameplay/entities/../../core/../globals.h:
+src/gameplay/entities/../../core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -132,7 +126,8 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
-src/gameplay/levelscenes/../../core/sprite.h:
-src/gameplay/levelscenes/../../core/entities.h:
-src/gameplay/levelscenes/../../core/entity.h:
-src/gameplay/levelscenes/../../core/drawable.h:
+src/gameplay/entities/../../core/drawable.h:
+src/gameplay/entities/../../core/uilayers.h:
+src/gameplay/entities/../../core/baseuilayer.h:
+src/gameplay/entities/../../core/button.h:
+src/gameplay/entities/../../core/sprite.h:

@@ -58,7 +58,10 @@ obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/gameplay/levelscenes/../../core/sprite.h
+ src/gameplay/levelscenes/../../core/sprite.h \
+ src/gameplay/levelscenes/../../core/entities.h \
+ src/gameplay/levelscenes/../../core/entity.h \
+ src/gameplay/levelscenes/../../core/drawable.h
 /usr/include/stdc-predef.h:
 src/gameplay/levelscenes/../../core/scenes.h:
 src/gameplay/levelscenes/../../core/bacescene.h:
@@ -130,3 +133,6 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
 src/gameplay/levelscenes/../../core/sprite.h:
+src/gameplay/levelscenes/../../core/entities.h:
+src/gameplay/levelscenes/../../core/entity.h:
+src/gameplay/levelscenes/../../core/drawable.h:

@@ -1,6 +1,7 @@
 #pragma once
 #include "bacescene.h"
 #include "sprite.h"
+#include "entities.h"
 
 
 
@@ -54,6 +55,7 @@ class GameScene : public  BaseScene, public SignalObserver {
 
     int* level_array;
     bool player_collided;
+    Player *this_player;
     //gameSettings &game_settings;
 
 

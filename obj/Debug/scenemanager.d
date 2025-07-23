@@ -54,7 +54,8 @@ obj/Debug/scenemanager.o: src/core/scenemanager.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/core/sprite.h
+ src/core/sprite.h src/core/entities.h src/core/entity.h \
+ src/core/drawable.h
 /usr/include/stdc-predef.h:
 src/core/scenemanager.h:
 src/core/scenes.h:
@@ -127,3 +128,6 @@ src/core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
 src/core/sprite.h:
+src/core/entities.h:
+src/core/entity.h:
+src/core/drawable.h:

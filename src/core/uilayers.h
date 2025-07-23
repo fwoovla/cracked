@@ -1,3 +1,4 @@
+#pragma once
 #include "baseuilayer.h"
 
 class TitleUiLayer : public BaseUILayer {
