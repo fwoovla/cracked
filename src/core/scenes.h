@@ -40,7 +40,7 @@ class TitleScene : public  BaseScene, public SignalObserver {
 
 class GameScene : public  BaseScene, public SignalObserver {
     public:
-    GameScene(char *level_data);
+    GameScene(char level_data[]);
     SCENE_ID Update() override;
     void Draw() override;
     void Destroy() override;

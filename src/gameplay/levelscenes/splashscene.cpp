@@ -8,7 +8,7 @@ SplashScreen::SplashScreen() {
     return_scene = NO_SCENE;
     timer = new Timer(wait_time, true, true);
     timer->ConnectSignalTo(this);
-    alpha_value = 0;
+    alpha_value = 0;  
     alpha_step = 255/wait_time;
 
     Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2 };

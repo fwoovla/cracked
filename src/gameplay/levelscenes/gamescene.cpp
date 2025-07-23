@@ -1,11 +1,11 @@
 #include "../../core/scenes.h"
 
-GameScene::GameScene(char *level_data) {
+GameScene::GameScene(char level_data[]) {
     scene_id = GAME_SCENE;
     //game_settings = _game_settings;
 
-    Image level_image = LoadImage("assets/level1.png");
-    TraceLog(LOG_INFO, "LEVEL DATA LOADED");
+    Image level_image = LoadImage(level_data);
+    TraceLog(LOG_INFO, "LEVEL DATA LOADED, %s", level_data);
 
 /*      if(game_settings->show_debug) {
         TraceLog(LOG_INFO, "settings!!!!!!!!!!!!!!!!!!!!1");

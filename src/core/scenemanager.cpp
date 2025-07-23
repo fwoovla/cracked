@@ -1,11 +1,11 @@
 #include "scenemanager.h"
 
-
+char level1_data[] = "assets/level1.png";
 
 SceneManager::SceneManager() {
     //g_scenemanager = this;
     //game_settings = _game_settings;
-    TraceLog(LOG_INFO, "                                        SCENEMANAGER-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
+    TraceLog(LOG_INFO, "SCENEMANAGER-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
     current_scene = new SplashScreen();
 }
 
@@ -46,7 +46,7 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
             break;
     
         case GAME_SCENE:
-            current_scene = new GameScene("../assets/level1.png");
+            current_scene = new GameScene(level1_data);
             break;
 
         default:
