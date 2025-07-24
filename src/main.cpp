@@ -6,7 +6,8 @@
 
 gameSettings settings = {
    .window_size = {1280, 720},
-   .show_debug = true,
+   .show_debug = false,
+   .control_type = 0
 };
 
 int main(int argc, char *argv[]) {

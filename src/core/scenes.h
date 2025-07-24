@@ -47,6 +47,8 @@ class GameScene : public  BaseScene, public SignalObserver {
     void Draw() override;
     void Destroy() override;
     void OnSignal(SIGNAL signal);
+    void DrawLevel();
+    void DrawDebug();
 
     //Image *level_image;
 
@@ -57,7 +59,10 @@ class GameScene : public  BaseScene, public SignalObserver {
     int* level_array;
     //bool player_collided;
     PlayerShip *this_player;
-    //gameSettings &game_settings;
-
+    Texture space_tile_texture;
+    Texture2D asteroid_texture;
+    Texture2D bg_texture;
+    //Sprite space_tile;
+    //std::vector<Sprite > background_sprites;
 
 };

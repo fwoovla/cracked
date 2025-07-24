@@ -6,9 +6,12 @@
 #define MAX_SIGNAL_CONNECTIONS 256
 #define LEVEL_SIZE 64
 #define TILE_SIZE 32
-#define PLAYER_SPEED 200
+#define PLAYER_SPEED 3
 #define PLAYER_SIZE 30
 #define COLLISION_RANGE 3
+#define SHIP_THRUST 0.05f
+#define SHIP_ROT_SPEED 180.0f
+#define AIR_FRICTION 0.99f
 
 enum SIGNAL {
     END_GAME,
@@ -26,6 +29,7 @@ enum SCENE_ID {
 struct  gameSettings {
     Vector2 window_size;
     bool show_debug;
+    int control_type;
 };
 
 

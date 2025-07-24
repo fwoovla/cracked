@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include <vector>
 #include <raylib.h>
+#include <cmath>
 
 
 class SignalObserver {
@@ -47,7 +48,19 @@ class Timer : public SignalEmiter{
 };
 
 
+inline Vector2 vClamp(Vector2 v, float maxLength) {
+    float length = sqrtf(v.x * v.x + v.y * v.y);
+    if (length > maxLength) {
+        float scale = maxLength / length;
+        v.x *= scale;
+        v.y *= scale;
+    }
+    return v;
+}
 
-
-
+inline float GetAngleFromTo(Vector2 from, Vector2 to) {
+    Vector2 dir = { to.x - from.x, to.y - from.y };
+    float angle = atan2(dir.y, dir.x) * RAD2DEG;
+    return angle;
+}
 

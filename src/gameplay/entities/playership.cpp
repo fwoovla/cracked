@@ -1,53 +1,104 @@
 #include "../../core/ships.h"
+#include<cmath>
+#include <raymath.h>
 
-PlayerShip::PlayerShip() : BaseShip() {
-    LoadSprite(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
-    collision_rect = { 32*TILE_SIZE, 32*TILE_SIZE, PLAYER_SIZE, PLAYER_SIZE };
+PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
+    position = _position;
+    velocity = {0};
+    rotation = 0.0f;
+    LoadSpriteCentered(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
+
+    centered_offset = {PLAYER_SIZE/2, PLAYER_SIZE/2};
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PLAYER_SIZE, PLAYER_SIZE };
+
+    LoadSpriteCentered(turret, LoadTexture("assets/turret.png"), position);
+    //LoadTexture("assets/turret.png");
 }
 
 PlayerShip::~PlayerShip() {
     UnloadTexture(sprite.texture);
+    UnloadTexture(turret.texture);
 }
 
 void PlayerShip::Update(int *level_array) {
-    //TraceLog(LOG_INFO, "PLAYER UPDATE");
-
     float dt = GetFrameTime();
-    Vector2 previous_position = {collision_rect.x, collision_rect.y};
+    DoMovement(dt, level_array);
+}
 
-    player_collided = false;
+void PlayerShip::Draw() {
+    //TraceLog(LOG_INFO, "PLAYER DRAW");
 
-    if (IsKeyDown(KEY_D)) collision_rect.x += PLAYER_SPEED * dt;
-    else if (IsKeyDown(KEY_A)) collision_rect.x -= PLAYER_SPEED * dt;
-            
-    if (IsKeyDown(KEY_W)) collision_rect.y -= PLAYER_SPEED * dt;
-    else if (IsKeyDown(KEY_S)) collision_rect.y += PLAYER_SPEED * dt;
+    DrawSprite(sprite);
+    DrawSprite(turret);
+
+    if(settings.show_debug){
+        if(player_collided and settings.show_debug) {
+        DrawRectangleRec(collision_rect, RED);
+        }
+        else {
+        DrawRectangleRec(collision_rect, GREEN);
+        }
+    }
+}
+
+
+void PlayerShip::DoMovement(float dt, int *level_array) {
+    if(settings.control_type == 0) {
+        if (IsKeyDown(KEY_A)) {rotation -= SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_D)) {rotation += SHIP_ROT_SPEED * dt;}
+    }
+    else if(settings.control_type == 1) {
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += SHIP_ROT_SPEED * dt;}
+    }
+
+    sprite.roataion = rotation;
+
+    Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
     
+    if (IsKeyDown(KEY_W)) {
+        // Convert angle to radians
+        float rad = rotation * DEG2RAD;
+        // Apply acceleration in facing direction
+        velocity.x += cosf(rad) * SHIP_THRUST;
+        velocity.y += sinf(rad) * SHIP_THRUST;
+    }
+
+    velocity.x *= AIR_FRICTION;
+    velocity.y *= AIR_FRICTION;
+
+    vClamp(velocity, 1.0);
+
+    collision_rect.x += velocity.x;
+    collision_rect.y += velocity.y;
+   
+    player_collided = false;
     Vector4 collision_data = {0};
     if(CheckCollision(collision_data, level_array)) {
         player_collided = true;
     }
 
     if(player_collided) {
-        collision_rect.x = previous_position.x;
-        collision_rect.y = previous_position.y;
-    }
-
-    sprite.dest.x = collision_rect.x;
-    sprite.dest.y = collision_rect.y;
-}
-
-void PlayerShip::Draw() {
-    //TraceLog(LOG_INFO, "PLAYER DRAW");
-    DrawSprite(sprite);
-    if(player_collided) {
-        DrawRectangleRec(collision_rect, RED);
+        collision_rect.x = previous_collision_position.x;
+        collision_rect.y = previous_collision_position.y;
+        velocity = {0};
     }
     else {
-        DrawRectangleRec(collision_rect, GREEN);
+        position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
     }
+
+    sprite.dest.x = position.x;
+    sprite.dest.y = position.y;
+    turret.dest.x = position.x;
+    turret.dest.y = position.y;
     
+    Vector2 mp = GetMousePosition();
+    Vector2 pp = GetWorldToScreen2D(position, *camera);
+
+    turret.roataion = GetAngleFromTo(pp, mp);
+
 }
+
 
 bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
     for(int x = -1; x <  COLLISION_RANGE; x++) {
@@ -71,8 +122,8 @@ bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
                     return true;
                 }
             }
-
         }
     }
     return false;
 }
+

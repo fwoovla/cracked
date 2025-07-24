@@ -16,8 +16,6 @@ TitleScene::TitleScene() {
 
     ui = new TitleUiLayer();
     ui->ConnectSignalTo(this);
-
-    TraceLog(LOG_INFO, "TITLE-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
 }
 
 

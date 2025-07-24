@@ -10,6 +10,7 @@ struct Sprite {
     Rectangle source;
     Rectangle dest;
     Vector2 scale;
+    float roataion;
 };
 
 
@@ -31,6 +32,7 @@ inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _pos
         _sprite.size.x,
         _sprite.size.y  
     };
+    _sprite.roataion = 0.0;
         
 }
 
@@ -51,7 +53,7 @@ inline void LoadSprite(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
         _sprite.size.x,
         _sprite.size.y  
     };
-        
+    _sprite.roataion = 0.0;
 }
 
 inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
@@ -73,5 +75,5 @@ inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
 }
 
 inline void DrawSprite(Sprite &_sprite) {
-    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, 0.0, WHITE );       
+    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.roataion, WHITE );       
 }

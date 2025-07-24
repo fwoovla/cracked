@@ -28,14 +28,6 @@ void Game::StartGame() {
         if(IsKeyPressed(KEY_ESCAPE)) {
             running = false;
         }
-        if(IsKeyPressed(KEY_SPACE)) {
-            if(scene_manager->current_scene->scene_id == TITLE_SCENE) {
-                scene_manager->ChangeSceneTo(GAME_SCENE);
-            }
-            else if(scene_manager->current_scene->scene_id == GAME_SCENE) {
-                scene_manager->ChangeSceneTo(TITLE_SCENE);
-            }
-        }
     }
 }
 
