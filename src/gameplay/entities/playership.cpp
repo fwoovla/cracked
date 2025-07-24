@@ -1,15 +1,15 @@
-#include "../../core/entities.h"
+#include "../../core/ships.h"
 
-Player::Player() : DrawableEntity() {
+PlayerShip::PlayerShip() : BaseShip() {
     LoadSprite(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
     collision_rect = { 32*TILE_SIZE, 32*TILE_SIZE, PLAYER_SIZE, PLAYER_SIZE };
 }
 
-Player::~Player() {
+PlayerShip::~PlayerShip() {
     UnloadTexture(sprite.texture);
 }
 
-void Player::Update(int *level_array) {
+void PlayerShip::Update(int *level_array) {
     //TraceLog(LOG_INFO, "PLAYER UPDATE");
 
     float dt = GetFrameTime();
@@ -37,7 +37,7 @@ void Player::Update(int *level_array) {
     sprite.dest.y = collision_rect.y;
 }
 
-void Player::Draw() {
+void PlayerShip::Draw() {
     //TraceLog(LOG_INFO, "PLAYER DRAW");
     DrawSprite(sprite);
     if(player_collided) {
@@ -49,7 +49,7 @@ void Player::Draw() {
     
 }
 
-bool Player::CheckCollision(Vector4 &collision_data, int *level_array) {
+bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
     for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 

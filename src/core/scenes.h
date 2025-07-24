@@ -2,6 +2,7 @@
 #include "bacescene.h"
 #include "sprite.h"
 #include "entities.h"
+#include "ships.h"
 
 
 
@@ -51,11 +52,11 @@ class GameScene : public  BaseScene, public SignalObserver {
 
     BaseUILayer *ui;
     Camera2D camera;
-    Rectangle player;
+    //Rectangle player;
 
     int* level_array;
     //bool player_collided;
-    Player *this_player;
+    PlayerShip *this_player;
     //gameSettings &game_settings;
 
 

@@ -1,17 +1,21 @@
 #pragma once
 #include <raylib.h>
 #include "../globals.h"
+#include "uilayers.h"
 #include "../utils/utils.h"
-#include "drawable.h"
+#include "baseentity.h"
+#include "sprite.h"
 
-class Entity  {
+class BaseShip : public DrawableEntity {
     public:
-    virtual void Update(int *level_data) = 0;    
-};
 
-class DrawableEntity{
-    public:
     virtual void Update(int *level_data) = 0;
     virtual void Draw() = 0;
     virtual bool CheckCollision(Vector4 &collision_data, int *level_array) = 0;
+    
+    
+    SCENE_ID scene_id;
+    SCENE_ID return_scene;
+
+    
 };

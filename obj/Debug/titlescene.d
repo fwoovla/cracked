@@ -60,8 +60,9 @@ obj/Debug/titlescene.o: src/gameplay/levelscenes/titlescene.cpp \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
  src/gameplay/levelscenes/../../core/sprite.h \
  src/gameplay/levelscenes/../../core/entities.h \
- src/gameplay/levelscenes/../../core/entity.h \
- src/gameplay/levelscenes/../../core/drawable.h
+ src/gameplay/levelscenes/../../core/baseentity.h \
+ src/gameplay/levelscenes/../../core/ships.h \
+ src/gameplay/levelscenes/../../core/baseship.h
 /usr/include/stdc-predef.h:
 src/gameplay/levelscenes/../../core/scenes.h:
 src/gameplay/levelscenes/../../core/bacescene.h:
@@ -134,5 +135,6 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/tuple:
 src/gameplay/levelscenes/../../core/sprite.h:
 src/gameplay/levelscenes/../../core/entities.h:
-src/gameplay/levelscenes/../../core/entity.h:
-src/gameplay/levelscenes/../../core/drawable.h:
+src/gameplay/levelscenes/../../core/baseentity.h:
+src/gameplay/levelscenes/../../core/ships.h:
+src/gameplay/levelscenes/../../core/baseship.h:

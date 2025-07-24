@@ -32,10 +32,8 @@ GameScene::GameScene(char level_data[]) {
     ui->ConnectSignalTo(this);
 
 //LOAD PLAYER------------------------------------
-    this_player = new Player();
+    this_player = new PlayerShip();
     TraceLog(LOG_INFO, "PLAYER CREATED");
-
-    player = { 32*TILE_SIZE, 32 *TILE_SIZE, PLAYER_SIZE, PLAYER_SIZE };
 
 //SETUP CAMERA--------------------------------------
     camera = { 0 };
@@ -73,6 +71,7 @@ void GameScene::Draw() {
             }
         }
     }
+
     if(settings.show_debug){
         for(int x = -1; x <  COLLISION_RANGE; x++) {
             for(int y = -1; y < COLLISION_RANGE; y++) {
@@ -100,6 +99,8 @@ void GameScene::Draw() {
 }
 
 void GameScene::Destroy() {
+    delete[] level_array;
+    delete this_player;
 }
 
 void GameScene::OnSignal(SIGNAL signal) {

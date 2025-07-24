@@ -1,12 +1,9 @@
-#pragma once
+#include "baseship.h"
 
-#include "baseentity.h"
-#include "sprite.h"
-
-class Player : public DrawableEntity {
+class PlayerShip : public BaseShip {
     public:
-    Player();
-    ~Player();
+    PlayerShip();
+    ~PlayerShip();
     void Update(int *level_data) override;
     void Draw() override;
     bool CheckCollision(Vector4 &collision_data, int *level_array) override;
