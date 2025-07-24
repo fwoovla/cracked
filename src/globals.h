@@ -8,6 +8,7 @@
 #define TILE_SIZE 32
 #define PLAYER_SPEED 200
 #define PLAYER_SIZE 30
+#define COLLISION_RANGE 3
 
 enum SIGNAL {
     END_GAME,

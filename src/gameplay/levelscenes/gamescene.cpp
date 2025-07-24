@@ -39,65 +39,22 @@ GameScene::GameScene(char level_data[]) {
 
 //SETUP CAMERA--------------------------------------
     camera = { 0 };
-    camera.target = (Vector2){ player.x, player.y};
+    camera.target = (Vector2){ this_player->collision_rect.x, this_player->collision_rect.y};
     camera.offset = (Vector2){ GetScreenWidth()/2.0f, GetScreenHeight()/2.0f };
     camera.rotation = 0.0f;
-    camera.zoom = 0.5f;
+    camera.zoom = 1.5f;
 }
 
 
 SCENE_ID GameScene::Update() {
     //TraceLog(LOG_INFO, "UPDATE GAME SCENE");
-    float dt = GetFrameTime();
+    if(IsKeyPressed(KEY_TAB)) {
+        settings.show_debug = !settings.show_debug;
+    }
     ui->Update();
-    
-    
-    player_collided = false;
-    Vector2 previous_position = {player.x, player.y};
-    
-    if (IsKeyDown(KEY_D)) player.x += PLAYER_SPEED * dt;
-    else if (IsKeyDown(KEY_A)) player.x -= PLAYER_SPEED * dt;
-            
-    if (IsKeyDown(KEY_W)) player.y -= PLAYER_SPEED * dt;
-    else if (IsKeyDown(KEY_S)) player.y += PLAYER_SPEED * dt;
-    
-    if(!player_collided) {
-    
-        for(int x = -1; x <  2; x++) {
-            for(int y = -1; y < 2; y++) {
+    this_player->Update(level_array);
 
-                float fx = player.x + (TILE_SIZE + x);
-                float fy = player.y + (TILE_SIZE + y);
-                int ix = (player.x/TILE_SIZE) + x;
-                int iy = (player.y/TILE_SIZE) + y;
-
-                if(level_array[(iy * LEVEL_SIZE + ix)] == 0) {
-                    //DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, PINK);
-
-                    TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
-                    TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);
-                    TraceLog(LOG_INFO, "checking cell at index%i %i ", ix, iy);
-                    TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);
-
-                    if(CheckCollisionRecs( {player.x,player.y, PLAYER_SIZE, PLAYER_SIZE}, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
-                        player_collided = true;
-                        TraceLog(LOG_INFO, "COLLISION");
-                    }
-                    else {
-                        TraceLog(LOG_INFO, "NO COLLISION");
-                    }
-                }
-
-            }
-        }
-    }
-    
-    if(player_collided) {
-        player.x = previous_position.x;
-        player.y = previous_position.y;
-    }
-    camera.target = (Vector2){ player.x, player.y};
-    //return NO_SCENE;
+    camera.target = (Vector2){ this_player->collision_rect.x, this_player->collision_rect.y};
     return return_scene;
 
 }
@@ -111,20 +68,19 @@ void GameScene::Draw() {
 
     for(int x = 0; x < LEVEL_SIZE; x++) {
         for(int y = 0; y < LEVEL_SIZE; y++) {
-            //TraceLog(LOG_INFO, "drawing %i ", level_array[y * LEVEL_SIZE + x]);
             if(level_array[y * LEVEL_SIZE + x] == 0) {
                 DrawRectangle(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, GOLD);
             }
         }
     }
     if(settings.show_debug){
-        for(int x = -1; x <  2; x++) {
-            for(int y = -1; y < 2; y++) {
+        for(int x = -1; x <  COLLISION_RANGE; x++) {
+            for(int y = -1; y < COLLISION_RANGE; y++) {
 
-                float fx = player.x + (TILE_SIZE + x);
-                float fy = player.y + (TILE_SIZE + y);
-                int ix = (player.x/TILE_SIZE) + x;
-                int iy = (player.y/TILE_SIZE) + y;
+                float fx = this_player->collision_rect.x + (TILE_SIZE + x);
+                float fy = this_player->collision_rect.y + (TILE_SIZE + y);
+                int ix = (this_player->collision_rect.x/TILE_SIZE) + x;
+                int iy = (this_player->collision_rect.y/TILE_SIZE) + y;
 
                 if(level_array[(iy) * LEVEL_SIZE + (ix)] == 0) {
                     DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, PINK);
@@ -135,14 +91,8 @@ void GameScene::Draw() {
             }
         }
     }
+
     this_player->Draw();
-    if(player_collided) {
-        DrawRectangleRec(player, RED);
-    }
-    else {
-        DrawRectangleRec(player, GREEN);
-    }
-    //DrawRectangle(player.x, player.y, PLAYER_SIZE,PLAYER_SIZE, PINK);
 
     EndMode2D();
 
@@ -150,7 +100,6 @@ void GameScene::Draw() {
 }
 
 void GameScene::Destroy() {
-    //UnloadImage(level_image);
 }
 
 void GameScene::OnSignal(SIGNAL signal) {

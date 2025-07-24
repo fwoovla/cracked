@@ -54,7 +54,7 @@ class GameScene : public  BaseScene, public SignalObserver {
     Rectangle player;
 
     int* level_array;
-    bool player_collided;
+    //bool player_collided;
     Player *this_player;
     //gameSettings &game_settings;
 
