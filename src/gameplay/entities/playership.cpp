@@ -24,11 +24,6 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
     //LoadTexture("assets/turret.png");
 }
 
-PlayerShip::~PlayerShip() {
-    UnloadTexture(sprite.texture);
-    UnloadTexture(turret.texture);
-}
-
 void PlayerShip::Update(int *level_array) {
     float dt = GetFrameTime();
     DoMovement(dt, level_array);
@@ -156,12 +151,10 @@ void PlayerShip::DoWeapons() {
             if(can_fire) {
                 can_fire = false;
                 TraceLog(LOG_INFO, "FIRE 1");
-                AddToDrawList(new Bullet(position, turret.roataion));
+                AddToDrawList(bullet_list, new Bullet(position, turret.roataion));
             }
-
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) ) {
-            
             TraceLog(LOG_INFO, "FIRE 2");
         }
     }
@@ -183,3 +176,9 @@ void PlayerShip::OnSignal(SIGNAL signal) {
         can_fire = true;
     }
 }
+
+PlayerShip::~PlayerShip() {
+    UnloadTexture(sprite.texture);
+    UnloadTexture(turret.texture);
+}
+

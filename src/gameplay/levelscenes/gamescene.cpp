@@ -1,6 +1,7 @@
 #include "../../core/scenes.h"
 
-DrawableEntity *draw_list[DRAW_LIST_SIZE];
+DrawableEntity *bullet_list[DRAW_LIST_SIZE];
+DrawableEntity *entity_list[DRAW_LIST_SIZE];
 
 
 GameScene::GameScene(char level_data[]) {
@@ -8,7 +9,8 @@ GameScene::GameScene(char level_data[]) {
     return_scene = NO_SCENE;
     //delete draw_list;
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        draw_list[i] = nullptr;
+        bullet_list[i] = nullptr;
+        entity_list[i] = nullptr;
 
     }
 
@@ -51,7 +53,7 @@ GameScene::GameScene(char level_data[]) {
 
 //LOAD PLAYER------------------------------------
     this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2} );
-    draw_list[0] = this_player;
+    entity_list[0] = this_player;
     //draw_list.push_back(this_player);
     this_player->camera = &camera;
     //TraceLog(LOG_INFO, "PLAYER CREATED");
@@ -72,13 +74,22 @@ SCENE_ID GameScene::Update() {
     }
 
     for(int i = 0; i < 100; i++) {
-        if(draw_list[i] != nullptr){
-            draw_list[i]->Update(level_array);
-            if(draw_list[i]->should_delete) {
-                delete(draw_list[i]);
-                draw_list[i] = nullptr;
+        if(bullet_list[i] != nullptr){
+            bullet_list[i]->Update(level_array);
+            if(bullet_list[i]->should_delete) {
+                TraceLog(LOG_INFO, "DELETING BULLET");
+                delete bullet_list[i];
+                bullet_list[i] = nullptr;
             }
         }
+        if(entity_list[i] != nullptr){
+            entity_list[i]->Update(level_array);
+            if(entity_list[i]->should_delete) {
+                TraceLog(LOG_INFO, "DELETING Entity");
+                delete entity_list[i];
+                entity_list[i] = nullptr;
+                }
+            }
     }
 
     ui->Update();
@@ -111,11 +122,13 @@ void GameScene::Draw() {
         DrawDebug();
     }
     for(int i = 0; i < 100; i++) {
-        if(draw_list[i] != nullptr){
-            draw_list[i]->Draw();
+        if(bullet_list[i] != nullptr){
+            bullet_list[i]->Draw();
+        }
+        if(entity_list[i] != nullptr){
+            entity_list[i]->Draw();
         }
     }
-    //this_player->Draw();
     
     EndMode2D();
 //------------------------END WORLDSPACE
@@ -123,7 +136,7 @@ void GameScene::Draw() {
     ui->Draw();
 }
 
-void GameScene::Destroy() {
+GameScene::~GameScene() {
     delete[] level_array;
     delete this_player;
     UnloadTexture(space_tile_texture);

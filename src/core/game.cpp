@@ -10,6 +10,7 @@ Game::Game(){
 }
 
 Game::~Game() {
+    delete scene_manager;
 
 }
 

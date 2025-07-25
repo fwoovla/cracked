@@ -109,8 +109,8 @@ obj/Debug/scenemanager.o: src/core/scenemanager.cpp \
  /usr/include/c++/13/tr1/modified_bessel_func.tcc \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
- /usr/include/c++/13/tr1/riemann_zeta.tcc src/core/sprite.h \
- src/core/entities.h src/core/baseentity.h src/core/ships.h \
+ /usr/include/c++/13/tr1/riemann_zeta.tcc src/core/baseentity.h \
+ src/core/sprite.h src/core/entities.h src/core/ships.h \
  src/core/baseship.h
 /usr/include/stdc-predef.h:
 src/core/scenemanager.h:
@@ -245,8 +245,8 @@ src/core/../utils/utils.h:
 /usr/include/c++/13/tr1/poly_hermite.tcc:
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
+src/core/baseentity.h:
 src/core/sprite.h:
 src/core/entities.h:
-src/core/baseentity.h:
 src/core/ships.h:
 src/core/baseship.h:

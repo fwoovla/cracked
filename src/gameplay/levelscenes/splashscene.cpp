@@ -30,7 +30,9 @@ void SplashScreen::Draw() {
     DrawRectangle( 0,0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, (unsigned char)alpha_value} );
     //DrawText("SPLASH SCENE", 200, 200, 40, BLACK);
 }
-void SplashScreen::Destroy() {
+
+SplashScreen::~SplashScreen() {
+    UnloadTexture(logo.texture);
     delete timer;
 }
 

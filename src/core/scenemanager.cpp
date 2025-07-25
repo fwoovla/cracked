@@ -6,6 +6,10 @@ SceneManager::SceneManager() {
     current_scene = new SplashScreen();
 }
 
+SceneManager::~SceneManager() {
+    delete current_scene;
+}
+
 void SceneManager::UpdateScene()
 {
     if(current_scene == nullptr){
@@ -30,8 +34,8 @@ void SceneManager::DrawScene() {
 
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
     
-    current_scene->Destroy();
-    delete(current_scene);
+    
+    delete current_scene;
 
     switch (new_scene) {
         case SPLASH_SCENE:

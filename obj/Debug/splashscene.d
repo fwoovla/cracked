@@ -115,9 +115,9 @@ obj/Debug/splashscene.o: src/gameplay/levelscenes/splashscene.cpp \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
  /usr/include/c++/13/tr1/riemann_zeta.tcc \
+ src/gameplay/levelscenes/../../core/baseentity.h \
  src/gameplay/levelscenes/../../core/sprite.h \
  src/gameplay/levelscenes/../../core/entities.h \
- src/gameplay/levelscenes/../../core/baseentity.h \
  src/gameplay/levelscenes/../../core/ships.h \
  src/gameplay/levelscenes/../../core/baseship.h
 /usr/include/stdc-predef.h:
@@ -252,8 +252,8 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/tr1/poly_hermite.tcc:
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
+src/gameplay/levelscenes/../../core/baseentity.h:
 src/gameplay/levelscenes/../../core/sprite.h:
 src/gameplay/levelscenes/../../core/entities.h:
-src/gameplay/levelscenes/../../core/baseentity.h:
 src/gameplay/levelscenes/../../core/ships.h:
 src/gameplay/levelscenes/../../core/baseship.h:

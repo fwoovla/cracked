@@ -37,7 +37,7 @@ void TitleScene::Draw() {
     //DrawText("X", (float)GetScreenWidth()/2, (float)GetScreenHeight() /2, 10, BLACK);
 }
 
-void TitleScene::Destroy() {
+TitleScene::~TitleScene() {
     TraceLog(LOG_INFO, "DESTROY TITLE");
     UnloadTexture(logo.texture);
     delete ui;

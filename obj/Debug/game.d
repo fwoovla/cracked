@@ -109,8 +109,8 @@ obj/Debug/game.o: src/core/game.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
  /usr/include/c++/13/tr1/riemann_zeta.tcc src/core/scenemanager.h \
  src/core/scenes.h src/core/bacescene.h src/core/uilayers.h \
- src/core/baseuilayer.h src/core/button.h src/core/sprite.h \
- src/core/entities.h src/core/baseentity.h src/core/ships.h \
+ src/core/baseuilayer.h src/core/button.h src/core/baseentity.h \
+ src/core/sprite.h src/core/entities.h src/core/ships.h \
  src/core/baseship.h
 /usr/include/stdc-predef.h:
 src/core/game.h:
@@ -246,8 +246,8 @@ src/core/bacescene.h:
 src/core/uilayers.h:
 src/core/baseuilayer.h:
 src/core/button.h:
+src/core/baseentity.h:
 src/core/sprite.h:
 src/core/entities.h:
-src/core/baseentity.h:
 src/core/ships.h:
 src/core/baseship.h:

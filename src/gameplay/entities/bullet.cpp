@@ -24,10 +24,11 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
 
 
 Bullet::~Bullet() {
-    
+    TraceLog(LOG_INFO, "BULLET DELETED DESTRUCTOR");
     UnloadTexture(sprite.texture);
     delete lifetime;
 }
+
 
 void Bullet::Update(int *level_array) {
     if(should_delete) {
@@ -63,5 +64,6 @@ void Bullet::OnSignal(SIGNAL signal) {
     if(signal == TIMER_TIMEOUT) {
         TraceLog(LOG_INFO, "BULLET should delete %i", id);
         should_delete = true;
+
     }
 }

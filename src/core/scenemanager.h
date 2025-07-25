@@ -6,7 +6,7 @@
 class SceneManager{
     public:
     SceneManager();
-    ~SceneManager(){};
+    ~SceneManager();
     void UpdateScene();
     void DrawScene();
     void ChangeSceneTo(SCENE_ID new_scene);

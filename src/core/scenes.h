@@ -9,9 +9,9 @@
 class SplashScreen : public  BaseScene, public SignalObserver {
     public:
     SplashScreen();
+    ~SplashScreen() override;
     SCENE_ID Update() override;
     void Draw() override;
-    void Destroy() override;
     void OnSignal(SIGNAL signal);
 
 
@@ -27,9 +27,9 @@ class SplashScreen : public  BaseScene, public SignalObserver {
 class TitleScene : public  BaseScene, public SignalObserver {
     public:
     TitleScene();
+    ~TitleScene() override;
     SCENE_ID Update() override;
     void Draw() override;
-    void Destroy() override;
     void OnSignal(SIGNAL signal);
 
     BaseUILayer *ui;
@@ -43,26 +43,24 @@ class TitleScene : public  BaseScene, public SignalObserver {
 class GameScene : public  BaseScene, public SignalObserver {
     public:
     GameScene(char level_data[]);
+    ~GameScene() override;
     SCENE_ID Update() override;
     void Draw() override;
-    void Destroy() override;
     void OnSignal(SIGNAL signal);
     void DrawLevel();
     void DrawDebug();
 
-    //Image *level_image;
+
+    //DrawableEntity *bullet_draw_list[DRAW_LIST_SIZE];
+    //DrawableEntity *entity_draw_list[DRAW_LIST_SIZE];
 
     BaseUILayer *ui;
     Camera2D camera;
-    //Rectangle player;
 
     int* level_array;
-    //bool player_collided;
     PlayerShip *this_player;
     Texture space_tile_texture;
     Texture2D asteroid_texture;
     Texture2D bg_texture;
-    //Sprite space_tile;
-    //std::vector<Sprite > background_sprites;
 
 };
