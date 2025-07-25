@@ -78,6 +78,7 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/bullet.o
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
@@ -89,6 +90,7 @@ GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
+OBJECTS += $(OBJDIR)/bullet.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
@@ -167,6 +169,9 @@ $(OBJDIR)/game.o: src/core/game.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/scenemanager.o: src/core/scenemanager.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/bullet.o: src/gameplay/entities/bullet.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/player.o: src/gameplay/entities/player.cpp

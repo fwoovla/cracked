@@ -14,8 +14,4 @@ class BaseShip : public DrawableEntity {
     virtual bool CheckCollision(Vector4 &collision_data, int *level_array) = 0;
     
     
-    SCENE_ID scene_id;
-    SCENE_ID return_scene;
-
-    
 };

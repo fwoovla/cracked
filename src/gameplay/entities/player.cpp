@@ -15,7 +15,7 @@ void Player::Update(int *level_array) {
     float dt = GetFrameTime();
     Vector2 previous_position = {collision_rect.x, collision_rect.y};
 
-    player_collided = false;
+    collided = false;
 
     if (IsKeyDown(KEY_D)) collision_rect.x += PLAYER_SPEED * dt;
     else if (IsKeyDown(KEY_A)) collision_rect.x -= PLAYER_SPEED * dt;
@@ -25,10 +25,10 @@ void Player::Update(int *level_array) {
     
     Vector4 collision_data = {0};
     if(CheckCollision(collision_data, level_array)) {
-        player_collided = true;
+        collided = true;
     }
 
-    if(player_collided) {
+    if(collided) {
         collision_rect.x = previous_position.x;
         collision_rect.y = previous_position.y;
     }
@@ -40,7 +40,7 @@ void Player::Update(int *level_array) {
 void Player::Draw() {
     //TraceLog(LOG_INFO, "PLAYER DRAW");
     DrawSprite(sprite);
-    if(player_collided) {
+    if(collided) {
         DrawRectangleRec(collision_rect, RED);
     }
     else {

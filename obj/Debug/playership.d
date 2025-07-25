@@ -2,12 +2,8 @@ obj/Debug/playership.o: src/gameplay/entities/playership.cpp \
  /usr/include/stdc-predef.h src/gameplay/entities/../../core/ships.h \
  src/gameplay/entities/../../core/baseship.h /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/gameplay/entities/../../core/../globals.h \
- src/gameplay/entities/../../core/uilayers.h \
- src/gameplay/entities/../../core/baseuilayer.h \
- src/gameplay/entities/../../core/button.h \
- src/gameplay/entities/../../core/../utils/utils.h \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
+ src/gameplay/entities/../../core/../globals.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -57,6 +53,10 @@ obj/Debug/playership.o: src/gameplay/entities/playership.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
+ src/gameplay/entities/../../core/uilayers.h \
+ src/gameplay/entities/../../core/baseuilayer.h \
+ src/gameplay/entities/../../core/button.h \
+ src/gameplay/entities/../../core/../utils/utils.h \
  /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -116,17 +116,13 @@ obj/Debug/playership.o: src/gameplay/entities/playership.cpp \
  /usr/include/c++/13/tr1/riemann_zeta.tcc \
  src/gameplay/entities/../../core/baseentity.h \
  src/gameplay/entities/../../core/sprite.h /usr/local/include/raymath.h \
- /usr/include/c++/13/math.h
+ /usr/include/c++/13/math.h src/gameplay/entities/../../core/entities.h
 /usr/include/stdc-predef.h:
 src/gameplay/entities/../../core/ships.h:
 src/gameplay/entities/../../core/baseship.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 src/gameplay/entities/../../core/../globals.h:
-src/gameplay/entities/../../core/uilayers.h:
-src/gameplay/entities/../../core/baseuilayer.h:
-src/gameplay/entities/../../core/button.h:
-src/gameplay/entities/../../core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -187,6 +183,10 @@ src/gameplay/entities/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
+src/gameplay/entities/../../core/uilayers.h:
+src/gameplay/entities/../../core/baseuilayer.h:
+src/gameplay/entities/../../core/button.h:
+src/gameplay/entities/../../core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
@@ -253,3 +253,4 @@ src/gameplay/entities/../../core/baseentity.h:
 src/gameplay/entities/../../core/sprite.h:
 /usr/local/include/raymath.h:
 /usr/include/c++/13/math.h:
+src/gameplay/entities/../../core/entities.h:

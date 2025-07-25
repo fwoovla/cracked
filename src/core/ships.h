@@ -1,6 +1,6 @@
 #include "baseship.h"
 
-class PlayerShip : public BaseShip {
+class PlayerShip : public BaseShip, public SignalObserver {
     public:
     PlayerShip(Vector2 _position);
     ~PlayerShip();
@@ -8,10 +8,12 @@ class PlayerShip : public BaseShip {
     void Draw() override;
     bool CheckCollision(Vector4 &collision_data, int *level_array) override;
     void DoMovement(float dt, int *level_array);
+    void DoWeapons();
+    void OnSignal(SIGNAL signal) override;
 
     Sprite sprite;
     Rectangle collision_rect;
-    bool player_collided;
+    bool collided;
 
     Vector2 velocity;
     Vector2 position;
@@ -22,6 +24,8 @@ class PlayerShip : public BaseShip {
     Sprite turret;
     Camera2D *camera;
 
+    Timer *gun_timer;
+    bool can_fire;
 
 };
 

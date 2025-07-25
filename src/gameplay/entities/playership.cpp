@@ -2,7 +2,10 @@
 #include<cmath>
 #include <raymath.h>
 
+#include "../../core/entities.h"
+
 PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
+
     position = _position;
     velocity = {0};
     rotation = 0.0f;
@@ -12,6 +15,12 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PLAYER_SIZE, PLAYER_SIZE };
 
     LoadSpriteCentered(turret, LoadTexture("assets/turret.png"), position);
+
+    should_delete = false;
+
+    gun_timer = new Timer(1.0, true, false);
+    gun_timer->ConnectSignalTo(this);
+    can_fire = false;
     //LoadTexture("assets/turret.png");
 }
 
@@ -23,16 +32,21 @@ PlayerShip::~PlayerShip() {
 void PlayerShip::Update(int *level_array) {
     float dt = GetFrameTime();
     DoMovement(dt, level_array);
+    DoWeapons();
+    gun_timer->Update();
+
 }
 
 void PlayerShip::Draw() {
     //TraceLog(LOG_INFO, "PLAYER DRAW");
 
+    
+
     DrawSprite(sprite);
     DrawSprite(turret);
 
     if(settings.show_debug){
-        if(player_collided and settings.show_debug) {
+        if(collided and settings.show_debug) {
         DrawRectangleRec(collision_rect, RED);
         }
         else {
@@ -63,22 +77,33 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
         velocity.x += cosf(rad) * SHIP_THRUST;
         velocity.y += sinf(rad) * SHIP_THRUST;
     }
+    if (IsKeyDown(KEY_S)) {
+        // Convert angle to radians
+        float rad = rotation * DEG2RAD;
+        // Apply acceleration in facing direction
+        velocity.x -= cosf(rad) * SHIP_THRUST * .2;
+        velocity.y -= sinf(rad) * SHIP_THRUST * .2;
+    }
 
     velocity.x *= AIR_FRICTION;
     velocity.y *= AIR_FRICTION;
 
     vClamp(velocity, 1.0);
 
+    velocity = Vector2ClampValue(velocity, -PLAYER_SPEED, PLAYER_SPEED);
+    //TraceLog(LOG_INFO, "VELOCITY: %f %f", velocity.x,velocity.y);
+
+
     collision_rect.x += velocity.x;
     collision_rect.y += velocity.y;
    
-    player_collided = false;
+    collided = false;
     Vector4 collision_data = {0};
     if(CheckCollision(collision_data, level_array)) {
-        player_collided = true;
+        collided = true;
     }
 
-    if(player_collided) {
+    if(collided) {
         collision_rect.x = previous_collision_position.x;
         collision_rect.y = previous_collision_position.y;
         velocity = {0};
@@ -96,7 +121,6 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
     Vector2 pp = GetWorldToScreen2D(position, *camera);
 
     turret.roataion = GetAngleFromTo(pp, mp);
-
 }
 
 
@@ -117,8 +141,6 @@ bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
                 TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);  */
 
                 if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {                        return true;
-                    //player_collided = true;
-                    //TraceLog(LOG_INFO, "COLLISION");
                     return true;
                 }
             }
@@ -127,3 +149,37 @@ bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
     return false;
 }
 
+void PlayerShip::DoWeapons() {
+
+    if(settings.control_type == 0) {
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            if(can_fire) {
+                can_fire = false;
+                TraceLog(LOG_INFO, "FIRE 1");
+                AddToDrawList(new Bullet(position, turret.roataion));
+            }
+
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) ) {
+            
+            TraceLog(LOG_INFO, "FIRE 2");
+        }
+    }
+
+    else if(settings.control_type == 1) {
+        if(IsKeyDown(KEY_SPACE)) {
+            TraceLog(LOG_INFO, "FIRE 1");
+        }
+        if(IsKeyDown(KEY_LEFT_SHIFT)) {
+            TraceLog(LOG_INFO, "FIRE 2");
+        }
+    }
+}
+
+
+void PlayerShip::OnSignal(SIGNAL signal) {
+    if(signal == TIMER_TIMEOUT){
+        //TraceLog(LOG_INFO, "can shoot");
+        can_fire = true;
+    }
+}

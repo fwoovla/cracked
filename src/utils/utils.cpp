@@ -16,7 +16,6 @@ Timer::Timer(double _wait_time, bool _autostart, bool _one_shot) {
 
 void Timer::Start() {
     active = true;
-
 }
 
 void Timer::Stop() {
@@ -27,6 +26,7 @@ void Timer::Update() {
     if(!active){
         return;
     }
+    //TraceLog(LOG_INFO,"TIMER");
     elapsed_time += GetFrameTime();
     if(elapsed_time >= wait_time) {
         EmitSignal(TIMER_TIMEOUT);
@@ -34,7 +34,7 @@ void Timer::Update() {
         finished = true;
         if(!one_shot) {
             elapsed_time = 0.0;
-            active = true;
+            //active = true;
             finished = false;
             Start();
         }

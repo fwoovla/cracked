@@ -1,8 +1,18 @@
 #include "../../core/scenes.h"
 
+DrawableEntity *draw_list[DRAW_LIST_SIZE];
+
+
 GameScene::GameScene(char level_data[]) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
+    //delete draw_list;
+    for(int i = 0; i < DRAW_LIST_SIZE; i++) {
+        draw_list[i] = nullptr;
+
+    }
+
+    
     
 //LOAD LEVEL------------------------------
     space_tile_texture = LoadTexture("assets/spacetile1.png");
@@ -41,6 +51,8 @@ GameScene::GameScene(char level_data[]) {
 
 //LOAD PLAYER------------------------------------
     this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2} );
+    draw_list[0] = this_player;
+    //draw_list.push_back(this_player);
     this_player->camera = &camera;
     //TraceLog(LOG_INFO, "PLAYER CREATED");
 
@@ -59,6 +71,16 @@ SCENE_ID GameScene::Update() {
         settings.show_debug = !settings.show_debug;
     }
 
+    for(int i = 0; i < 100; i++) {
+        if(draw_list[i] != nullptr){
+            draw_list[i]->Update(level_array);
+            if(draw_list[i]->should_delete) {
+                delete(draw_list[i]);
+                draw_list[i] = nullptr;
+            }
+        }
+    }
+
     ui->Update();
     this_player->Update(level_array);
 
@@ -69,10 +91,18 @@ SCENE_ID GameScene::Update() {
 
 void GameScene::Draw() {
     //TraceLog(LOG_INFO, "DRAW GAMESCEME");
+
+
     ClearBackground(BLACK);
     
-    DrawTexturePro(bg_texture, {0,0,(float)bg_texture.width,(float)bg_texture.height}, {0,0,(float)GetScreenWidth(),(float)GetScreenHeight()}, {0}, 0.0,WHITE);
+    DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
+                                {0,0,(float)GetScreenWidth(),
+                                (float)GetScreenHeight()},
+                                {0},
+                                0.0,
+                                WHITE);
 
+//------------------------BEGIN WORLDSPACE
     BeginMode2D(camera);
 
     DrawLevel();
@@ -80,11 +110,16 @@ void GameScene::Draw() {
     if(settings.show_debug) {
         DrawDebug();
     }
-
-    this_player->Draw();
+    for(int i = 0; i < 100; i++) {
+        if(draw_list[i] != nullptr){
+            draw_list[i]->Draw();
+        }
+    }
+    //this_player->Draw();
     
     EndMode2D();
-    
+//------------------------END WORLDSPACE
+
     ui->Draw();
 }
 

@@ -4,10 +4,6 @@ obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  src/gameplay/levelscenes/../../core/../globals.h \
- src/gameplay/levelscenes/../../core/uilayers.h \
- src/gameplay/levelscenes/../../core/baseuilayer.h \
- src/gameplay/levelscenes/../../core/button.h \
- src/gameplay/levelscenes/../../core/../utils/utils.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -58,6 +54,10 @@ obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
+ src/gameplay/levelscenes/../../core/uilayers.h \
+ src/gameplay/levelscenes/../../core/baseuilayer.h \
+ src/gameplay/levelscenes/../../core/button.h \
+ src/gameplay/levelscenes/../../core/../utils/utils.h \
  /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -126,10 +126,6 @@ src/gameplay/levelscenes/../../core/bacescene.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 src/gameplay/levelscenes/../../core/../globals.h:
-src/gameplay/levelscenes/../../core/uilayers.h:
-src/gameplay/levelscenes/../../core/baseuilayer.h:
-src/gameplay/levelscenes/../../core/button.h:
-src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -190,6 +186,10 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
+src/gameplay/levelscenes/../../core/uilayers.h:
+src/gameplay/levelscenes/../../core/baseuilayer.h:
+src/gameplay/levelscenes/../../core/button.h:
+src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
