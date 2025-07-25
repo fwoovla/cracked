@@ -6,7 +6,7 @@ class PlayerShip : public BaseShip, public SignalObserver {
     ~PlayerShip() override;
     void Update(int *level_data) override;
     void Draw() override;
-    bool CheckCollision(Vector4 &collision_data, int *level_array) override;
+    bool CheckCollision(Vector4 &collision_data) override;
     void DoMovement(float dt, int *level_array);
     void DoWeapons();
     void OnSignal(SIGNAL signal) override;

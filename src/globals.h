@@ -43,7 +43,9 @@ struct  gameSettings {
 };
 
 
-extern gameSettings settings;
 
+
+extern gameSettings settings;
+extern int* level_array_data;
 
 //inline SceneManager *scenemanager;

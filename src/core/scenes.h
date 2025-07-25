@@ -35,6 +35,7 @@ class TitleScene : public  BaseScene, public SignalObserver {
     BaseUILayer *ui;
     Button play_button;
     Sprite logo;
+    Texture2D bg_texture;
     //gameSettings &game_settings;
 
 };
@@ -57,10 +58,11 @@ class GameScene : public  BaseScene, public SignalObserver {
     BaseUILayer *ui;
     Camera2D camera;
 
-    int* level_array;
+    //int* level_array;
     PlayerShip *this_player;
     Texture space_tile_texture;
     Texture2D asteroid_texture;
     Texture2D bg_texture;
 
 };
+

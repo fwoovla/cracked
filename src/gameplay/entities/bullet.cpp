@@ -52,11 +52,12 @@ void Bullet::Update(int *level_array) {
 
 void Bullet::Draw() {
     DrawSprite(sprite);
+
     //TraceLog(LOG_INFO, "BULLET Draw %i", id);
     
 }
 
-bool Bullet::CheckCollision(Vector4 &collision_data, int *level_array) {
+bool Bullet::CheckCollision(Vector4 &collision_data) {
     return false;
 }
 

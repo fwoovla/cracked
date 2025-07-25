@@ -15,7 +15,6 @@ class BaseScene  {
     
     SCENE_ID scene_id;
     SCENE_ID return_scene;
-    
-
-    
+        
 };
+

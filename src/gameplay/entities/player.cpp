@@ -24,7 +24,7 @@ void Player::Update(int *level_array) {
     else if (IsKeyDown(KEY_S)) collision_rect.y += PLAYER_SPEED * dt;
     
     Vector4 collision_data = {0};
-    if(CheckCollision(collision_data, level_array)) {
+    if(CheckCollision(collision_data)) {
         collided = true;
     }
 
@@ -49,7 +49,7 @@ void Player::Draw() {
     
 }
 
-bool Player::CheckCollision(Vector4 &collision_data, int *level_array) {
+bool Player::CheckCollision(Vector4 &collision_data) {
     for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 
@@ -58,7 +58,7 @@ bool Player::CheckCollision(Vector4 &collision_data, int *level_array) {
             int ix = (collision_rect.x/TILE_SIZE) + x;
             int iy = (collision_rect.y/TILE_SIZE) + y;
 
-            if(level_array[(iy * LEVEL_SIZE + ix)] == 0) {
+            if(level_array_data[(iy * LEVEL_SIZE + ix)] == 0) {
 
 /*              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
                 TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);
@@ -66,8 +66,6 @@ bool Player::CheckCollision(Vector4 &collision_data, int *level_array) {
                 TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);  */
 
                 if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {                        return true;
-                    //player_collided = true;
-                    //TraceLog(LOG_INFO, "COLLISION");
                     return true;
                 }
             }

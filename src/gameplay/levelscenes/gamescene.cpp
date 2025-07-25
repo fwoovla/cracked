@@ -2,6 +2,7 @@
 
 DrawableEntity *bullet_list[DRAW_LIST_SIZE];
 DrawableEntity *entity_list[DRAW_LIST_SIZE];
+int* level_array_data;
 
 
 GameScene::GameScene(char level_data[]) {
@@ -11,7 +12,6 @@ GameScene::GameScene(char level_data[]) {
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         bullet_list[i] = nullptr;
         entity_list[i] = nullptr;
-
     }
 
     
@@ -26,7 +26,7 @@ GameScene::GameScene(char level_data[]) {
     
     Color *colors = LoadImageColors(level_image);
 
-    level_array = new int[LEVEL_SIZE * LEVEL_SIZE];
+    level_array_data = new int[LEVEL_SIZE * LEVEL_SIZE];
 
      for(int x = 0; x < LEVEL_SIZE; x++) {
         for(int y = 0; y < LEVEL_SIZE; y++) {
@@ -34,10 +34,10 @@ GameScene::GameScene(char level_data[]) {
             LoadSprite(new_tile, space_tile_texture, {(float)x *TILE_SIZE, (float)y *TILE_SIZE} );
             background_sprites.push_back(new_tile);  */
             if(colors[y * level_image.width + x].r == 255) {
-                level_array[y * level_image.width + x] = 1;
+                level_array_data[y * level_image.width + x] = 1;
             }
             else if (colors[y * level_image.width + x].r == 0) {
-                level_array[y * level_image.width + x] = 0;
+                level_array_data[y * level_image.width + x] = 0;
             }
         }
             
@@ -72,10 +72,10 @@ SCENE_ID GameScene::Update() {
     if(IsKeyPressed(KEY_TAB)) {
         settings.show_debug = !settings.show_debug;
     }
-
+    //DrawListUpdate(entity_list);
     for(int i = 0; i < 100; i++) {
         if(bullet_list[i] != nullptr){
-            bullet_list[i]->Update(level_array);
+            bullet_list[i]->Update(level_array_data);
             if(bullet_list[i]->should_delete) {
                 TraceLog(LOG_INFO, "DELETING BULLET");
                 delete bullet_list[i];
@@ -83,17 +83,17 @@ SCENE_ID GameScene::Update() {
             }
         }
         if(entity_list[i] != nullptr){
-            entity_list[i]->Update(level_array);
+            entity_list[i]->Update(level_array_data);
             if(entity_list[i]->should_delete) {
                 TraceLog(LOG_INFO, "DELETING Entity");
                 delete entity_list[i];
                 entity_list[i] = nullptr;
                 }
             }
-    }
+    } 
 
     ui->Update();
-    this_player->Update(level_array);
+    this_player->Update(level_array_data);
 
     camera.target = (Vector2){this_player->collision_rect.x, this_player->collision_rect.y};
     //camera.offset = (Vector2){ this_player->position.x, this_player->position.y };
@@ -121,14 +121,16 @@ void GameScene::Draw() {
     if(settings.show_debug) {
         DrawDebug();
     }
+
     for(int i = 0; i < 100; i++) {
         if(bullet_list[i] != nullptr){
             bullet_list[i]->Draw();
         }
         if(entity_list[i] != nullptr){
             entity_list[i]->Draw();
-        }
+        } 
     }
+
     
     EndMode2D();
 //------------------------END WORLDSPACE
@@ -137,7 +139,7 @@ void GameScene::Draw() {
 }
 
 GameScene::~GameScene() {
-    delete[] level_array;
+    delete[] level_array_data;
     delete this_player;
     UnloadTexture(space_tile_texture);
     UnloadTexture(asteroid_texture);
@@ -164,7 +166,7 @@ void GameScene::DrawLevel() {
         for(int y = 0; y < LEVEL_SIZE; y++) {
             DrawTexture(space_tile_texture, x*TILE_SIZE, y*TILE_SIZE, WHITE);
 
-            if(level_array[y * LEVEL_SIZE + x] == 0) {
+            if(level_array_data[y * LEVEL_SIZE + x] == 0) {
                 DrawTexture(asteroid_texture, x*TILE_SIZE, y*TILE_SIZE, WHITE);
                 //DrawRectangle(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, GOLD);
             }
@@ -182,7 +184,7 @@ void GameScene::DrawDebug() {
                 int ix = (this_player->collision_rect.x/TILE_SIZE) + x;
                 int iy = (this_player->collision_rect.y/TILE_SIZE) + y;
 
-                if(level_array[(iy) * LEVEL_SIZE + (ix)] == 0) {
+                if(level_array_data[(iy) * LEVEL_SIZE + (ix)] == 0) {
                     DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, PINK);
                 }
                 else {

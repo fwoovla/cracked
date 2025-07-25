@@ -94,7 +94,7 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
    
     collided = false;
     Vector4 collision_data = {0};
-    if(CheckCollision(collision_data, level_array)) {
+    if(CheckCollision(collision_data)) {
         collided = true;
     }
 
@@ -119,7 +119,7 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
 }
 
 
-bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
+bool PlayerShip::CheckCollision(Vector4 &collision_data) {
     for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 
@@ -128,7 +128,7 @@ bool PlayerShip::CheckCollision(Vector4 &collision_data, int *level_array) {
             int ix = (collision_rect.x/TILE_SIZE) + x;
             int iy = (collision_rect.y/TILE_SIZE) + y;
 
-            if(level_array[(iy * LEVEL_SIZE + ix)] == 0) {
+            if(level_array_data[(iy * LEVEL_SIZE + ix)] == 0) {
 
 /*              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
                 TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);

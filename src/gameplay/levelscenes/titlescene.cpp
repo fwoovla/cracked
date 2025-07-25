@@ -9,10 +9,14 @@ TitleScene::TitleScene() {
     return_scene = NO_SCENE;
     //game_settings = _game_settings;
 
+
+    bg_texture = LoadTexture("assets/levelbg1.png");
+
     Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 - GetScreenHeight() / 3 };
 
     LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
     //ScaleSprite(logo, {2,2});
+
 
     ui = new TitleUiLayer();
     ui->ConnectSignalTo(this);
@@ -30,6 +34,12 @@ SCENE_ID TitleScene::Update() {
 
 void TitleScene::Draw() {
     ClearBackground(BLUE);
+    DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
+                                {0,0,(float)GetScreenWidth(),
+                                (float)GetScreenHeight()},
+                                {0},
+                                0.0,
+                                WHITE);
     DrawSprite(logo);
     ui->Draw();
     //DrawButton(play_button);
@@ -40,6 +50,7 @@ void TitleScene::Draw() {
 TitleScene::~TitleScene() {
     TraceLog(LOG_INFO, "DESTROY TITLE");
     UnloadTexture(logo.texture);
+    UnloadTexture(bg_texture);
     delete ui;
 }
 
