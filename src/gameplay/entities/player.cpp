@@ -23,7 +23,7 @@ void Player::Update(int *level_array) {
     if (IsKeyDown(KEY_W)) collision_rect.y -= PLAYER_SPEED * dt;
     else if (IsKeyDown(KEY_S)) collision_rect.y += PLAYER_SPEED * dt;
     
-    Vector4 collision_data = {0};
+    collisionResult collision_data = {0};
     if(CheckCollision(collision_data)) {
         collided = true;
     }
@@ -49,7 +49,7 @@ void Player::Draw() {
     
 }
 
-bool Player::CheckCollision(Vector4 &collision_data) {
+bool Player::CheckCollision(collisionResult &collision_data) {
     for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 

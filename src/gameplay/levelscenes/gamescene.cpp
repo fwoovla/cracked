@@ -41,8 +41,7 @@ GameScene::GameScene(char level_data[]) {
             else if (colors[y * level_image.width + x].r == 0) {
                 level_array_data[y * level_image.width + x] = 0;
             }
-        }
-            
+        }      
     } 
 
     UnloadImage(level_image);
@@ -75,31 +74,11 @@ SCENE_ID GameScene::Update() {
     }
     DrawListUpdate(bullet_list);
     DrawListUpdate(entity_list);
-    //DrawListUpdate(entity_list);
-/*     for(int i = 0; i < 100; i++) {
-        if(bullet_list[i] != nullptr){
-            bullet_list[i]->Update(level_array_data);
-            if(bullet_list[i]->should_delete) {
-                TraceLog(LOG_INFO, "DELETING BULLET");
-                delete bullet_list[i];
-                bullet_list[i] = nullptr;
-            }
-        }
-        if(entity_list[i] != nullptr){
-            entity_list[i]->Update(level_array_data);
-            if(entity_list[i]->should_delete) {
-                TraceLog(LOG_INFO, "DELETING Entity");
-                delete entity_list[i];
-                entity_list[i] = nullptr;
-                }
-            }
-    }  */
 
     ui->Update();
     this_player->Update(level_array_data);
 
     camera.target = (Vector2){this_player->collision_rect.x, this_player->collision_rect.y};
-    //camera.offset = (Vector2){ this_player->position.x, this_player->position.y };
     return return_scene;
 }
 
@@ -127,15 +106,6 @@ void GameScene::Draw() {
  
     DrawListDraw(bullet_list);
     DrawListDraw(entity_list);
-/*     for(int i = 0; i < 100; i++) {
-        if(bullet_list[i] != nullptr){
-            bullet_list[i]->Draw();
-        }
-        if(entity_list[i] != nullptr){
-            entity_list[i]->Draw();
-        } 
-    } */
-
     
     EndMode2D();
 //------------------------END WORLDSPACE

@@ -42,9 +42,11 @@ void PlayerShip::Draw() {
 
     if(settings.show_debug){
         if(collided and settings.show_debug) {
+        //DrawCircleV(position, PLAYER_SIZE * 0.5, RED);
         DrawRectangleRec(collision_rect, RED);
         }
         else {
+        //DrawCircleV(position, PLAYER_SIZE * 0.5, GREEN);
         DrawRectangleRec(collision_rect, GREEN);
         }
     }
@@ -93,7 +95,7 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
     collision_rect.y += velocity.y;
    
     collided = false;
-    Vector4 collision_data = {0};
+    collisionResult collision_data = {0};
     if(CheckCollision(collision_data)) {
         collided = true;
     }
@@ -119,7 +121,7 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
 }
 
 
-bool PlayerShip::CheckCollision(Vector4 &collision_data) {
+bool PlayerShip::CheckCollision(collisionResult &collision_result) {
     for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 
@@ -134,7 +136,9 @@ bool PlayerShip::CheckCollision(Vector4 &collision_data) {
                 TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);
                 TraceLog(LOG_INFO, "checking cell at index%i %i ", ix, iy);
                 TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);  */
-
+/*                 if(CheckCollisionCircleRec( position, PLAYER_SIZE * 0.5, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
+                    return true;
+                } */
                 if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {                        return true;
                     return true;
                 }

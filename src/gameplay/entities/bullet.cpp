@@ -11,7 +11,7 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
     position = _position;
     rotation = _rotation;
     
-    LoadSpriteCentered(sprite, LoadTexture("assets/player.png"), position );
+    LoadSpriteCentered(sprite, LoadTexture("assets/laser1.png"), position );
     sprite.roataion = rotation;
 
     velocity = {BULLET_SPEED, 0};
@@ -34,30 +34,47 @@ void Bullet::Update(int *level_array) {
     if(should_delete) {
         return;
     }
+    Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
     //TraceLog(LOG_INFO, "BULLET velocity %i  %f  %f   %f", id, velocity.x, velocity.y, rotation);
     float dt = GetFrameTime();
 
-    position.x += velocity.x * dt;
-    position.y += velocity.y * dt;
+    collision_rect.x += velocity.x * dt;
+    collision_rect.y += velocity.y * dt;
+
+    //position.x += velocity.x * dt;
+    //position.y += velocity.y * dt;
+
+    collided = false;
+    collisionResult collision_data;
+    if(CheckCollision(collision_data)) {
+        collided = true;
+    }
+
+    if(collided) {
+        collision_rect.x = previous_collision_position.x;
+        collision_rect.y = previous_collision_position.y;
+        velocity = {0};
+    }
+    else {
+        position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
+    }
+
     sprite.dest.x = position.x;
     sprite.dest.y = position.y;
 
     lifetime->Update();
-
-
-
-    //TraceLog(LOG_INFO, "BULLET Update");
-    
+    //TraceLog(LOG_INFO, "BULLET Update");    
 }
 
 void Bullet::Draw() {
     DrawSprite(sprite);
-
+    if(settings.show_debug) {
+        DrawRectangleRec(collision_rect, RED);
+    }
     //TraceLog(LOG_INFO, "BULLET Draw %i", id);
-    
 }
 
-bool Bullet::CheckCollision(Vector4 &collision_data) {
+bool Bullet::CheckCollision(collisionResult &collision_data) {
     return false;
 }
 

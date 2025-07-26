@@ -17,10 +17,15 @@ class DrawableEntity{
     virtual ~DrawableEntity() = default;
     virtual void Update(int *level_data) = 0;
     virtual void Draw() = 0;
-    virtual bool CheckCollision(Vector4 &collision_data) = 0;
+    virtual bool CheckCollision(collisionResult &collision_data) = 0;
 
     bool should_delete;
 };
+
+
+inline bool EntityCheckCollision(DrawableEntity *_entity, Vector4 &collision_data) {
+    return false;
+}
 
 
 inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEntity *new_entity) {

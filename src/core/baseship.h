@@ -11,7 +11,7 @@ class BaseShip : public DrawableEntity {
 
     virtual void Update(int *level_data) = 0;
     virtual void Draw() = 0;
-    virtual bool CheckCollision(Vector4 &collision_data) = 0;
+    virtual bool CheckCollision(collisionResult &collision_data) = 0;
     
     
 };

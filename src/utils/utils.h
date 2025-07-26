@@ -36,9 +36,8 @@ class Timer : public SignalEmiter{
     double TimeRemaining();
     double TimeElapsed();
     double GetWaitTime();
-    
-    private:
 
+    private:
     double wait_time; //in seconds
     double elapsed_time;
     bool active;

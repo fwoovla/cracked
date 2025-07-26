@@ -7,7 +7,7 @@ class Player : public DrawableEntity {
     ~Player() override;
     void Update(int *level_data) override;
     void Draw() override;
-    bool CheckCollision(Vector4 &collision_data) override;
+    bool CheckCollision(collisionResult &collision_data) override;
 
     Rectangle collision_rect;
     bool collided;
@@ -19,7 +19,7 @@ class Bullet :public DrawableEntity, public SignalObserver {
     ~Bullet() override;
     void Update(int *level_data) override;
     void Draw() override;
-    bool CheckCollision(Vector4 &collision_data) override;
+    bool CheckCollision(collisionResult &collision_data) override;
     void OnSignal(SIGNAL signal) override;
 
     Rectangle collision_rect;

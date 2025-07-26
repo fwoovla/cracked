@@ -9,12 +9,12 @@
 #define LEVEL_SIZE 64
 #define TILE_SIZE 32
 
-#define PLAYER_SPEED 3.0f
+#define PLAYER_SPEED 1.5f
 #define PLAYER_SIZE 30
 #define COLLISION_RANGE 3
-#define SHIP_THRUST 0.05f
-#define SHIP_ROT_SPEED 180.0f
-#define AIR_FRICTION 0.999f
+#define SHIP_THRUST 0.02f
+#define SHIP_ROT_SPEED 90.0f
+#define AIR_FRICTION 0.99f
 
 #define DRAW_LIST_SIZE 100
 
@@ -26,7 +26,7 @@ enum SIGNAL {
     TIMER_TIMEOUT,
     PLAY_PRESSED,
     SHOULD_DELETE,
-    CAN_FIRE
+    CAN_FIRE,
 };
 
 enum SCENE_ID {
@@ -42,6 +42,10 @@ struct  gameSettings {
     int control_type;
 };
 
+struct  collisionResult {
+    Vector2 collision_dir;
+    
+};
 
 
 
