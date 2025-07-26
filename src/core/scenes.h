@@ -52,8 +52,6 @@ class GameScene : public  BaseScene, public SignalObserver {
     void DrawDebug();
 
 
-    //DrawableEntity *bullet_draw_list[DRAW_LIST_SIZE];
-    //DrawableEntity *entity_draw_list[DRAW_LIST_SIZE];
 
     BaseUILayer *ui;
     Camera2D camera;
@@ -65,4 +63,5 @@ class GameScene : public  BaseScene, public SignalObserver {
     Texture2D bg_texture;
 
 };
+
 

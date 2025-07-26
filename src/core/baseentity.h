@@ -14,18 +14,13 @@ class DrawableEntity{
     public:
     Sprite sprite;
 
-    virtual ~DrawableEntity(){};
+    virtual ~DrawableEntity() = default;
     virtual void Update(int *level_data) = 0;
     virtual void Draw() = 0;
     virtual bool CheckCollision(Vector4 &collision_data) = 0;
 
     bool should_delete;
 };
-
-
-extern DrawableEntity *bullet_list[DRAW_LIST_SIZE];
-extern DrawableEntity *entity_list[DRAW_LIST_SIZE];
-//extern std::vector<DrawableEntity *> draw_list;
 
 
 inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEntity *new_entity) {
@@ -42,20 +37,24 @@ inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEn
 
 inline void DrawListDraw(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        if(_draw_list[i] == nullptr){
+        if(_draw_list[i] != nullptr){
             _draw_list[i]->Draw();
-            return;
         }
     }
 }
 
 inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
-    for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        if(_draw_list[i] == nullptr){
+    for(int i = 0; i < 100; i++) {
+        if(_draw_list[i] != nullptr){
             _draw_list[i]->Update(level_array_data);
-            return;
+            if(_draw_list[i]->should_delete) {
+                TraceLog(LOG_INFO, "DELETING ENTITY");
+                delete _draw_list[i];
+                _draw_list[i] = nullptr;
+            }
         }
     }
 }
 
-
+extern DrawableEntity *bullet_list[DRAW_LIST_SIZE];//[DRAW_LIST_SIZE];
+extern DrawableEntity *entity_list[DRAW_LIST_SIZE];

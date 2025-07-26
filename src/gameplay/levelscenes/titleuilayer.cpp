@@ -11,6 +11,10 @@ TitleUiLayer::TitleUiLayer() {
     
 }
 
+TitleUiLayer::~TitleUiLayer() {
+
+}
+
 void TitleUiLayer::Draw() {
     DrawButton(start_button);
     DrawButton(quit_button);
@@ -31,8 +35,4 @@ void TitleUiLayer::Update() {
             EmitSignal(PLAY_PRESSED);
         }        
     }
-}
-
-void TitleUiLayer::Destroy() {
-
 }

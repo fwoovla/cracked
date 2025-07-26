@@ -20,9 +20,9 @@ void Game::StartGame() {
     while(running) {
 
         scene_manager->UpdateScene();
-        scene_manager->DrawScene();
-
+        
         BeginDrawing();
+        scene_manager->DrawScene();
         //ClearBackground(RAYWHITE);
         EndDrawing();
 

@@ -19,7 +19,7 @@
 #define DRAW_LIST_SIZE 100
 
 #define BULLET_SIZE 10
-#define BULLET_SPEED 2000
+#define BULLET_SPEED 500
 
 enum SIGNAL {
     END_GAME,

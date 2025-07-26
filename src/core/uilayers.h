@@ -5,9 +5,9 @@ class TitleUiLayer : public BaseUILayer {
 
     public:
     TitleUiLayer();
+    ~TitleUiLayer() override;
     void Update() override;
     void Draw() override;
-    void Destroy() override;
 
     private:
     Button start_button;
@@ -19,9 +19,9 @@ class GameUILayer : public BaseUILayer {
 
     public:
     GameUILayer();
+    ~GameUILayer() override;
     void Update() override;
     void Draw() override;
-    void Destroy() override;
     
     private:
     

@@ -29,7 +29,6 @@ void SceneManager::UpdateScene()
 
 void SceneManager::DrawScene() {
     current_scene->Draw();
-
 }
 
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {

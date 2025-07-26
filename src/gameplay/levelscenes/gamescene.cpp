@@ -1,19 +1,24 @@
 #include "../../core/scenes.h"
 
-DrawableEntity *bullet_list[DRAW_LIST_SIZE];
-DrawableEntity *entity_list[DRAW_LIST_SIZE];
 int* level_array_data;
+
+DrawableEntity *bullet_list[DRAW_LIST_SIZE] = {nullptr};
+DrawableEntity *entity_list[DRAW_LIST_SIZE] = {nullptr};
 
 
 GameScene::GameScene(char level_data[]) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     //delete draw_list;
-    for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        bullet_list[i] = nullptr;
-        entity_list[i] = nullptr;
-    }
 
+ 
+    for(int i = 0; i < DRAW_LIST_SIZE; i++) {
+        delete bullet_list[i];
+        bullet_list[i] = nullptr;
+         delete(entity_list[i]);
+        entity_list[i] = nullptr; 
+
+    } 
     
     
 //LOAD LEVEL------------------------------
@@ -30,9 +35,6 @@ GameScene::GameScene(char level_data[]) {
 
      for(int x = 0; x < LEVEL_SIZE; x++) {
         for(int y = 0; y < LEVEL_SIZE; y++) {
-/*             Sprite new_tile;
-            LoadSprite(new_tile, space_tile_texture, {(float)x *TILE_SIZE, (float)y *TILE_SIZE} );
-            background_sprites.push_back(new_tile);  */
             if(colors[y * level_image.width + x].r == 255) {
                 level_array_data[y * level_image.width + x] = 1;
             }
@@ -54,7 +56,6 @@ GameScene::GameScene(char level_data[]) {
 //LOAD PLAYER------------------------------------
     this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2} );
     entity_list[0] = this_player;
-    //draw_list.push_back(this_player);
     this_player->camera = &camera;
     //TraceLog(LOG_INFO, "PLAYER CREATED");
 
@@ -72,8 +73,10 @@ SCENE_ID GameScene::Update() {
     if(IsKeyPressed(KEY_TAB)) {
         settings.show_debug = !settings.show_debug;
     }
+    DrawListUpdate(bullet_list);
+    DrawListUpdate(entity_list);
     //DrawListUpdate(entity_list);
-    for(int i = 0; i < 100; i++) {
+/*     for(int i = 0; i < 100; i++) {
         if(bullet_list[i] != nullptr){
             bullet_list[i]->Update(level_array_data);
             if(bullet_list[i]->should_delete) {
@@ -90,7 +93,7 @@ SCENE_ID GameScene::Update() {
                 entity_list[i] = nullptr;
                 }
             }
-    } 
+    }  */
 
     ui->Update();
     this_player->Update(level_array_data);
@@ -121,15 +124,17 @@ void GameScene::Draw() {
     if(settings.show_debug) {
         DrawDebug();
     }
-
-    for(int i = 0; i < 100; i++) {
+ 
+    DrawListDraw(bullet_list);
+    DrawListDraw(entity_list);
+/*     for(int i = 0; i < 100; i++) {
         if(bullet_list[i] != nullptr){
             bullet_list[i]->Draw();
         }
         if(entity_list[i] != nullptr){
             entity_list[i]->Draw();
         } 
-    }
+    } */
 
     
     EndMode2D();
@@ -140,10 +145,22 @@ void GameScene::Draw() {
 
 GameScene::~GameScene() {
     delete[] level_array_data;
-    delete this_player;
+    //delete this_player;
+    delete ui;
     UnloadTexture(space_tile_texture);
     UnloadTexture(asteroid_texture);
     UnloadTexture(bg_texture);
+
+     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
+        if(bullet_list[i] != nullptr) {
+            delete(bullet_list[i]);
+            bullet_list[i] = nullptr;
+        }
+        if(bullet_list[i] != nullptr) {
+            delete(entity_list[i]);
+            entity_list[i] = nullptr;
+        }
+    }
 }
 
 void GameScene::OnSignal(SIGNAL signal) {

@@ -5,6 +5,10 @@ GameUILayer::GameUILayer(){
     quit_button.default_color = GRAY;
 }
 
+GameUILayer::~GameUILayer() {
+
+}
+
 void GameUILayer::Draw() {
     DrawButton(quit_button);
 
@@ -18,8 +22,4 @@ void GameUILayer::Update() {
             EmitSignal(END_GAME);
         }
     }
-}
-
-void GameUILayer::Destroy() {
-
 }
