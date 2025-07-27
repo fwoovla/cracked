@@ -1,8 +1,9 @@
-obj/Debug/scenemanager.o: src/core/scenemanager.cpp \
- /usr/include/stdc-predef.h src/core/scenemanager.h src/core/scenes.h \
- src/core/bacescene.h /usr/local/include/raylib.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h src/core/../globals.h \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
+obj/Debug/scenemanager.o: src/gameplay/scenemanager.cpp \
+ /usr/include/stdc-predef.h src/gameplay/../core/global_def.h \
+ /usr/local/include/raylib.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
+ src/gameplay/../core/../utils/utils.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -52,8 +53,7 @@ obj/Debug/scenemanager.o: src/core/scenemanager.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/core/uilayers.h src/core/baseuilayer.h src/core/button.h \
- src/core/../utils/utils.h /usr/include/c++/13/cmath /usr/include/math.h \
+ /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
@@ -109,16 +109,18 @@ obj/Debug/scenemanager.o: src/core/scenemanager.cpp \
  /usr/include/c++/13/tr1/modified_bessel_func.tcc \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
- /usr/include/c++/13/tr1/riemann_zeta.tcc src/core/baseentity.h \
- src/core/sprite.h src/core/entities.h src/core/ships.h \
- src/core/baseship.h
+ /usr/include/c++/13/tr1/riemann_zeta.tcc src/gameplay/../core/uilayers.h \
+ src/gameplay/../core/baseuilayer.h src/gameplay/../core/button.h \
+ src/gameplay/../core/entities.h src/gameplay/../core/baseentity.h \
+ src/gameplay/../core/sprite.h src/gameplay/../core/ships.h \
+ src/gameplay/../core/baseship.h src/gameplay/../core/global_types.h \
+ src/gameplay/../core/scenes.h src/gameplay/../core/bacescene.h \
+ src/gameplay/../core/scenemanager.h src/gameplay/../core/game.h
 /usr/include/stdc-predef.h:
-src/core/scenemanager.h:
-src/core/scenes.h:
-src/core/bacescene.h:
+src/gameplay/../core/global_def.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/core/../globals.h:
+src/gameplay/../core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -179,10 +181,6 @@ src/core/../globals.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
-src/core/uilayers.h:
-src/core/baseuilayer.h:
-src/core/button.h:
-src/core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
@@ -245,8 +243,16 @@ src/core/../utils/utils.h:
 /usr/include/c++/13/tr1/poly_hermite.tcc:
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
-src/core/baseentity.h:
-src/core/sprite.h:
-src/core/entities.h:
-src/core/ships.h:
-src/core/baseship.h:
+src/gameplay/../core/uilayers.h:
+src/gameplay/../core/baseuilayer.h:
+src/gameplay/../core/button.h:
+src/gameplay/../core/entities.h:
+src/gameplay/../core/baseentity.h:
+src/gameplay/../core/sprite.h:
+src/gameplay/../core/ships.h:
+src/gameplay/../core/baseship.h:
+src/gameplay/../core/global_types.h:
+src/gameplay/../core/scenes.h:
+src/gameplay/../core/bacescene.h:
+src/gameplay/../core/scenemanager.h:
+src/gameplay/../core/game.h:

@@ -29,6 +29,7 @@ void Timer::Update() {
     //TraceLog(LOG_INFO,"TIMER");
     elapsed_time += GetFrameTime();
     if(elapsed_time >= wait_time) {
+
         EmitSignal(TIMER_TIMEOUT);
         active = false;
         finished = true;
@@ -63,6 +64,9 @@ void SignalObserver::OnSignal(SIGNAL signal) {
 
 }
 
+void SignalEmiter::AddSignal() {
+    
+}
 
 void SignalEmiter::ConnectSignalTo(SignalObserver *_observer)
 {

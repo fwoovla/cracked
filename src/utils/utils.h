@@ -1,9 +1,25 @@
 #pragma once
 
-#include "../globals.h"
 #include <vector>
 #include <raylib.h>
 #include <cmath>
+//#include "../../global_def.h"
+
+#define MAX_SIGNAL_CONNECTIONS 256
+
+
+enum SIGNAL {
+    END_GAME,
+    TIMER_TIMEOUT,
+    PLAY_PRESSED,
+    SHOULD_DELETE,
+    CAN_FIRE,
+};
+
+struct Signal {
+    void (*callback)(void*);
+    void* payload;
+};
 
 
 class SignalObserver {
@@ -17,10 +33,12 @@ class SignalObserver {
 
 class SignalEmiter {
     public:
+    void AddSignal();
     void ConnectSignalTo(SignalObserver *_observer);
     void EmitSignal(SIGNAL signal);
 
-    std::vector< SignalObserver * > observers;
+    std::vector<SignalObserver *> observers;
+
 
     private:
 

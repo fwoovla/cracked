@@ -1,9 +1,9 @@
 obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
- /usr/include/stdc-predef.h src/gameplay/levelscenes/../../core/scenes.h \
- src/gameplay/levelscenes/../../core/bacescene.h \
+ /usr/include/stdc-predef.h \
+ src/gameplay/levelscenes/../../core/global_def.h \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/gameplay/levelscenes/../../core/../globals.h \
+ src/gameplay/levelscenes/../../core/../utils/utils.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -54,10 +54,6 @@ obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/gameplay/levelscenes/../../core/uilayers.h \
- src/gameplay/levelscenes/../../core/baseuilayer.h \
- src/gameplay/levelscenes/../../core/button.h \
- src/gameplay/levelscenes/../../core/../utils/utils.h \
  /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -115,17 +111,24 @@ obj/Debug/gamescene.o: src/gameplay/levelscenes/gamescene.cpp \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
  /usr/include/c++/13/tr1/riemann_zeta.tcc \
+ src/gameplay/levelscenes/../../core/uilayers.h \
+ src/gameplay/levelscenes/../../core/baseuilayer.h \
+ src/gameplay/levelscenes/../../core/button.h \
+ src/gameplay/levelscenes/../../core/entities.h \
  src/gameplay/levelscenes/../../core/baseentity.h \
  src/gameplay/levelscenes/../../core/sprite.h \
- src/gameplay/levelscenes/../../core/entities.h \
  src/gameplay/levelscenes/../../core/ships.h \
- src/gameplay/levelscenes/../../core/baseship.h
+ src/gameplay/levelscenes/../../core/baseship.h \
+ src/gameplay/levelscenes/../../core/global_types.h \
+ src/gameplay/levelscenes/../../core/scenes.h \
+ src/gameplay/levelscenes/../../core/bacescene.h \
+ src/gameplay/levelscenes/../../core/scenemanager.h \
+ src/gameplay/levelscenes/../../core/game.h
 /usr/include/stdc-predef.h:
-src/gameplay/levelscenes/../../core/scenes.h:
-src/gameplay/levelscenes/../../core/bacescene.h:
+src/gameplay/levelscenes/../../core/global_def.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/gameplay/levelscenes/../../core/../globals.h:
+src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -186,10 +189,6 @@ src/gameplay/levelscenes/../../core/../globals.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
-src/gameplay/levelscenes/../../core/uilayers.h:
-src/gameplay/levelscenes/../../core/baseuilayer.h:
-src/gameplay/levelscenes/../../core/button.h:
-src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
@@ -252,8 +251,16 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/tr1/poly_hermite.tcc:
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
+src/gameplay/levelscenes/../../core/uilayers.h:
+src/gameplay/levelscenes/../../core/baseuilayer.h:
+src/gameplay/levelscenes/../../core/button.h:
+src/gameplay/levelscenes/../../core/entities.h:
 src/gameplay/levelscenes/../../core/baseentity.h:
 src/gameplay/levelscenes/../../core/sprite.h:
-src/gameplay/levelscenes/../../core/entities.h:
 src/gameplay/levelscenes/../../core/ships.h:
 src/gameplay/levelscenes/../../core/baseship.h:
+src/gameplay/levelscenes/../../core/global_types.h:
+src/gameplay/levelscenes/../../core/scenes.h:
+src/gameplay/levelscenes/../../core/bacescene.h:
+src/gameplay/levelscenes/../../core/scenemanager.h:
+src/gameplay/levelscenes/../../core/game.h:

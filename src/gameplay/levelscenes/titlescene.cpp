@@ -1,8 +1,12 @@
-#include "../../core/scenes.h"
+#include "../../core/global_def.h"
+
+
+
+/* #include "../../core/scenes.h"
 #include "../../core/sprite.h"
 #include "../../core/button.h"
 
-#include "../../utils/utils.h"
+#include "../../utils/utils.h" */
 
 TitleScene::TitleScene() {
     scene_id = TITLE_SCENE;

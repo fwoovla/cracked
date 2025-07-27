@@ -1,4 +1,15 @@
 #include "baseship.h"
+#include "../utils/utils.h"
+#include "global_types.h"
+
+
+#define PLAYER_SPEED 1.5f
+#define PLAYER_SIZE 30
+#define COLLISION_RANGE 3
+#define SHIP_THRUST 0.02f
+#define SHIP_ROT_SPEED 90.0f
+#define AIR_FRICTION 0.99f
+
 
 class PlayerShip : public BaseShip, public SignalObserver {
     public:

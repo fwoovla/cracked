@@ -1,7 +1,11 @@
 #pragma once
 #include "baseentity.h"
+//#include "global_def.h"
+#include "../utils/utils.h"
 
-class Player : public DrawableEntity {
+
+
+/* class Player : public DrawableEntity {
     public:
     Player();
     ~Player() override;
@@ -11,7 +15,7 @@ class Player : public DrawableEntity {
 
     Rectangle collision_rect;
     bool collided;
-};
+}; */
 
 class Bullet :public DrawableEntity, public SignalObserver {
     public:

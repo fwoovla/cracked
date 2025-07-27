@@ -1,8 +1,8 @@
-#include "../../core/ships.h"
+#include "../../core/global_def.h"
 #include<cmath>
 #include <raymath.h>
 
-#include "../../core/entities.h"
+//#include "../../core/entities.h"
 
 PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
 

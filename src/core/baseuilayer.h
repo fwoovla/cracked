@@ -1,7 +1,12 @@
 #pragma once
+
+//#include "global_def.h"
+
+/* 
+#include "button.h"
 #include <raylib.h>
 #include "../globals.h"
-#include "button.h"
+*/
 #include "../utils/utils.h"
 
 class BaseUILayer : public SignalEmiter {

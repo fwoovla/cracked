@@ -1,9 +1,8 @@
 #pragma once
 #include <raylib.h>
-#include "../globals.h"
-#include "uilayers.h"
-#include "../utils/utils.h"
-#include "baseentity.h"
+#include "global_types.h"
+
+//#include "baseentity.h"
 
 class BaseScene  {
     public:

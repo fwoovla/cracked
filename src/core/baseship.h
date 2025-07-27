@@ -1,10 +1,15 @@
 #pragma once
+
+//#include "global_def.h"
+#include "baseentity.h"
+
+/* 
 #include <raylib.h>
 #include "../globals.h"
 #include "uilayers.h"
 #include "../utils/utils.h"
-#include "baseentity.h"
 #include "sprite.h"
+ */
 
 class BaseShip : public DrawableEntity {
     public:

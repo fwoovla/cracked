@@ -1,4 +1,4 @@
-#include "../../core/scenes.h"
+#include "../../core/global_def.h"
 
 SplashScreen::SplashScreen() {
 

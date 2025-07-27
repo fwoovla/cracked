@@ -1,9 +1,16 @@
 #pragma once
+
+//#include "global_def.h"
+
+
 #include "bacescene.h"
 #include "sprite.h"
+#include "uilayers.h"
+#include "../utils/utils.h"
+/* 
 #include "entities.h"
 #include "ships.h"
-
+ */
 
 
 class SplashScreen : public  BaseScene, public SignalObserver {

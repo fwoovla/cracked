@@ -1,4 +1,5 @@
-#include "../../core/scenes.h"
+
+#include "../../core/global_def.h"
 
 int* level_array_data;
 
@@ -27,7 +28,7 @@ GameScene::GameScene(char level_data[]) {
     bg_texture = LoadTexture("assets/levelbg1.png");
     
     Image level_image = LoadImage(level_data);
-    TraceLog(LOG_INFO, "LEVEL DATA LOADED, %s", level_data);   
+    TraceLog(LOG_INFO, "LEVEL DATA LOADED, %s", level_data); 
     
     Color *colors = LoadImageColors(level_image);
 
@@ -72,8 +73,8 @@ SCENE_ID GameScene::Update() {
     if(IsKeyPressed(KEY_TAB)) {
         settings.show_debug = !settings.show_debug;
     }
-    DrawListUpdate(bullet_list);
-    DrawListUpdate(entity_list);
+    DrawListUpdate(bullet_list, level_array_data);
+    DrawListUpdate(entity_list, level_array_data);
 
     ui->Update();
     this_player->Update(level_array_data);

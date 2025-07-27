@@ -1,7 +1,13 @@
 #pragma once
+
+#include "global_def.h"
+
+/* 
 #include "../globals.h"
 #include "../utils/utils.h"
 #include "scenemanager.h"
+
+ */
 
 class Game{
     public:

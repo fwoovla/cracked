@@ -1,5 +1,9 @@
-#include "../../core/entities.h"
+#include "../../core/global_def.h"
 #include <raymath.h>
+
+
+#define BULLET_SIZE 10
+#define BULLET_SPEED 500
 
 //extern DrawableEntity *bullet;
 Bullet::Bullet(Vector2 _position, float _rotation) {

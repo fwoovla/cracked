@@ -1,6 +1,9 @@
 #pragma once
 
-#include "scenes.h"
+#include "global_def.h"
+
+ 
+#include "bacescene.h"
 
 
 class SceneManager{

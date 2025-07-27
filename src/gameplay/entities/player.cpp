@@ -1,4 +1,4 @@
-#include "../../core/entities.h"
+/* #include "../../core/entities.h"
 
 Player::Player() : DrawableEntity() {
     LoadSprite(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
@@ -65,7 +65,7 @@ bool Player::CheckCollision(collisionResult &collision_data) {
                 TraceLog(LOG_INFO, "checking cell at index%i %i ", ix, iy);
                 TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);  */
 
-                if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {                        return true;
+ /*               if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {                        return true;
                     return true;
                 }
             }
@@ -73,4 +73,4 @@ bool Player::CheckCollision(collisionResult &collision_data) {
         }
     }
     return false;
-}
+} */

@@ -1,7 +1,6 @@
 obj/Debug/utils.o: src/utils/utils.cpp /usr/include/stdc-predef.h \
- src/utils/utils.h src/utils/../globals.h /usr/local/include/raylib.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
+ src/utils/utils.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -51,6 +50,8 @@ obj/Debug/utils.o: src/utils/utils.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
+ /usr/local/include/raylib.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -110,9 +111,6 @@ obj/Debug/utils.o: src/utils/utils.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/tr1/riemann_zeta.tcc
 /usr/include/stdc-predef.h:
 src/utils/utils.h:
-src/utils/../globals.h:
-/usr/local/include/raylib.h:
-/usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -173,6 +171,8 @@ src/utils/../globals.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
+/usr/local/include/raylib.h:
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:

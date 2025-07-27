@@ -1,6 +1,6 @@
 #pragma once
 #include <raylib.h>
-#include "../globals.h"
+//#include "../globals.h"
 
 struct Sprite {
     Texture2D texture;

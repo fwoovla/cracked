@@ -1,8 +1,22 @@
 #pragma once
-#include <raylib.h>
+
+
+
+/* 
 #include "../globals.h"
 #include "../utils/utils.h"
+*/
+#include <raylib.h>
 #include "sprite.h"
+
+
+#define DRAW_LIST_SIZE 100
+
+
+struct  collisionResult {
+    Vector2 collision_dir;
+    
+};
 
 
 class BaseEntity  {
@@ -21,6 +35,12 @@ class DrawableEntity{
 
     bool should_delete;
 };
+
+
+extern DrawableEntity *bullet_list[DRAW_LIST_SIZE];
+extern DrawableEntity *entity_list[DRAW_LIST_SIZE];
+
+
 
 
 inline bool EntityCheckCollision(DrawableEntity *_entity, Vector4 &collision_data) {
@@ -48,10 +68,10 @@ inline void DrawListDraw(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
     }
 }
 
-inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
+inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE], int *level_data) {
     for(int i = 0; i < 100; i++) {
         if(_draw_list[i] != nullptr){
-            _draw_list[i]->Update(level_array_data);
+            _draw_list[i]->Update(level_data);
             if(_draw_list[i]->should_delete) {
                 TraceLog(LOG_INFO, "DELETING ENTITY");
                 delete _draw_list[i];
@@ -61,5 +81,4 @@ inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
     }
 }
 
-extern DrawableEntity *bullet_list[DRAW_LIST_SIZE];//[DRAW_LIST_SIZE];
-extern DrawableEntity *entity_list[DRAW_LIST_SIZE];
+
