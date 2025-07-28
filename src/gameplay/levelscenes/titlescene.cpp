@@ -1,13 +1,6 @@
 #include "../../core/global_def.h"
 
 
-
-/* #include "../../core/scenes.h"
-#include "../../core/sprite.h"
-#include "../../core/button.h"
-
-#include "../../utils/utils.h" */
-
 TitleScene::TitleScene() {
     scene_id = TITLE_SCENE;
     return_scene = NO_SCENE;
@@ -23,7 +16,8 @@ TitleScene::TitleScene() {
 
 
     ui = new TitleUiLayer();
-    ui->ConnectSignalTo(this);
+    ui->play_pressed.Connect( [&](){this->OnPlayPressed();} );
+    ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
 }
 
 
@@ -46,33 +40,24 @@ void TitleScene::Draw() {
                                 WHITE);
     DrawSprite(logo);
     ui->Draw();
-    //DrawButton(play_button);
-    //DrawText("TITLE SCENE", 200, 200, 40, BLACK);
-    //DrawText("X", (float)GetScreenWidth()/2, (float)GetScreenHeight() /2, 10, BLACK);
+
 }
 
 TitleScene::~TitleScene() {
-    TraceLog(LOG_INFO, "DESTROY TITLE");
+    //TraceLog(LOG_INFO, "DESTROY TITLE");
     UnloadTexture(logo.texture);
     UnloadTexture(bg_texture);
     delete ui;
 }
 
-void TitleScene::OnSignal(SIGNAL signal) {
-    TraceLog(LOG_INFO, "SCENE KNOWS, %i", signal);
-    switch (signal)
-    {
-    case PLAY_PRESSED:
-        return_scene = GAME_SCENE;
-        break;
+void TitleScene::OnPlayPressed() {
+    //TraceLog(LOG_INFO, "SCENE PLAY");
+    return_scene = GAME_SCENE;
 
-    case END_GAME:
-        
-        return_scene = SPLASH_SCENE;
-        break;
+}
 
-    default:
-        TraceLog(LOG_INFO, "SCENE DOES NOT KNOW, %i", signal);
-        break;
-    }
+void TitleScene::OnQuitPressed() {
+    //TraceLog(LOG_INFO, "SCENE QUIT");
+    return_scene = SPLASH_SCENE;
+
 }

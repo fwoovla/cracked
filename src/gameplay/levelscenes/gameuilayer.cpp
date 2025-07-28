@@ -14,12 +14,17 @@ void GameUILayer::Draw() {
 
 }
 
-void GameUILayer::Update() {
-    //TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
+
+void GameUILayer::Update()
+{
     if(IsButtonHovered(quit_button)) {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
-            EmitSignal(END_GAME);
+            //TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
+            quit_pressed.EmitSignal();
         }
     }
+}
+
+void GameUILayer::OnPlayerShoot(){
+    TraceLog(LOG_INFO, "PLAYER SHOOT");
 }

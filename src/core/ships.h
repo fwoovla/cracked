@@ -11,7 +11,7 @@
 #define AIR_FRICTION 0.99f
 
 
-class PlayerShip : public BaseShip, public SignalObserver {
+class PlayerShip : public BaseShip {
     public:
     PlayerShip(Vector2 _position);
     ~PlayerShip() override;
@@ -20,7 +20,8 @@ class PlayerShip : public BaseShip, public SignalObserver {
     bool CheckCollision(collisionResult &collision_data) override;
     void DoMovement(float dt, int *level_array);
     void DoWeapons();
-    void OnSignal(SIGNAL signal) override;
+
+    void OnGunTimerTimeout();
 
     
     Rectangle collision_rect;
@@ -37,6 +38,8 @@ class PlayerShip : public BaseShip, public SignalObserver {
 
     Timer *gun_timer;
     bool can_fire;
+
+    Signal shoot;
 
 };
 

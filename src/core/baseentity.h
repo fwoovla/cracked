@@ -43,9 +43,9 @@ extern DrawableEntity *entity_list[DRAW_LIST_SIZE];
 
 
 
-inline bool EntityCheckCollision(DrawableEntity *_entity, Vector4 &collision_data) {
+/* inline bool EntityCheckCollision(DrawableEntity *_entity, Vector4 &collision_data) {
     return false;
-}
+} */
 
 
 inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEntity *new_entity) {

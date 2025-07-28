@@ -17,14 +17,14 @@
     bool collided;
 }; */
 
-class Bullet :public DrawableEntity, public SignalObserver {
+class Bullet :public DrawableEntity{
     public:
     Bullet(Vector2 _position, float _rotation);
     ~Bullet() override;
     void Update(int *level_data) override;
     void Draw() override;
     bool CheckCollision(collisionResult &collision_data) override;
-    void OnSignal(SIGNAL signal) override;
+    void OnLifetimeTimeout();
 
     Rectangle collision_rect;
     Vector2 centered_offset;

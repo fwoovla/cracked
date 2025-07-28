@@ -13,13 +13,13 @@
  */
 
 
-class SplashScreen : public  BaseScene, public SignalObserver {
+class SplashScreen : public  BaseScene{
     public:
     SplashScreen();
     ~SplashScreen() override;
     SCENE_ID Update() override;
     void Draw() override;
-    void OnSignal(SIGNAL signal);
+    void OnSignal();
 
 
     Timer *timer;
@@ -31,16 +31,17 @@ class SplashScreen : public  BaseScene, public SignalObserver {
 };
 
 
-class TitleScene : public  BaseScene, public SignalObserver {
+class TitleScene : public  BaseScene{
     public:
     TitleScene();
     ~TitleScene() override;
     SCENE_ID Update() override;
     void Draw() override;
-    void OnSignal(SIGNAL signal);
+    void OnPlayPressed();
+    void OnQuitPressed();
 
-    BaseUILayer *ui;
-    Button play_button;
+    TitleUiLayer *ui;
+    //Button play_button;
     Sprite logo;
     Texture2D bg_texture;
     //gameSettings &game_settings;
@@ -48,19 +49,19 @@ class TitleScene : public  BaseScene, public SignalObserver {
 };
 
 
-class GameScene : public  BaseScene, public SignalObserver {
+class GameScene : public  BaseScene{
     public:
     GameScene(char level_data[]);
     ~GameScene() override;
     SCENE_ID Update() override;
     void Draw() override;
-    void OnSignal(SIGNAL signal);
     void DrawLevel();
     void DrawDebug();
+    void OnQuitPressed();
 
 
 
-    BaseUILayer *ui;
+    GameUILayer*ui;
     Camera2D camera;
 
     //int* level_array;

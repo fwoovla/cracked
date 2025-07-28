@@ -3,6 +3,7 @@
 #include <vector>
 #include <raylib.h>
 #include <cmath>
+#include <functional>
 //#include "../../global_def.h"
 
 #define MAX_SIGNAL_CONNECTIONS 256
@@ -16,35 +17,15 @@ enum SIGNAL {
     CAN_FIRE,
 };
 
-struct Signal {
-    void (*callback)(void*);
-    void* payload;
-};
-
-
-class SignalObserver {
-
+class Signal {
     public:
-    virtual void OnSignal(SIGNAL signal) = 0;
-
-    private:
-
+    std::vector<std::function<void()>> callbacks;
+    void Connect(std::function<void()> const& callback);
+    void EmitSignal();    
 };
 
-class SignalEmiter {
-    public:
-    void AddSignal();
-    void ConnectSignalTo(SignalObserver *_observer);
-    void EmitSignal(SIGNAL signal);
 
-    std::vector<SignalObserver *> observers;
-
-
-    private:
-
-};
-
-class Timer : public SignalEmiter{
+class Timer{
     public:
     Timer(double _wait_time, bool _autostart, bool _one_shot);
     void Start();
@@ -54,6 +35,8 @@ class Timer : public SignalEmiter{
     double TimeRemaining();
     double TimeElapsed();
     double GetWaitTime();
+    
+    Signal timout;
 
     private:
     double wait_time; //in seconds
@@ -62,6 +45,7 @@ class Timer : public SignalEmiter{
     bool finished;
     bool one_shot;
     bool autostart;
+    
 };
 
 

@@ -51,13 +51,16 @@ GameScene::GameScene(char level_data[]) {
 
 //LOAD UI----------------------------------------------
     ui = new GameUILayer();
-    ui->ConnectSignalTo(this);
+    ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
 
-//LOAD PLAYER------------------------------------
+    //ui->ConnectSignalTo(this);
+    
+    //LOAD PLAYER------------------------------------
     this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2} );
     entity_list[0] = this_player;
     this_player->camera = &camera;
     //TraceLog(LOG_INFO, "PLAYER CREATED");
+    this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
 
 //SETUP CAMERA--------------------------------------
     camera = { 0 };
@@ -133,7 +136,7 @@ GameScene::~GameScene() {
         }
     }
 }
-
+/* 
 void GameScene::OnSignal(SIGNAL signal) {
 
     TraceLog(LOG_INFO, "SCENE KNOWS, %i", signal);
@@ -147,7 +150,7 @@ void GameScene::OnSignal(SIGNAL signal) {
         TraceLog(LOG_INFO, "SCENE DOES NOT KNOW, %i", signal);
         break;
     }
-}
+} */
 
 void GameScene::DrawLevel() {
     for(int x = 0; x < LEVEL_SIZE; x++) {
@@ -181,4 +184,10 @@ void GameScene::DrawDebug() {
             }
         }
     }
+}
+
+void GameScene::OnQuitPressed() {
+    //TraceLog(LOG_INFO, "SCENE QUIT");
+    return_scene = SPLASH_SCENE;
+
 }

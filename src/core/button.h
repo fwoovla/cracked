@@ -10,6 +10,7 @@ struct Button {
     Color default_color;
     bool hovered;
     bool clicked;
+    Signal button_pressed;
 };
 
 inline void CreateButton(Button &_button, Vector2 _position, Vector2 _size, Color _focus_color) {

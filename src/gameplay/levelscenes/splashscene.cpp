@@ -7,7 +7,8 @@ SplashScreen::SplashScreen() {
     scene_id = SPLASH_SCENE;
     return_scene = NO_SCENE;
     timer = new Timer(wait_time, true, true);
-    timer->ConnectSignalTo(this);
+    //timer->ConnectSignalTo(this);
+    timer->timout.Connect([&](){this->OnSignal();});
     alpha_value = 0;  
     alpha_step = 255/wait_time;
 
@@ -36,6 +37,6 @@ SplashScreen::~SplashScreen() {
     delete timer;
 }
 
-void SplashScreen::OnSignal(SIGNAL signal) {
+void SplashScreen::OnSignal() {
     return_scene = TITLE_SCENE;
 }

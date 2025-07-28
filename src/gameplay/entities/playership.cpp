@@ -19,7 +19,10 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
     should_delete = false;
 
     gun_timer = new Timer(1.0, true, false);
-    gun_timer->ConnectSignalTo(this);
+    gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
+    //gun_timer->ConnectSignalTo(this);
+    //gun_timer->callback = [&](){this->OnSignal();};  
+    //gun_timer->callbacks.push_back([&](){this->OnSignal();}) ;
     can_fire = false;
     //LoadTexture("assets/turret.png");
 }
@@ -154,8 +157,9 @@ void PlayerShip::DoWeapons() {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             if(can_fire) {
                 can_fire = false;
-                TraceLog(LOG_INFO, "FIRE 1");
+                //TraceLog(LOG_INFO, "FIRE 1");
                 AddToDrawList(bullet_list, new Bullet(position, turret.roataion));
+                shoot.EmitSignal();
             }
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) ) {
@@ -174,11 +178,10 @@ void PlayerShip::DoWeapons() {
 }
 
 
-void PlayerShip::OnSignal(SIGNAL signal) {
-    if(signal == TIMER_TIMEOUT){
-        //TraceLog(LOG_INFO, "can shoot");
-        can_fire = true;
-    }
+void PlayerShip::OnGunTimerTimeout() {
+    TraceLog(LOG_INFO, "SIGNAL RECIEVED");
+    can_fire = true;
+
 }
 
 PlayerShip::~PlayerShip() {

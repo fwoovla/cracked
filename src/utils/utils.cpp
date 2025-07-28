@@ -30,7 +30,7 @@ void Timer::Update() {
     elapsed_time += GetFrameTime();
     if(elapsed_time >= wait_time) {
 
-        EmitSignal(TIMER_TIMEOUT);
+        timout.EmitSignal();
         active = false;
         finished = true;
         if(!one_shot) {
@@ -60,25 +60,21 @@ double Timer::GetWaitTime() {
     return wait_time;;
 }
 
-void SignalObserver::OnSignal(SIGNAL signal) {
+/* void SignalObserver::OnSignal(SIGNAL signal) {
 
 }
+ */
 
-void SignalEmiter::AddSignal() {
-    
+void Signal::Connect(std::function<void()> const& callback) {
+    callbacks.push_back(callback);
 }
 
-void SignalEmiter::ConnectSignalTo(SignalObserver *_observer)
-{
-    observers.push_back(_observer);
-}
-
-void SignalEmiter::EmitSignal(SIGNAL signal) {
-    for(int i = 0; i < observers.size(); i++) {
-        observers[i]->OnSignal(signal);
-
+void Signal::EmitSignal() {
+    for(int i = 0; i < callbacks.size(); i++) {
+        callbacks[i]();
+ 
     }
+}   
 
-}
 
 

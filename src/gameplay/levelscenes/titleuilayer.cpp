@@ -1,4 +1,6 @@
-#include "../../core/uilayers.h"
+#include "../../core/global_def.h"
+
+//#include "../../core/uilayers.h"
 
 TitleUiLayer::TitleUiLayer() {
     Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
@@ -25,14 +27,14 @@ void TitleUiLayer::Update() {
     if(IsButtonHovered(quit_button)) {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
-            EmitSignal(END_GAME);
+            quit_pressed.EmitSignal();
         }
     }
     //TraceLog(LOG_INFO, "UI UPDATE");
     if(IsButtonHovered(start_button)) {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "BUTTON PRESSED ");
-            EmitSignal(PLAY_PRESSED);
+            TraceLog(LOG_INFO, "PLAY BUTTON PRESSED ");
+            play_pressed.EmitSignal();
         }        
     }
 }

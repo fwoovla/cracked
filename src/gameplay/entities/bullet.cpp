@@ -10,7 +10,7 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
     id = GetRandomValue(0, 10000);
     should_delete = false;
     lifetime = new Timer(2.0, true, true);
-    lifetime->ConnectSignalTo(this);
+    lifetime->timout.Connect([&](){this->OnLifetimeTimeout();});
 
     position = _position;
     rotation = _rotation;
@@ -28,7 +28,7 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
 
 
 Bullet::~Bullet() {
-    TraceLog(LOG_INFO, "BULLET DELETED DESTRUCTOR");
+    //TraceLog(LOG_INFO, "BULLET DELETED DESTRUCTOR");
     UnloadTexture(sprite.texture);
     delete lifetime;
 }
@@ -82,10 +82,6 @@ bool Bullet::CheckCollision(collisionResult &collision_data) {
     return false;
 }
 
-void Bullet::OnSignal(SIGNAL signal) {
-    if(signal == TIMER_TIMEOUT) {
-        TraceLog(LOG_INFO, "BULLET should delete %i", id);
-        should_delete = true;
-
-    }
+void Bullet::OnLifetimeTimeout() {
+    TraceLog(LOG_INFO, "BULLET should delete %i", id);
 }

@@ -11,9 +11,12 @@ class TitleUiLayer : public BaseUILayer {
     void Update() override;
     void Draw() override;
 
-    private:
     Button start_button;
     Button quit_button;
+    Signal play_pressed;
+    Signal quit_pressed;
+    
+    private:
 
 };
 
@@ -24,9 +27,11 @@ class GameUILayer : public BaseUILayer {
     ~GameUILayer() override;
     void Update() override;
     void Draw() override;
+    void OnPlayerShoot();
     
-    private:
     
     Button quit_button;
+    Signal quit_pressed;
+    private:
 
 };

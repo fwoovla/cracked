@@ -9,7 +9,7 @@
 */
 #include "../utils/utils.h"
 
-class BaseUILayer : public SignalEmiter {
+class BaseUILayer{
     public:
     virtual ~BaseUILayer(){};
     virtual void Update() = 0;
