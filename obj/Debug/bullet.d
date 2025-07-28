@@ -125,14 +125,14 @@ obj/Debug/bullet.o: src/gameplay/entities/bullet.cpp \
  /usr/include/c++/13/bits/uniform_int_dist.h \
  /usr/include/c++/13/bits/stl_tempbuf.h /usr/include/c++/13/cstdlib \
  src/gameplay/entities/../../core/uilayers.h \
+ src/gameplay/entities/../../core/ships.h \
+ src/gameplay/entities/../../core/baseship.h \
+ src/gameplay/entities/../../core/baseentity.h \
+ src/gameplay/entities/../../core/sprite.h \
+ src/gameplay/entities/../../core/global_types.h \
  src/gameplay/entities/../../core/baseuilayer.h \
  src/gameplay/entities/../../core/button.h \
  src/gameplay/entities/../../core/entities.h \
- src/gameplay/entities/../../core/baseentity.h \
- src/gameplay/entities/../../core/sprite.h \
- src/gameplay/entities/../../core/ships.h \
- src/gameplay/entities/../../core/baseship.h \
- src/gameplay/entities/../../core/global_types.h \
  src/gameplay/entities/../../core/scenes.h \
  src/gameplay/entities/../../core/bacescene.h \
  src/gameplay/entities/../../core/scenemanager.h \
@@ -285,14 +285,14 @@ src/gameplay/entities/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/stl_tempbuf.h:
 /usr/include/c++/13/cstdlib:
 src/gameplay/entities/../../core/uilayers.h:
+src/gameplay/entities/../../core/ships.h:
+src/gameplay/entities/../../core/baseship.h:
+src/gameplay/entities/../../core/baseentity.h:
+src/gameplay/entities/../../core/sprite.h:
+src/gameplay/entities/../../core/global_types.h:
 src/gameplay/entities/../../core/baseuilayer.h:
 src/gameplay/entities/../../core/button.h:
 src/gameplay/entities/../../core/entities.h:
-src/gameplay/entities/../../core/baseentity.h:
-src/gameplay/entities/../../core/sprite.h:
-src/gameplay/entities/../../core/ships.h:
-src/gameplay/entities/../../core/baseship.h:
-src/gameplay/entities/../../core/global_types.h:
 src/gameplay/entities/../../core/scenes.h:
 src/gameplay/entities/../../core/bacescene.h:
 src/gameplay/entities/../../core/scenemanager.h:

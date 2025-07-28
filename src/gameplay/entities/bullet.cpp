@@ -5,7 +5,6 @@
 #define BULLET_SIZE 10
 #define BULLET_SPEED 500
 
-//extern DrawableEntity *bullet;
 Bullet::Bullet(Vector2 _position, float _rotation) {
     id = GetRandomValue(0, 10000);
     should_delete = false;
@@ -20,7 +19,7 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
 
     velocity = {BULLET_SPEED, 0};
     velocity = Vector2Rotate(velocity, rotation * DEG2RAD);
-    TraceLog(LOG_INFO, "BULLET velocity %i  %f  %f   %f", id, velocity.x, velocity.y, rotation);
+    //TraceLog(LOG_INFO, "BULLET velocity %i  %f  %f   %f", id, velocity.x, velocity.y, rotation);
 
     centered_offset = {BULLET_SIZE/2, BULLET_SIZE/2};
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, BULLET_SIZE, BULLET_SIZE };
@@ -28,7 +27,6 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
 
 
 Bullet::~Bullet() {
-    //TraceLog(LOG_INFO, "BULLET DELETED DESTRUCTOR");
     UnloadTexture(sprite.texture);
     delete lifetime;
 }
@@ -39,14 +37,10 @@ void Bullet::Update(int *level_array) {
         return;
     }
     Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
-    //TraceLog(LOG_INFO, "BULLET velocity %i  %f  %f   %f", id, velocity.x, velocity.y, rotation);
     float dt = GetFrameTime();
 
     collision_rect.x += velocity.x * dt;
     collision_rect.y += velocity.y * dt;
-
-    //position.x += velocity.x * dt;
-    //position.y += velocity.y * dt;
 
     collided = false;
     collisionResult collision_data;
@@ -67,7 +61,6 @@ void Bullet::Update(int *level_array) {
     sprite.dest.y = position.y;
 
     lifetime->Update();
-    //TraceLog(LOG_INFO, "BULLET Update");    
 }
 
 void Bullet::Draw() {
@@ -75,7 +68,6 @@ void Bullet::Draw() {
     if(settings.show_debug) {
         DrawRectangleRec(collision_rect, RED);
     }
-    //TraceLog(LOG_INFO, "BULLET Draw %i", id);
 }
 
 bool Bullet::CheckCollision(collisionResult &collision_data) {
@@ -84,4 +76,5 @@ bool Bullet::CheckCollision(collisionResult &collision_data) {
 
 void Bullet::OnLifetimeTimeout() {
     TraceLog(LOG_INFO, "BULLET should delete %i", id);
+    should_delete =true;
 }

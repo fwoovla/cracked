@@ -126,14 +126,14 @@ obj/Debug/titlescene.o: src/gameplay/levelscenes/titlescene.cpp \
  /usr/include/c++/13/bits/uniform_int_dist.h \
  /usr/include/c++/13/bits/stl_tempbuf.h /usr/include/c++/13/cstdlib \
  src/gameplay/levelscenes/../../core/uilayers.h \
+ src/gameplay/levelscenes/../../core/ships.h \
+ src/gameplay/levelscenes/../../core/baseship.h \
+ src/gameplay/levelscenes/../../core/baseentity.h \
+ src/gameplay/levelscenes/../../core/sprite.h \
+ src/gameplay/levelscenes/../../core/global_types.h \
  src/gameplay/levelscenes/../../core/baseuilayer.h \
  src/gameplay/levelscenes/../../core/button.h \
  src/gameplay/levelscenes/../../core/entities.h \
- src/gameplay/levelscenes/../../core/baseentity.h \
- src/gameplay/levelscenes/../../core/sprite.h \
- src/gameplay/levelscenes/../../core/ships.h \
- src/gameplay/levelscenes/../../core/baseship.h \
- src/gameplay/levelscenes/../../core/global_types.h \
  src/gameplay/levelscenes/../../core/scenes.h \
  src/gameplay/levelscenes/../../core/bacescene.h \
  src/gameplay/levelscenes/../../core/scenemanager.h \
@@ -285,14 +285,14 @@ src/gameplay/levelscenes/../../core/../utils/utils.h:
 /usr/include/c++/13/bits/stl_tempbuf.h:
 /usr/include/c++/13/cstdlib:
 src/gameplay/levelscenes/../../core/uilayers.h:
+src/gameplay/levelscenes/../../core/ships.h:
+src/gameplay/levelscenes/../../core/baseship.h:
+src/gameplay/levelscenes/../../core/baseentity.h:
+src/gameplay/levelscenes/../../core/sprite.h:
+src/gameplay/levelscenes/../../core/global_types.h:
 src/gameplay/levelscenes/../../core/baseuilayer.h:
 src/gameplay/levelscenes/../../core/button.h:
 src/gameplay/levelscenes/../../core/entities.h:
-src/gameplay/levelscenes/../../core/baseentity.h:
-src/gameplay/levelscenes/../../core/sprite.h:
-src/gameplay/levelscenes/../../core/ships.h:
-src/gameplay/levelscenes/../../core/baseship.h:
-src/gameplay/levelscenes/../../core/global_types.h:
 src/gameplay/levelscenes/../../core/scenes.h:
 src/gameplay/levelscenes/../../core/bacescene.h:
 src/gameplay/levelscenes/../../core/scenemanager.h:

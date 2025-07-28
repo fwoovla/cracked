@@ -1,3 +1,4 @@
+#pragma once
 #include "baseship.h"
 #include "../utils/utils.h"
 #include "global_types.h"
@@ -9,6 +10,11 @@
 #define SHIP_THRUST 0.02f
 #define SHIP_ROT_SPEED 90.0f
 #define AIR_FRICTION 0.99f
+
+#define GUN_MAX_POWER 10.0f
+#define GUN_POWER_USE 1.0f
+#define GUN_REGEN 1.5f
+#define GUN_DELAY 0.2f
 
 
 class PlayerShip : public BaseShip {
@@ -38,8 +44,11 @@ class PlayerShip : public BaseShip {
 
     Timer *gun_timer;
     bool can_fire;
+    float gun_power;
+    int shots;
 
     Signal shoot;
+
 
 };
 

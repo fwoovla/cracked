@@ -18,27 +18,35 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
 
     should_delete = false;
 
-    gun_timer = new Timer(1.0, true, false);
+    gun_timer = new Timer(GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
-    //gun_timer->ConnectSignalTo(this);
-    //gun_timer->callback = [&](){this->OnSignal();};  
-    //gun_timer->callbacks.push_back([&](){this->OnSignal();}) ;
     can_fire = false;
-    //LoadTexture("assets/turret.png");
+    gun_power = GUN_MAX_POWER;
+    shots = 0;
 }
 
 void PlayerShip::Update(int *level_array) {
     float dt = GetFrameTime();
+
+    gun_power += GetFrameTime() * GUN_REGEN;
+    if (  gun_power > GUN_MAX_POWER) {
+        gun_power = GUN_MAX_POWER;
+
+    }
+    
+
+    //TraceLog(LOG_INFO, "PLAYER GUN POWER %f  %i", gun_power, shots);
+    
+    
     DoMovement(dt, level_array);
     DoWeapons();
     gun_timer->Update();
+
 
 }
 
 void PlayerShip::Draw() {
     //TraceLog(LOG_INFO, "PLAYER DRAW");
-
-    
 
     DrawSprite(sprite);
     DrawSprite(turret);
@@ -91,8 +99,6 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
     vClamp(velocity, 1.0);
 
     velocity = Vector2ClampValue(velocity, -PLAYER_SPEED, PLAYER_SPEED);
-    //TraceLog(LOG_INFO, "VELOCITY: %f %f", velocity.x,velocity.y);
-
 
     collision_rect.x += velocity.x;
     collision_rect.y += velocity.y;
@@ -155,18 +161,19 @@ void PlayerShip::DoWeapons() {
 
     if(settings.control_type == 0) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            if(can_fire) {
+            if(can_fire and gun_power > GUN_POWER_USE ) {
                 can_fire = false;
-                //TraceLog(LOG_INFO, "FIRE 1");
                 AddToDrawList(bullet_list, new Bullet(position, turret.roataion));
+                gun_power -= GUN_POWER_USE;
                 shoot.EmitSignal();
+                shots++;
             }
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) ) {
             TraceLog(LOG_INFO, "FIRE 2");
         }
     }
-
+    
     else if(settings.control_type == 1) {
         if(IsKeyDown(KEY_SPACE)) {
             TraceLog(LOG_INFO, "FIRE 1");
@@ -179,7 +186,8 @@ void PlayerShip::DoWeapons() {
 
 
 void PlayerShip::OnGunTimerTimeout() {
-    TraceLog(LOG_INFO, "SIGNAL RECIEVED");
+    //TraceLog(LOG_INFO, "SIGNAL RECIEVED");
+    
     can_fire = true;
 
 }

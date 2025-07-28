@@ -124,11 +124,11 @@ obj/Debug/game.o: src/gameplay/game.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/bits/stl_heap.h \
  /usr/include/c++/13/bits/uniform_int_dist.h \
  /usr/include/c++/13/bits/stl_tempbuf.h /usr/include/c++/13/cstdlib \
- src/gameplay/../core/uilayers.h src/gameplay/../core/baseuilayer.h \
- src/gameplay/../core/button.h src/gameplay/../core/entities.h \
- src/gameplay/../core/baseentity.h src/gameplay/../core/sprite.h \
- src/gameplay/../core/ships.h src/gameplay/../core/baseship.h \
- src/gameplay/../core/global_types.h src/gameplay/../core/scenes.h \
+ src/gameplay/../core/uilayers.h src/gameplay/../core/ships.h \
+ src/gameplay/../core/baseship.h src/gameplay/../core/baseentity.h \
+ src/gameplay/../core/sprite.h src/gameplay/../core/global_types.h \
+ src/gameplay/../core/baseuilayer.h src/gameplay/../core/button.h \
+ src/gameplay/../core/entities.h src/gameplay/../core/scenes.h \
  src/gameplay/../core/bacescene.h src/gameplay/../core/scenemanager.h
 /usr/include/stdc-predef.h:
 src/gameplay/../core/game.h:
@@ -278,14 +278,14 @@ src/gameplay/../core/../utils/utils.h:
 /usr/include/c++/13/bits/stl_tempbuf.h:
 /usr/include/c++/13/cstdlib:
 src/gameplay/../core/uilayers.h:
+src/gameplay/../core/ships.h:
+src/gameplay/../core/baseship.h:
+src/gameplay/../core/baseentity.h:
+src/gameplay/../core/sprite.h:
+src/gameplay/../core/global_types.h:
 src/gameplay/../core/baseuilayer.h:
 src/gameplay/../core/button.h:
 src/gameplay/../core/entities.h:
-src/gameplay/../core/baseentity.h:
-src/gameplay/../core/sprite.h:
-src/gameplay/../core/ships.h:
-src/gameplay/../core/baseship.h:
-src/gameplay/../core/global_types.h:
 src/gameplay/../core/scenes.h:
 src/gameplay/../core/bacescene.h:
 src/gameplay/../core/scenemanager.h:

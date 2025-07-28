@@ -1,4 +1,4 @@
-#include "../../core/uilayers.h"
+#include "../../core/global_def.h"
 
 GameUILayer::GameUILayer(){
     CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED );
@@ -17,6 +17,7 @@ void GameUILayer::Draw() {
 
 void GameUILayer::Update()
 {
+    TraceLog(LOG_INFO, "PLAYER POWER %f", player->gun_power);
     if(IsButtonHovered(quit_button)) {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             //TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");

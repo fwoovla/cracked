@@ -61,6 +61,7 @@ GameScene::GameScene(char level_data[]) {
     this_player->camera = &camera;
     //TraceLog(LOG_INFO, "PLAYER CREATED");
     this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
+    ui->player = this_player;
 
 //SETUP CAMERA--------------------------------------
     camera = { 0 };

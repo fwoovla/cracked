@@ -1,5 +1,5 @@
 #pragma once
-//#include "global_def.h"
+#include "ships.h"
 #include "baseuilayer.h"
 #include "button.h"
 
@@ -32,6 +32,8 @@ class GameUILayer : public BaseUILayer {
     
     Button quit_button;
     Signal quit_pressed;
+
+    PlayerShip *player;
     private:
 
 };
