@@ -34,6 +34,10 @@ class GameUILayer : public BaseUILayer {
     Signal quit_pressed;
 
     PlayerShip *player;
+
+    Rectangle gun_power_rect;
+    Color gun_power_color;
+
     private:
 
 };

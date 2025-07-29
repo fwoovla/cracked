@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
    Game game;
    game.StartGame();
-
+   CloseWindow();
    TraceLog(LOG_INFO, "GAME OVER");
 
    return 0;

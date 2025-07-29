@@ -4,11 +4,12 @@
 
 #define BULLET_SIZE 10
 #define BULLET_SPEED 500
+#define BULLET_LIFETIME 1.0f
 
 Bullet::Bullet(Vector2 _position, float _rotation) {
     id = GetRandomValue(0, 10000);
     should_delete = false;
-    lifetime = new Timer(2.0, true, true);
+    lifetime = new Timer(BULLET_LIFETIME, true, true);
     lifetime->timout.Connect([&](){this->OnLifetimeTimeout();});
 
     position = _position;
@@ -30,7 +31,6 @@ Bullet::~Bullet() {
     UnloadTexture(sprite.texture);
     delete lifetime;
 }
-
 
 void Bullet::Update(int *level_array) {
     if(should_delete) {
