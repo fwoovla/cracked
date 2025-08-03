@@ -23,6 +23,9 @@ void GameUILayer::Draw() {
 
 void GameUILayer::Update()
 {
+    if(player == nullptr) {
+        return;
+    }
     float dt = GetFrameTime();
     gun_power_rect.y = GetScreenHeight() -10.0f - player->gun_power * GUN_POWER_SCALER;
     gun_power_rect.height = player->gun_power * GUN_POWER_SCALER;

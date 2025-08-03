@@ -69,7 +69,6 @@ class GameScene : public  BaseScene{
     Texture space_tile_texture;
     Texture2D asteroid_texture;
     Texture2D bg_texture;
-
 };
 
 

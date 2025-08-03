@@ -1,6 +1,7 @@
 #include "../../core/global_def.h"
 #include<cmath>
 #include <raymath.h>
+//#include "ships.h"
 
 //#include "../../core/entities.h"
 
@@ -9,13 +10,14 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
     position = _position;
     velocity = {0};
     rotation = 0.0f;
+    id = 1;
     LoadSpriteCentered(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
-
+    
     centered_offset = {PLAYER_SIZE/2, PLAYER_SIZE/2};
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PLAYER_SIZE, PLAYER_SIZE };
-
+    
     LoadSpriteCentered(turret, LoadTexture("assets/turret.png"), position);
-
+    
     should_delete = false;
 
     gun_timer = new Timer(GUN_DELAY, true, false);
@@ -25,7 +27,7 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
     shots = 0;
 }
 
-void PlayerShip::Update(int *level_array) {
+void PlayerShip::Update() {
     float dt = GetFrameTime();
 
     gun_power += GetFrameTime() * GUN_REGEN;
@@ -38,9 +40,12 @@ void PlayerShip::Update(int *level_array) {
     //TraceLog(LOG_INFO, "PLAYER GUN POWER %f  %i", gun_power, shots);
     
     
-    DoMovement(dt, level_array);
+    DoMovement(dt);
     DoWeapons();
     gun_timer->Update();
+
+    collisionResult result;
+    //collided = CheckCollisionWithEntities(this, result);
 
 
 }
@@ -64,7 +69,7 @@ void PlayerShip::Draw() {
 }
 
 
-void PlayerShip::DoMovement(float dt, int *level_array) {
+void PlayerShip::DoMovement(float dt) {
     if(settings.control_type == 0) {
         if (IsKeyDown(KEY_A)) {rotation -= SHIP_ROT_SPEED * dt;}
         if (IsKeyDown(KEY_D)) {rotation += SHIP_ROT_SPEED * dt;}
@@ -105,14 +110,15 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
    
     collided = false;
     collisionResult collision_data = {0};
-    if(CheckCollision(collision_data)) {
+    if(CheckCollisionWithLevel(this, collision_data)) {
         collided = true;
+        //TraceLog(LOG_INFO, "COLLIED");
     }
 
     if(collided) {
         collision_rect.x = previous_collision_position.x;
         collision_rect.y = previous_collision_position.y;
-        velocity = {0};
+        velocity = {-velocity.x * SHIP_BOUNCE_SCALEAR, -velocity.y * SHIP_BOUNCE_SCALEAR};
     }
     else {
         position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
@@ -130,32 +136,36 @@ void PlayerShip::DoMovement(float dt, int *level_array) {
 }
 
 
-bool PlayerShip::CheckCollision(collisionResult &collision_result) {
-    for(int x = -1; x <  COLLISION_RANGE; x++) {
+ //bool PlayerShip::CheckCollision(collisionResult &collision_result) {return false;}
+    //================TILE COLLISION=========================
+/*    for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 
             float fx = collision_rect.x + (TILE_SIZE + x);
             float fy = collision_rect.y + (TILE_SIZE + y);
-            int ix = (collision_rect.x/TILE_SIZE) + x;
-            int iy = (collision_rect.y/TILE_SIZE) + y;
+            int ix = (collision_rect.x * INV_TILE_SIZE) + x;
+            int iy = (collision_rect.y * INV_TILE_SIZE) + y;
 
             if(level_array_data[(iy * LEVEL_SIZE + ix)] == 0) {
 
-/*              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
+              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
                 TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);
                 TraceLog(LOG_INFO, "checking cell at index%i %i ", ix, iy);
-                TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);  */
-/*                 if(CheckCollisionCircleRec( position, PLAYER_SIZE * 0.5, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
+                TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);
+                 if(CheckCollisionCircleRec( position, PLAYER_SIZE * 0.5, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
                     return true;
-                } */
-                if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {                        return true;
+                } 
+
+                if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
                     return true;
                 }
             }
         }
     }
+    //==============================END TILE COLLISION=================
+
     return false;
-}
+} */
 
 void PlayerShip::DoWeapons() {
 
@@ -192,8 +202,12 @@ void PlayerShip::OnGunTimerTimeout() {
 
 }
 
-PlayerShip::~PlayerShip() {
+void PlayerShip::OnPickup() {
+    TraceLog(LOG_INFO, "PLAYER GOT A PICKUP!!");
+}
+
+PlayerShip::~PlayerShip()
+{
     UnloadTexture(sprite.texture);
     UnloadTexture(turret.texture);
 }
-

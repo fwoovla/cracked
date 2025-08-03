@@ -1,5 +1,5 @@
-obj/Debug/scenemanager.o: src/gameplay/scenemanager.cpp \
- /usr/include/stdc-predef.h src/gameplay/../core/global_def.h \
+obj/Debug/pickup.o: src/gameplay/entities/pickup.cpp \
+ /usr/include/stdc-predef.h src/gameplay/entities/../../core/global_def.h \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
@@ -52,8 +52,8 @@ obj/Debug/scenemanager.o: src/gameplay/scenemanager.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- src/gameplay/../core/../utils/utils.h /usr/include/c++/13/cmath \
- /usr/include/math.h \
+ src/gameplay/entities/../../core/../utils/utils.h \
+ /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
@@ -124,15 +124,22 @@ obj/Debug/scenemanager.o: src/gameplay/scenemanager.cpp \
  /usr/include/c++/13/bits/stl_heap.h \
  /usr/include/c++/13/bits/uniform_int_dist.h \
  /usr/include/c++/13/bits/stl_tempbuf.h /usr/include/c++/13/cstdlib \
- src/gameplay/../core/uilayers.h src/gameplay/../core/ships.h \
- src/gameplay/../core/baseship.h src/gameplay/../core/baseentity.h \
- src/gameplay/../core/sprite.h src/gameplay/../core/global_types.h \
- src/gameplay/../core/baseuilayer.h src/gameplay/../core/button.h \
- src/gameplay/../core/entities.h src/gameplay/../core/scenes.h \
- src/gameplay/../core/bacescene.h src/gameplay/../core/scenemanager.h \
- src/gameplay/../core/game.h
+ src/gameplay/entities/../../core/uilayers.h \
+ src/gameplay/entities/../../core/ships.h \
+ src/gameplay/entities/../../core/baseship.h \
+ src/gameplay/entities/../../core/baseentity.h \
+ src/gameplay/entities/../../core/sprite.h \
+ src/gameplay/entities/../../core/global_types.h \
+ src/gameplay/entities/../../core/baseuilayer.h \
+ src/gameplay/entities/../../core/button.h \
+ src/gameplay/entities/../../core/entities.h \
+ src/gameplay/entities/../../core/scenes.h \
+ src/gameplay/entities/../../core/bacescene.h \
+ src/gameplay/entities/../../core/scenemanager.h \
+ src/gameplay/entities/../../core/game.h /usr/local/include/raymath.h \
+ /usr/include/c++/13/math.h
 /usr/include/stdc-predef.h:
-src/gameplay/../core/global_def.h:
+src/gameplay/entities/../../core/global_def.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 /usr/include/c++/13/vector:
@@ -195,7 +202,7 @@ src/gameplay/../core/global_def.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
-src/gameplay/../core/../utils/utils.h:
+src/gameplay/entities/../../core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
@@ -277,16 +284,18 @@ src/gameplay/../core/../utils/utils.h:
 /usr/include/c++/13/bits/uniform_int_dist.h:
 /usr/include/c++/13/bits/stl_tempbuf.h:
 /usr/include/c++/13/cstdlib:
-src/gameplay/../core/uilayers.h:
-src/gameplay/../core/ships.h:
-src/gameplay/../core/baseship.h:
-src/gameplay/../core/baseentity.h:
-src/gameplay/../core/sprite.h:
-src/gameplay/../core/global_types.h:
-src/gameplay/../core/baseuilayer.h:
-src/gameplay/../core/button.h:
-src/gameplay/../core/entities.h:
-src/gameplay/../core/scenes.h:
-src/gameplay/../core/bacescene.h:
-src/gameplay/../core/scenemanager.h:
-src/gameplay/../core/game.h:
+src/gameplay/entities/../../core/uilayers.h:
+src/gameplay/entities/../../core/ships.h:
+src/gameplay/entities/../../core/baseship.h:
+src/gameplay/entities/../../core/baseentity.h:
+src/gameplay/entities/../../core/sprite.h:
+src/gameplay/entities/../../core/global_types.h:
+src/gameplay/entities/../../core/baseuilayer.h:
+src/gameplay/entities/../../core/button.h:
+src/gameplay/entities/../../core/entities.h:
+src/gameplay/entities/../../core/scenes.h:
+src/gameplay/entities/../../core/bacescene.h:
+src/gameplay/entities/../../core/scenemanager.h:
+src/gameplay/entities/../../core/game.h:
+/usr/local/include/raymath.h:
+/usr/include/c++/13/math.h:

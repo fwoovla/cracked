@@ -17,14 +17,12 @@ gameSettings settings = {
 
 int main(int argc, char *argv[]) {
 
-
-
    InitWindow(settings.window_size.x, settings.window_size.y, "cracked");
    SetTargetFPS(60);
 
    Game game;
    game.StartGame();
-   CloseWindow();
+   //CloseWindow();
    TraceLog(LOG_INFO, "GAME OVER");
 
    return 0;

@@ -23,8 +23,8 @@ obj/Debug/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h src/core/global_def.h \
- /usr/local/include/raylib.h src/core/../utils/utils.h \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
+ /usr/local/include/raylib.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
@@ -66,7 +66,7 @@ obj/Debug/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/bits/memory_resource.h /usr/include/c++/13/cstddef \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- /usr/include/c++/13/cmath /usr/include/math.h \
+ src/core/../utils/utils.h /usr/include/c++/13/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
@@ -164,7 +164,6 @@ obj/Debug/main.o: src/main.cpp /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
 src/core/global_def.h:
 /usr/local/include/raylib.h:
-src/core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -216,6 +215,7 @@ src/core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
+src/core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:

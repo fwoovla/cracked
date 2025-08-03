@@ -1,10 +1,13 @@
 
 #include "../../core/global_def.h"
+#include <raymath.h>
 
 int* level_array_data;
 
 DrawableEntity *bullet_list[DRAW_LIST_SIZE] = {nullptr};
 DrawableEntity *entity_list[DRAW_LIST_SIZE] = {nullptr};
+DrawableEntity *effects_list[DRAW_LIST_SIZE] = {nullptr};
+std::vector<DrawableEntity*> *collision_data[LEVEL_SIZE * LEVEL_SIZE] = {nullptr};
 
 
 GameScene::GameScene(char level_data[]) {
@@ -13,12 +16,17 @@ GameScene::GameScene(char level_data[]) {
     //delete draw_list;
 
  
+    for(int i = 0; i < LEVEL_SIZE*LEVEL_SIZE; i++) {
+        if(collision_data[i] != nullptr) {
+            collision_data[i]->clear();
+        }
+    }
+
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         delete bullet_list[i];
         bullet_list[i] = nullptr;
          delete(entity_list[i]);
         entity_list[i] = nullptr; 
-
     } 
     
     
@@ -69,21 +77,38 @@ GameScene::GameScene(char level_data[]) {
     camera.offset = (Vector2){ this_player->position.x, this_player->position.y };
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
+
+
+    
+    AddToDrawList(entity_list, new Pickup( {500, 500} ));
+    AddToDrawList(entity_list, new Pickup( {300, 600} ));
+    AddToDrawList(entity_list, new Pickup( {500, 200} ));
+    AddToDrawList(entity_list, new Pickup( {700, 300} ));
 }
 
 
 SCENE_ID GameScene::Update() {
-    //TraceLog(LOG_INFO, "UPDATE GAME SCENE");
+
     if(IsKeyPressed(KEY_TAB)) {
         settings.show_debug = !settings.show_debug;
     }
-    DrawListUpdate(bullet_list, level_array_data);
-    DrawListUpdate(entity_list, level_array_data);
+    DrawListUpdate(bullet_list);
+    DrawListUpdate(entity_list);
+    DrawListUpdate(effects_list);
+
 
     ui->Update();
-    this_player->Update(level_array_data);
+    this_player->Update();
 
     camera.target = (Vector2){this_player->collision_rect.x, this_player->collision_rect.y};
+
+    if( abs(this_player->velocity.x) > PLAYER_SPEED * 0.7f or abs(this_player->velocity.y) > PLAYER_SPEED * 0.7f) {
+        camera.zoom = Lerp(camera.zoom, 0.8f, .005);
+    }
+    else {
+        camera.zoom = Lerp(camera.zoom, 1.2f, .01);
+    }
+    //TraceLog(LOG_INFO, "PLAYER VELOCITY, (%f %f)", this_player->velocity.x, this_player->velocity.y);
     return return_scene;
 }
 
@@ -111,6 +136,7 @@ void GameScene::Draw() {
  
     DrawListDraw(bullet_list);
     DrawListDraw(entity_list);
+    DrawListDraw(effects_list);
     
     EndMode2D();
 //------------------------END WORLDSPACE
@@ -119,6 +145,8 @@ void GameScene::Draw() {
 }
 
 GameScene::~GameScene() {
+
+    
     delete[] level_array_data;
     //delete this_player;
     delete ui;
@@ -126,7 +154,7 @@ GameScene::~GameScene() {
     UnloadTexture(asteroid_texture);
     UnloadTexture(bg_texture);
 
-     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
+    for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         if(bullet_list[i] != nullptr) {
             delete(bullet_list[i]);
             bullet_list[i] = nullptr;
@@ -136,22 +164,8 @@ GameScene::~GameScene() {
             entity_list[i] = nullptr;
         }
     }
+    //free(pu);
 }
-/* 
-void GameScene::OnSignal(SIGNAL signal) {
-
-    TraceLog(LOG_INFO, "SCENE KNOWS, %i", signal);
-    switch (signal)
-    {
-    case END_GAME:
-        return_scene = SPLASH_SCENE;
-        break;
-
-    default:
-        TraceLog(LOG_INFO, "SCENE DOES NOT KNOW, %i", signal);
-        break;
-    }
-} */
 
 void GameScene::DrawLevel() {
     for(int x = 0; x < LEVEL_SIZE; x++) {

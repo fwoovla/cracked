@@ -8,6 +8,8 @@
 
 Bullet::Bullet(Vector2 _position, float _rotation) {
     id = GetRandomValue(0, 10000);
+
+
     should_delete = false;
     lifetime = new Timer(BULLET_LIFETIME, true, true);
     lifetime->timout.Connect([&](){this->OnLifetimeTimeout();});
@@ -28,25 +30,29 @@ Bullet::Bullet(Vector2 _position, float _rotation) {
 
 
 Bullet::~Bullet() {
+    AddToDrawList(effects_list, new BulletHit(position));
     UnloadTexture(sprite.texture);
     delete lifetime;
 }
 
-void Bullet::Update(int *level_array) {
+void Bullet::Update() {
     if(should_delete) {
         return;
     }
+
     Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
     float dt = GetFrameTime();
 
     collision_rect.x += velocity.x * dt;
     collision_rect.y += velocity.y * dt;
 
-    collided = false;
-    collisionResult collision_data;
-    if(CheckCollision(collision_data)) {
-        collided = true;
+    collisionResult result = {{0}, };
+    collided = CheckCollisionWithLevel(this, result);
+
+    if(collided) {
+        should_delete = true;
     }
+    
 
     if(collided) {
         collision_rect.x = previous_collision_position.x;
@@ -70,11 +76,8 @@ void Bullet::Draw() {
     }
 }
 
-bool Bullet::CheckCollision(collisionResult &collision_data) {
-    return false;
-}
 
 void Bullet::OnLifetimeTimeout() {
-    TraceLog(LOG_INFO, "BULLET should delete %i", id);
-    should_delete =true;
+    //TraceLog(LOG_INFO, "BULLET should delete %i", id);
+    should_delete = true;
 }

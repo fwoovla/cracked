@@ -1,6 +1,5 @@
-obj/Debug/scenemanager.o: src/gameplay/scenemanager.cpp \
- /usr/include/stdc-predef.h src/gameplay/../core/global_def.h \
- /usr/local/include/raylib.h \
+obj/Debug/effects.o: src/gameplay/effects.cpp /usr/include/stdc-predef.h \
+ src/gameplay/../core/global_def.h /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
@@ -130,7 +129,8 @@ obj/Debug/scenemanager.o: src/gameplay/scenemanager.cpp \
  src/gameplay/../core/baseuilayer.h src/gameplay/../core/button.h \
  src/gameplay/../core/entities.h src/gameplay/../core/scenes.h \
  src/gameplay/../core/bacescene.h src/gameplay/../core/scenemanager.h \
- src/gameplay/../core/game.h
+ src/gameplay/../core/game.h /usr/local/include/raymath.h \
+ /usr/include/c++/13/math.h
 /usr/include/stdc-predef.h:
 src/gameplay/../core/global_def.h:
 /usr/local/include/raylib.h:
@@ -290,3 +290,5 @@ src/gameplay/../core/scenes.h:
 src/gameplay/../core/bacescene.h:
 src/gameplay/../core/scenemanager.h:
 src/gameplay/../core/game.h:
+/usr/local/include/raymath.h:
+/usr/include/c++/13/math.h:

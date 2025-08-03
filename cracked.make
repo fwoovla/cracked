@@ -79,10 +79,12 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/bullet.o
+GENERATED += $(OBJDIR)/effects.o
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
 GENERATED += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/pickup.o
 GENERATED += $(OBJDIR)/player.o
 GENERATED += $(OBJDIR)/playership.o
 GENERATED += $(OBJDIR)/scenemanager.o
@@ -91,10 +93,12 @@ GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
 OBJECTS += $(OBJDIR)/bullet.o
+OBJECTS += $(OBJDIR)/effects.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
 OBJECTS += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/pickup.o
 OBJECTS += $(OBJDIR)/player.o
 OBJECTS += $(OBJDIR)/playership.o
 OBJECTS += $(OBJDIR)/scenemanager.o
@@ -165,7 +169,13 @@ endif
 # File Rules
 # #############################################
 
+$(OBJDIR)/effects.o: src/gameplay/effects.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/bullet.o: src/gameplay/entities/bullet.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pickup.o: src/gameplay/entities/pickup.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/player.o: src/gameplay/entities/player.cpp

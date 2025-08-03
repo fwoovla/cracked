@@ -2,8 +2,7 @@ obj/Debug/game.o: src/gameplay/game.cpp /usr/include/stdc-predef.h \
  src/gameplay/../core/game.h src/gameplay/../core/global_def.h \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/gameplay/../core/../utils/utils.h /usr/include/c++/13/vector \
- /usr/include/c++/13/bits/requires_hosted.h \
+ /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -53,7 +52,8 @@ obj/Debug/game.o: src/gameplay/game.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/c++/13/bits/uses_allocator.h \
  /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- /usr/include/c++/13/cmath /usr/include/math.h \
+ src/gameplay/../core/../utils/utils.h /usr/include/c++/13/cmath \
+ /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
@@ -135,7 +135,6 @@ src/gameplay/../core/game.h:
 src/gameplay/../core/global_def.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/gameplay/../core/../utils/utils.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -196,6 +195,7 @@ src/gameplay/../core/../utils/utils.h:
 /usr/include/c++/13/bits/uses_allocator.h:
 /usr/include/c++/13/bits/uses_allocator_args.h:
 /usr/include/c++/13/tuple:
+src/gameplay/../core/../utils/utils.h:
 /usr/include/c++/13/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:

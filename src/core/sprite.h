@@ -11,6 +11,7 @@ struct Sprite {
     Rectangle dest;
     Vector2 scale;
     float roataion;
+    Color modulate;
 };
 
 
@@ -33,6 +34,7 @@ inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _pos
         _sprite.size.y  
     };
     _sprite.roataion = 0.0;
+    _sprite.modulate = WHITE;
         
 }
 
@@ -58,7 +60,7 @@ inline void LoadSprite(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
 
 inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
     _sprite.scale = _scale;
-    _sprite.center = { (_sprite.size.x * _sprite.scale.x)/2, (_sprite.size.y * _sprite.scale.y) /2 };
+    _sprite.center = { abs((_sprite.size.x * _sprite.scale.x)) * 0.5f, abs((_sprite.size.y * _sprite.scale.y)) * 0.5f };
     _sprite.source = {
         .x = 0,
         .y = 0,
@@ -71,9 +73,8 @@ inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
         _sprite.size.x * _sprite.scale.x,
         _sprite.size.y * _sprite.scale.y  
     };
-        
 }
 
 inline void DrawSprite(Sprite &_sprite) {
-    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.roataion, WHITE );       
+    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.roataion, _sprite.modulate );       
 }
