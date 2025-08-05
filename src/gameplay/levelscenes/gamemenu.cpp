@@ -3,18 +3,21 @@
 #define GUN_POWER_SCALER 20.0f
 
 GameMenu::GameMenu(){
-    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED );
-    quit_button.default_color = GRAY;
+    CreateButton(exit_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2}, {300, 50}, RED );
+    exit_button.default_color = GRAY;
+    CreateButton(continue_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2 + 200 }, {300, 50}, GREEN );
+    continue_button.default_color = GRAY;
+
+    button_sound = LoadSound("assets/button.wav");
 }
 
 GameMenu::~GameMenu() {
-
+    UnloadSound(button_sound);
 }
 
 void GameMenu::Draw() {
-    DrawButton(quit_button);
-    DrawRectangleRec(gun_power_rect, gun_power_color);
-
+    DrawButton(exit_button);
+    DrawButton(continue_button);
 }
 
 
@@ -23,22 +26,23 @@ void GameMenu::Update()
     if(player == nullptr) {
         return;
     }
+
     float dt = GetFrameTime();
-    gun_power_rect.y = GetScreenHeight() -10.0f - player->gun_power * GUN_POWER_SCALER;
-    gun_power_rect.height = player->gun_power * GUN_POWER_SCALER;
-    if(player->gun_power < GUN_MAX_POWER * 0.3f) {
-        gun_power_color = MAGENTA;
-    }
-    else {
-        gun_power_color = YELLOW;
-    }
-    if(IsButtonHovered(quit_button)) {
+    if(IsButtonHovered(exit_button)) {
+        if(exit_button.already_hovered == false) {
+            PlaySound(button_sound);
+        }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            quit_pressed.EmitSignal();
+            exit.EmitSignal();
         }
     }
-}
 
-void GameMenu::OnPlayerShoot(){
-    TraceLog(LOG_INFO, "PLAYER SHOOT");
+    if(IsButtonHovered(continue_button)) {
+        if(continue_button.already_hovered == false) {
+            PlaySound(button_sound);
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            reset.EmitSignal();
+        }
+    }
 }

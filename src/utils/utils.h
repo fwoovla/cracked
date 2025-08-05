@@ -38,8 +38,8 @@ class Timer{
     
     Signal timout;
 
-    private:
     double wait_time; //in seconds
+    private:
     double elapsed_time;
     bool active;
     bool finished;

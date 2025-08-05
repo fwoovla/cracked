@@ -1,10 +1,9 @@
 #include "../core/game.h"
-
+bool game_running;
 
 Game::Game(){
     TraceLog(LOG_INFO, "GAME-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
-
-    running = false;
+    game_running = false;
     scene_manager = new SceneManager;
     render_texture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
     //render_texture = LoadRenderTexture(800, 800);
@@ -15,9 +14,10 @@ Game::~Game() {
 }
 
 void Game::StartGame() {
-    running = true;
+    
+    game_running = true;
 
-    while(running) {
+    while(game_running) {
 
         scene_manager->UpdateScene();
         
@@ -32,7 +32,7 @@ void Game::StartGame() {
         EndDrawing();
 
         if(IsKeyPressed(KEY_ESCAPE)) {
-            running = false;
+            game_running = false;
         }
     }
 }

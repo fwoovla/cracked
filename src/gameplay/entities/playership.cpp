@@ -4,6 +4,7 @@
 //#include "ships.h"
 
 //#include "../../core/entities.h"
+#define MAX_HEALTH 10
 
 PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
 
@@ -22,12 +23,26 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
 
     gun_timer = new Timer(GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
-    can_fire = false;
+    gun_can_shoot = false;
     gun_power = GUN_MAX_POWER;
     shots = 0;
+
+    health = MAX_HEALTH;
+
+    gun_sound = LoadSound("assets/laser.wav");
+    SetSoundVolume(gun_sound, 0.6f);
+
+    hit_sound = LoadSound("assets/laserhit1.wav");
+    engine_sound = LoadSound("assets/engine1.wav");
+    SetSoundVolume(engine_sound, 0.6f);
+
 }
 
 void PlayerShip::Update() {
+    if(health <= 0) {
+        return;
+    }
+
     float dt = GetFrameTime();
 
     gun_power += GetFrameTime() * GUN_REGEN;
@@ -36,21 +51,30 @@ void PlayerShip::Update() {
 
     }
     
-
-    //TraceLog(LOG_INFO, "PLAYER GUN POWER %f  %i", gun_power, shots);
-    
+    collisionResult result = {0};
+    if(CheckCollisionWithBullets(this, result)) {
+        Bullet *bullet = dynamic_cast<Bullet *>(result.collider);
+        //TraceLog(LOG_INFO, "collided %i", bullet->shooter_id);
+        if(bullet->shooter_id != id) {
+            PlaySound(hit_sound);
+            player_hit.EmitSignal();
+            result.collider->should_delete = true;
+            health -=1;
+            if(health <= 0) {
+                dead.EmitSignal();
+            }
+        }
+    }
     
     DoMovement(dt);
     DoWeapons();
     gun_timer->Update();
-
-    collisionResult result;
-    //collided = CheckCollisionWithEntities(this, result);
-
-
 }
 
 void PlayerShip::Draw() {
+    if(health <= 0) {
+        return;
+    }
     //TraceLog(LOG_INFO, "PLAYER DRAW");
 
     DrawSprite(sprite);
@@ -84,18 +108,26 @@ void PlayerShip::DoMovement(float dt) {
     Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
     
     if (IsKeyDown(KEY_W)) {
-        // Convert angle to radians
         float rad = rotation * DEG2RAD;
-        // Apply acceleration in facing direction
+        if(!IsSoundPlaying(engine_sound)) {
+            PlaySound(engine_sound);
+        }
         velocity.x += cosf(rad) * SHIP_THRUST;
         velocity.y += sinf(rad) * SHIP_THRUST;
     }
+    //else {StopSound(engine_sound);}
+
     if (IsKeyDown(KEY_S)) {
-        // Convert angle to radians
+        if(!IsSoundPlaying(engine_sound)) {
+            PlaySound(engine_sound);
+        }
         float rad = rotation * DEG2RAD;
-        // Apply acceleration in facing direction
         velocity.x -= cosf(rad) * SHIP_THRUST * .2;
         velocity.y -= sinf(rad) * SHIP_THRUST * .2;
+    }
+    //else {StopSound(engine_sound);}
+    if(!IsKeyDown(KEY_W) and !IsKeyDown(KEY_S)) {
+        StopSound(engine_sound);
     }
 
     velocity.x *= AIR_FRICTION;
@@ -136,47 +168,17 @@ void PlayerShip::DoMovement(float dt) {
 }
 
 
- //bool PlayerShip::CheckCollision(collisionResult &collision_result) {return false;}
-    //================TILE COLLISION=========================
-/*    for(int x = -1; x <  COLLISION_RANGE; x++) {
-        for(int y = -1; y < COLLISION_RANGE; y++) {
-
-            float fx = collision_rect.x + (TILE_SIZE + x);
-            float fy = collision_rect.y + (TILE_SIZE + y);
-            int ix = (collision_rect.x * INV_TILE_SIZE) + x;
-            int iy = (collision_rect.y * INV_TILE_SIZE) + y;
-
-            if(level_array_data[(iy * LEVEL_SIZE + ix)] == 0) {
-
-              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
-                TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);
-                TraceLog(LOG_INFO, "checking cell at index%i %i ", ix, iy);
-                TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);
-                 if(CheckCollisionCircleRec( position, PLAYER_SIZE * 0.5, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
-                    return true;
-                } 
-
-                if(CheckCollisionRecs( collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
-                    return true;
-                }
-            }
-        }
-    }
-    //==============================END TILE COLLISION=================
-
-    return false;
-} */
-
 void PlayerShip::DoWeapons() {
 
     if(settings.control_type == 0) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            if(can_fire and gun_power > GUN_POWER_USE ) {
-                can_fire = false;
-                AddToDrawList(bullet_list, new Bullet(position, turret.roataion));
+            if(gun_can_shoot and gun_power > GUN_POWER_USE ) {
+                gun_can_shoot = false;
+                AddToDrawList(bullet_list, new Bullet(position, turret.roataion, id));
                 gun_power -= GUN_POWER_USE;
                 shoot.EmitSignal();
                 shots++;
+                PlaySound(gun_sound);
             }
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) ) {
@@ -198,16 +200,26 @@ void PlayerShip::DoWeapons() {
 void PlayerShip::OnGunTimerTimeout() {
     //TraceLog(LOG_INFO, "SIGNAL RECIEVED");
     
-    can_fire = true;
+    gun_can_shoot = true;
 
 }
 
 void PlayerShip::OnPickup() {
-    TraceLog(LOG_INFO, "PLAYER GOT A PICKUP!!");
+    //TraceLog(LOG_INFO, "PLAYER GOT A PICKUP!!");
+    health = MAX_HEALTH;
 }
 
 PlayerShip::~PlayerShip()
 {
+    delete gun_timer;
+    UnloadSound(gun_sound);
+    UnloadSound(hit_sound);
+    UnloadSound(engine_sound);
     UnloadTexture(sprite.texture);
     UnloadTexture(turret.texture);
+}
+
+void PlayerShip::Reset() {
+    health = MAX_HEALTH;
+    gun_power = GUN_MAX_POWER;
 }

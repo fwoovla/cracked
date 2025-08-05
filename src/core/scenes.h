@@ -39,12 +39,17 @@ class TitleScene : public  BaseScene{
     void Draw() override;
     void OnPlayPressed();
     void OnQuitPressed();
+    void OnFadeOut();
 
     TitleUiLayer *ui;
     //Button play_button;
     Sprite logo;
     Texture2D bg_texture;
     //gameSettings &game_settings;
+    Timer *fade_timer;
+    float alpha_value;
+    float alpha_step;
+    bool transitioning;
 
 };
 
@@ -58,6 +63,12 @@ class GameScene : public  BaseScene{
     void DrawLevel();
     void DrawDebug();
     void OnQuitPressed();
+    void OnPickUpPickedUp();
+    void OnEnemySpawnTimerTimeout();
+    void OnEnemyDead();
+    void OnPlayerDead();
+    void OnMenuExit();
+    void OnMenuRestart();
 
 
 
@@ -69,6 +80,19 @@ class GameScene : public  BaseScene{
     Texture space_tile_texture;
     Texture2D asteroid_texture;
     Texture2D bg_texture;
+    std::vector<Vector2> pickup_positions;
+    std::vector<Vector2> enemy_positions;
+
+    Timer *enemy_spawn_timer;
+    int spawned_eney_amount;
+
+    GameMenu *menu;
+
+    bool show_menu;
+
+    Sound enemy_explosion_sound;
+    Sound game_over_sound;
+    Sound pickup_sound;
 };
 
 

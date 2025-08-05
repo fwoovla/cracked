@@ -80,7 +80,9 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/bullet.o
 GENERATED += $(OBJDIR)/effects.o
+GENERATED += $(OBJDIR)/enemyship.o
 GENERATED += $(OBJDIR)/game.o
+GENERATED += $(OBJDIR)/gamemenu.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
 GENERATED += $(OBJDIR)/main.o
@@ -94,7 +96,9 @@ GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
 OBJECTS += $(OBJDIR)/bullet.o
 OBJECTS += $(OBJDIR)/effects.o
+OBJECTS += $(OBJDIR)/enemyship.o
 OBJECTS += $(OBJDIR)/game.o
+OBJECTS += $(OBJDIR)/gamemenu.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
 OBJECTS += $(OBJDIR)/main.o
@@ -175,6 +179,9 @@ $(OBJDIR)/effects.o: src/gameplay/effects.cpp
 $(OBJDIR)/bullet.o: src/gameplay/entities/bullet.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/enemyship.o: src/gameplay/entities/enemyship.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/pickup.o: src/gameplay/entities/pickup.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -185,6 +192,9 @@ $(OBJDIR)/playership.o: src/gameplay/entities/playership.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/game.o: src/gameplay/game.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/gamemenu.o: src/gameplay/levelscenes/gamemenu.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/gamescene.o: src/gameplay/levelscenes/gamescene.cpp
