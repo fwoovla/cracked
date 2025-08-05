@@ -18,6 +18,10 @@ gameSettings settings = {
 int main(int argc, char *argv[]) {
 
    InitWindow(settings.window_size.x, settings.window_size.y, "cracked");
+   
+   int display = GetCurrentMonitor();
+   SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+   InitAudioDevice();
    SetTargetFPS(60);
 
    Game game;

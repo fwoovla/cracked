@@ -16,7 +16,7 @@ class Game{
     void StartGame();
   
     private:
-    bool running;
+    //bool running;
     SceneManager *scene_manager;
     RenderTexture2D render_texture;
     

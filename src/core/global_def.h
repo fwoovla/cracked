@@ -22,3 +22,4 @@
 extern gameSettings settings;
 extern int* level_array_data;
 extern  std::vector<DrawableEntity*> *collision_data_array[LEVEL_SIZE * LEVEL_SIZE];
+extern bool game_running;

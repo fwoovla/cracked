@@ -6,9 +6,9 @@
 #define BULLET_SPEED 500
 #define BULLET_LIFETIME 1.0f
 
-Bullet::Bullet(Vector2 _position, float _rotation) {
+Bullet::Bullet(Vector2 _position, float _rotation, int _shooter_id) {
     id = GetRandomValue(0, 10000);
-
+    shooter_id = _shooter_id;
 
     should_delete = false;
     lifetime = new Timer(BULLET_LIFETIME, true, true);

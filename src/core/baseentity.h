@@ -62,7 +62,7 @@ inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEn
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         if(_draw_list[i] == nullptr){
             _draw_list[i] = new_entity;
-            TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", i);
+            //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", i);
             return;
         }
     }
@@ -82,7 +82,7 @@ inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
         if(_draw_list[i] != nullptr){
             _draw_list[i]->Update();
             if(_draw_list[i]->should_delete) {
-                TraceLog(LOG_INFO, "DELETING ENTITY");
+                //TraceLog(LOG_INFO, "DELETING ENTITY");
                 delete _draw_list[i];
                 _draw_list[i] = nullptr;
             }
@@ -138,11 +138,11 @@ inline bool CheckCollisionWithLevel(DrawableEntity *checker, collisionResult &co
     for(int x = -1; x <  COLLISION_RANGE; x++) {
         for(int y = -1; y < COLLISION_RANGE; y++) {
 
-            float fx = checker->collision_rect.x + (TILE_SIZE + x);
-            float fy = checker->collision_rect.y + (TILE_SIZE + y);
+            //float fx = checker->collision_rect.x + (TILE_SIZE + x); 
+            //float fy = checker->collision_rect.y + (TILE_SIZE + y);
             int ix = (checker->collision_rect.x * INV_TILE_SIZE) + x;
             int iy = (checker->collision_rect.y * INV_TILE_SIZE) + y;
-            if(level_array_data[(iy * LEVEL_SIZE + ix)] == 0) {
+            if(level_array_data[(iy * LEVEL_SIZE + ix)] == 1) {
 
 /*              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
                 TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);

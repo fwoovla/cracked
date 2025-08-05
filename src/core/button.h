@@ -9,6 +9,7 @@ struct Button {
     Color focus_color;
     Color default_color;
     bool hovered;
+    bool already_hovered;
     bool clicked;
     Signal button_pressed;
 };
@@ -18,6 +19,7 @@ inline void CreateButton(Button &_button, Vector2 _position, Vector2 _size, Colo
     _button.default_color = GRAY;
     _button.size = _size;
     _button.hovered = false;
+    _button.already_hovered = false;
     _button.clicked = false;
     _button.position = {_position.x -( _button.size.x/2), _position.y - (_button.size.y/2) };
     _button.rect = { _button.position.x, _button.position.y, _button.size.x, _button.size.y};
@@ -34,6 +36,7 @@ inline void DrawButton(Button &_button) {
 }
 
 inline bool IsButtonHovered(Button &_button) {
+    _button.already_hovered = _button.hovered;
     if(CheckCollisionPointRec(GetMousePosition(), _button.rect)) {
         _button.hovered = true;
         return true;

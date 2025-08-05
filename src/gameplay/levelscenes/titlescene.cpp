@@ -18,11 +18,24 @@ TitleScene::TitleScene() {
     ui = new TitleUiLayer();
     ui->play_pressed.Connect( [&](){this->OnPlayPressed();} );
     ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
+
+    double wait_time = 1.0;
+    fade_timer = new Timer(wait_time, false, false);
+    //timer->ConnectSignalTo(this);
+    fade_timer->timout.Connect([&](){this->OnFadeOut();});
+    alpha_value = 0;  
+    alpha_step = 255/wait_time;
+    transitioning = false;
 }
 
 
 SCENE_ID TitleScene::Update() {
     ui->Update();
+
+    if(transitioning) {
+        fade_timer->Update();
+        alpha_value += (float)alpha_step * GetFrameTime();
+    }
 
     if(IsKeyPressed(KEY_ENTER)) {
         return_scene = GAME_SCENE;
@@ -41,6 +54,9 @@ void TitleScene::Draw() {
     DrawSprite(logo);
     ui->Draw();
 
+    if(transitioning) {
+        DrawRectangle( 0,0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, (unsigned char)alpha_value} );
+    }
 }
 
 TitleScene::~TitleScene() {
@@ -52,12 +68,20 @@ TitleScene::~TitleScene() {
 
 void TitleScene::OnPlayPressed() {
     //TraceLog(LOG_INFO, "SCENE PLAY");
-    return_scene = GAME_SCENE;
+    transitioning = true;
+    fade_timer->Start();
+    //return_scene = GAME_SCENE;
 
 }
 
 void TitleScene::OnQuitPressed() {
     //TraceLog(LOG_INFO, "SCENE QUIT");
+    game_running = false;
     return_scene = SPLASH_SCENE;
+
+}
+void TitleScene::OnFadeOut() {
+    //TraceLog(LOG_INFO, "SCENE QUIT");
+    return_scene = GAME_SCENE;
 
 }

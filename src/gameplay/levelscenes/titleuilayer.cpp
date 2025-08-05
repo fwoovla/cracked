@@ -10,11 +10,15 @@ TitleUiLayer::TitleUiLayer() {
 
     CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED );
     quit_button.default_color = GRAY;
+
+    button_sound = LoadSound("assets/button.wav");
+
+
     
 }
 
 TitleUiLayer::~TitleUiLayer() {
-
+    UnloadSound(button_sound);
 }
 
 void TitleUiLayer::Draw() {
@@ -25,6 +29,9 @@ void TitleUiLayer::Draw() {
 void TitleUiLayer::Update() {
 
     if(IsButtonHovered(quit_button)) {
+        if(quit_button.already_hovered == false) {
+            PlaySound(button_sound);
+        }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
             quit_pressed.EmitSignal();
@@ -32,6 +39,9 @@ void TitleUiLayer::Update() {
     }
     //TraceLog(LOG_INFO, "UI UPDATE");
     if(IsButtonHovered(start_button)) {
+        if(start_button.already_hovered == false) {
+            PlaySound(button_sound);
+        }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             TraceLog(LOG_INFO, "PLAY BUTTON PRESSED ");
             play_pressed.EmitSignal();

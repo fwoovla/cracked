@@ -20,6 +20,7 @@ Pickup::Pickup(Vector2 _position) {
 
 
 Pickup::~Pickup() {
+    AddToDrawList(effects_list, new PickupEffect(position));
     UnloadTexture(sprite.texture);
 }
 
@@ -44,6 +45,7 @@ void Pickup::Update() {
             if(playership) {
                 playership->OnPickup();
                 should_delete = true;
+                pickedup.EmitSignal();
             }
         }
     }
