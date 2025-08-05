@@ -8,6 +8,7 @@ class TitleUiLayer : public BaseUILayer {
     public:
     TitleUiLayer();
     ~TitleUiLayer() override;
+    
     void Update() override;
     void Draw() override;
 
