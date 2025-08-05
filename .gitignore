@@ -1,0 +1,8 @@
+build/
+bin/
+obj/
+*.out
+*.a
+*.dSYM/
+*.o
+.vscode/
