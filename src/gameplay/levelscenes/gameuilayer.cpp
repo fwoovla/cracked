@@ -3,8 +3,8 @@
 #define GUN_POWER_SCALER 20.0f
 
 GameUILayer::GameUILayer(){
-    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED );
-    quit_button.default_color = GRAY;
+    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED, "X");
+    quit_button.default_color = DARKGRAY;
 
     gun_power_rect = {10, 100, 20, GUN_MAX_POWER * GUN_POWER_SCALER};
     gun_power_color = YELLOW;

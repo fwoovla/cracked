@@ -21,12 +21,12 @@ int main(int argc, char *argv[]) {
    
    int display = GetCurrentMonitor();
    SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+   ToggleFullscreen();
    InitAudioDevice();
    SetTargetFPS(60);
 
    Game game;
    game.StartGame();
-   //CloseWindow();
    TraceLog(LOG_INFO, "GAME OVER");
 
    return 0;

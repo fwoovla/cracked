@@ -3,10 +3,9 @@
 #define GUN_POWER_SCALER 20.0f
 
 GameMenu::GameMenu(){
-    CreateButton(exit_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2}, {300, 50}, RED );
-    exit_button.default_color = GRAY;
-    CreateButton(continue_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2 + 200 }, {300, 50}, GREEN );
-    continue_button.default_color = GRAY;
+    CreateButton(exit_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2}, {300, 50}, RED, "exit");
+    
+    CreateButton(continue_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2 + 200 }, {300, 50}, GREEN, "retry");
 
     button_sound = LoadSound("assets/button.wav");
 }
@@ -23,9 +22,6 @@ void GameMenu::Draw() {
 
 void GameMenu::Update()
 {
-    if(player == nullptr) {
-        return;
-    }
 
     float dt = GetFrameTime();
     if(IsButtonHovered(exit_button)) {
