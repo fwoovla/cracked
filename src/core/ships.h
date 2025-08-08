@@ -18,14 +18,13 @@
 #define GUN_DELAY 0.2f
 
 
-class PlayerShip : public BaseShip {
+class PlayerShip : public AnimatedSpriteEntity {
     public:
     PlayerShip(Vector2 _position);
     ~PlayerShip() override;
     void Update() override;
     void Draw() override;
     void Reset();
-    //bool CheckCollision(collisionResult &collision_data) override;
     void DoMovement(float dt);
     void DoWeapons();
 
@@ -40,6 +39,8 @@ class PlayerShip : public BaseShip {
 
     Texture2D turret_texture;
     Sprite turret;
+    //AnimatedSprite flame;
+
     Camera2D *camera;
 
     Timer *gun_timer;
@@ -57,17 +58,18 @@ class PlayerShip : public BaseShip {
     Sound gun_sound;
     Sound hit_sound;
     Sound engine_sound;
+    Sound alert_sound;
 
+    int points;
 
 };
 
-class EnemyShip : public BaseShip {
+class EnemyShip : public SpriteEntity {
     public:
     EnemyShip(Vector2 _position);
     ~EnemyShip() override;
     void Update() override;
     void Draw() override;
-    //bool CheckCollision(collisionResult &collision_data) override;
     void DoMovement(float dt);
     void DoWeapons();
 
@@ -83,7 +85,7 @@ class EnemyShip : public BaseShip {
     Vector2 velocity;
     Timer *lifetime;
 
-    Texture2D turret_texture;
+    //Texture2D turret_texture;
     //Sprite turret;
     Camera2D *camera;
 
@@ -95,7 +97,11 @@ class EnemyShip : public BaseShip {
 
     Signal shoot;
     Signal dead;
-    BaseShip *target;
+    Signal player_killed_enemy;
+
+    BaseEntity *target;
+    Vector2 target_position;
+    
     Timer *thrust_timer;
     Timer *thrust_wait_timer;
     bool thrusting;
@@ -111,4 +117,7 @@ class EnemyShip : public BaseShip {
 
     Sound gun_sound;
     Sound hit_sound;
+    
+
+    Ray detect_ray;
 };

@@ -11,7 +11,7 @@
 #include "sprite.h"
  */
 
-class BaseShip : public DrawableEntity {
+/* class BaseShip : public SpriteEntity {
     public:
 
     virtual void Update() = 0;
@@ -19,4 +19,4 @@ class BaseShip : public DrawableEntity {
     //virtual bool CheckCollision(collisionResult &collision_data) = 0;
     
     
-};
+}; */

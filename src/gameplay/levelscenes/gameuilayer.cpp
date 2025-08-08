@@ -17,14 +17,22 @@ GameUILayer::GameUILayer(){
     hit_effect_alpha_value = 100;  
     hit_effect_alpha_step = 100/hit_efect_wait_time;
     show_hit_effect = false;
+
+    CreateLabel(points_tag_label, {100, 30}, 40, RAYWHITE, "POINTS:");
+    CreateLabel(points_value_label, {300, 30}, 50, GOLD, "0");
+    animating_points = false;
+
 }
 
 GameUILayer::~GameUILayer() {
     UnloadSound(button_sound);
-
 }
 
 void GameUILayer::Draw() {
+    
+    DrawLabel(points_tag_label);
+    DrawLabel(points_value_label);
+
     DrawButton(quit_button);
 
     DrawRectangle(gun_power_rect.x-2, gun_power_rect.y-2, gun_power_rect.width+4, gun_power_rect.y, WHITE);
@@ -49,6 +57,16 @@ void GameUILayer::Update()
     if(player == nullptr) {
         return;
     }
+     if(animating_points) {
+        points_value_label.text_size += 5;
+        if(points_value_label.text_size >= 60) {
+            points_value_label.text_size = 50;
+            animating_points = false;
+        }
+    }
+
+    points_value_label.text = TextFormat("%i", player->points);
+
     float dt = GetFrameTime();
     gun_power_rect.y = GetScreenHeight() -10.0f - player->gun_power * GUN_POWER_SCALER;
     gun_power_rect.height = player->gun_power * GUN_POWER_SCALER;
@@ -84,4 +102,10 @@ void GameUILayer::OnPlayerHit(){
 
 void GameUILayer::OnHitEffectTimeout(){
     show_hit_effect = false;
+}
+
+void GameUILayer::OnPlayerKilledEnemy(){
+    TraceLog(LOG_INFO, "STRTING ANIMATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    animating_points = true;
+    points_value_label.text_size = 10;
 }

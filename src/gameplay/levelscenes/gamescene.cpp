@@ -8,10 +8,10 @@
 
 int* level_array_data;
 
-DrawableEntity *bullet_list[DRAW_LIST_SIZE] = {nullptr};
-DrawableEntity *entity_list[DRAW_LIST_SIZE] = {nullptr};
-DrawableEntity *effects_list[DRAW_LIST_SIZE] = {nullptr};
-std::vector<DrawableEntity*> *collision_data[LEVEL_SIZE * LEVEL_SIZE] = {nullptr};
+BaseEntity *bullet_list[DRAW_LIST_SIZE] = {nullptr};
+BaseEntity *entity_list[DRAW_LIST_SIZE] = {nullptr};
+BaseEntity *effects_list[DRAW_LIST_SIZE] = {nullptr};
+std::vector<BaseEntity*> *collision_data[LEVEL_SIZE * LEVEL_SIZE] = {nullptr};
 
 
 GameScene::GameScene(char level_data[]) {
@@ -106,11 +106,16 @@ GameScene::GameScene(char level_data[]) {
     enemy_explosion_sound = LoadSound("assets/explode1.wav");
     game_over_sound = LoadSound("assets/gameover.wav");
     pickup_sound = LoadSound("assets/pickup.wav");
+    bg_music = LoadMusicStream("assets/levelmusic1.wav");
+    SetMusicVolume(bg_music, 0.5f);
+    PlayMusicStream(bg_music);
 
 }
 
 
 SCENE_ID GameScene::Update() {
+
+    UpdateMusicStream(bg_music);
 
     if(IsKeyPressed(KEY_TAB)) {
         settings.show_debug = !settings.show_debug;
@@ -181,6 +186,7 @@ GameScene::~GameScene() {
     UnloadSound(enemy_explosion_sound);
     UnloadSound(game_over_sound);
     UnloadSound(pickup_sound);
+    UnloadMusicStream(bg_music);
 
     UnloadTexture(space_tile_texture);
     UnloadTexture(asteroid_texture);
@@ -217,22 +223,7 @@ void GameScene::DrawLevel() {
 
 void GameScene::DrawDebug() {
     if(settings.show_debug){
-        for(int x = -1; x <  COLLISION_RANGE; x++) {
-            for(int y = -1; y < COLLISION_RANGE; y++) {
-
-                float fx = this_player->collision_rect.x + (TILE_SIZE + x);
-                float fy = this_player->collision_rect.y + (TILE_SIZE + y);
-                int ix = (this_player->collision_rect.x/TILE_SIZE) + x;
-                int iy = (this_player->collision_rect.y/TILE_SIZE) + y;
-
-                if(level_array_data[(iy) * LEVEL_SIZE + (ix)] == 0) {
-                    DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, PINK);
-                }
-                else {
-                    DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, BLUE);
-                }
-            }
-        }
+        
     }
 }
 
@@ -252,12 +243,14 @@ void GameScene::OnEnemySpawnTimerTimeout(){
     if(spawned_eney_amount >= MAX_ENEMIES) {
         return;
     }
-
+    //return;
     spawned_eney_amount++;
 
     EnemyShip *np = new EnemyShip( enemy_positions[GetRandomValue(0, enemy_positions.size() - 1)] );
     AddToDrawList(entity_list, np);
     np->dead.Connect( [&](){OnEnemyDead();} );
+    np->player_killed_enemy.Connect( [&](){OnPlayerKilledEnemy();} );
+    np->player_killed_enemy.Connect( [&](){ui->OnPlayerKilledEnemy();} );
     np->target = this_player;
     TraceLog(LOG_INFO, "NEW ENEMY, %i  (%f %f)", spawned_eney_amount, np->position.x, np->position.y);
 }
@@ -265,6 +258,11 @@ void GameScene::OnEnemySpawnTimerTimeout(){
 void GameScene::OnEnemyDead(){
     PlaySound(enemy_explosion_sound);
     spawned_eney_amount--;
+}
+
+void GameScene::OnPlayerKilledEnemy(){
+    TraceLog(LOG_INFO, "NEW POINTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!NEW POINTS");
+    this_player->points += 100;
 }
 
 void GameScene::OnPlayerDead(){

@@ -26,10 +26,17 @@ TitleScene::TitleScene() {
     alpha_value = 0;  
     alpha_step = 255/wait_time;
     transitioning = false;
+
+    bg_music = LoadMusicStream("assets/intromusic.wav");
+    SetMusicVolume(bg_music, 0.5f);
+    PlayMusicStream(bg_music);
 }
 
 
 SCENE_ID TitleScene::Update() {
+
+    UpdateMusicStream(bg_music);
+
     ui->Update();
 
     if(transitioning) {
@@ -63,6 +70,7 @@ TitleScene::~TitleScene() {
     //TraceLog(LOG_INFO, "DESTROY TITLE");
     UnloadTexture(logo.texture);
     UnloadTexture(bg_texture);
+    UnloadMusicStream(bg_music);
     delete ui;
 }
 

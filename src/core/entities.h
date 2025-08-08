@@ -5,7 +5,7 @@
 
 
 
-class Bullet :public DrawableEntity{
+class Bullet :public SpriteEntity{
     public:
     Bullet(Vector2 _position, float _rotation, int _shooter_id);
     ~Bullet() override;
@@ -13,7 +13,6 @@ class Bullet :public DrawableEntity{
     void Draw() override;
     void OnLifetimeTimeout();
 
-    Vector2 centered_offset;
     Vector2 velocity;
     Timer *lifetime;
 
@@ -21,19 +20,17 @@ class Bullet :public DrawableEntity{
 };
 
 
-class Pickup :public DrawableEntity{
+class Pickup :public SpriteEntity{
     public:
     Pickup(Vector2 _position);
     ~Pickup() override;
     void Update() override;
     void Draw() override;
 
-    Vector2 centered_offset;
-    Vector2 velocity;
     Signal pickedup;
 };
 
-class BulletHit :public DrawableEntity{
+class BulletHit :public SpriteEntity{
     public:
     BulletHit(Vector2 _position);
     ~BulletHit() override;
@@ -41,11 +38,10 @@ class BulletHit :public DrawableEntity{
     void Draw() override;
     //void OnLifetimeTimeout();
 
-    Vector2 centered_offset;
     //Timer *lifetime;
 };
 
-class PickupEffect :public DrawableEntity{
+class PickupEffect :public SpriteEntity{
     public:
     PickupEffect(Vector2 _position);
     ~PickupEffect() override;
@@ -53,11 +49,10 @@ class PickupEffect :public DrawableEntity{
     void Draw() override;
     //void OnLifetimeTimeout();
 
-    Vector2 centered_offset;
     //Timer *lifetime;
 };
 
-class ExplosionEffect :public DrawableEntity{
+class ExplosionEffect :public SpriteEntity{
     public:
     ExplosionEffect(Vector2 _position);
     ~ExplosionEffect() override;
@@ -65,6 +60,5 @@ class ExplosionEffect :public DrawableEntity{
     void Draw() override;
     //void OnLifetimeTimeout();
 
-    Vector2 centered_offset;
     //Timer *lifetime;
 };

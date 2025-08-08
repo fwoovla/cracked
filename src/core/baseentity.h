@@ -12,20 +12,12 @@
 
 
 #define DRAW_LIST_SIZE 100
-#define COLLISION_RANGE 3
-
-
-
-
 
 class BaseEntity  {
     public:
-    virtual void Update() = 0;    
-};
-
-class DrawableEntity{
-    public:
-    Sprite sprite;
+    virtual ~BaseEntity() = default;
+    virtual void Update() = 0;   
+    virtual void Draw() = 0; 
 
     Rectangle collision_rect;
     bool should_delete;
@@ -33,31 +25,45 @@ class DrawableEntity{
     Vector2 position;
     float rotation;
     int id;
-    
-    virtual ~DrawableEntity() = default;
+    Vector2 centered_offset;
+};
+
+class SpriteEntity : public BaseEntity {
+    public:
+    Sprite sprite;
+
+
+    virtual ~SpriteEntity() = default;
     virtual void Update() = 0;
     virtual void Draw() = 0;
-    //virtual bool CheckCollision(collisionResult &collision_data) = 0;
+};
 
+class AnimatedSpriteEntity : public BaseEntity {
+    public:
+    AnimatedSprite sprite;
+
+    virtual ~AnimatedSpriteEntity() = default;
+    virtual void Update() = 0;
+    virtual void Draw() = 0;
 };
 
 
 
 struct  collisionResult {
     Vector2 collision_dir;
-    DrawableEntity *collider;
+    BaseEntity *collider;
     
 };
 
 
-extern DrawableEntity *bullet_list[DRAW_LIST_SIZE];
-extern DrawableEntity *entity_list[DRAW_LIST_SIZE];
-extern DrawableEntity *effects_list[DRAW_LIST_SIZE];
+extern BaseEntity *bullet_list[DRAW_LIST_SIZE];
+extern BaseEntity *entity_list[DRAW_LIST_SIZE];
+extern BaseEntity *effects_list[DRAW_LIST_SIZE];
 extern int* level_array_data;
 
 
 
-inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEntity *new_entity) {
+inline void AddToDrawList(BaseEntity *_draw_list[DRAW_LIST_SIZE], SpriteEntity *new_entity) {
     
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         if(_draw_list[i] == nullptr){
@@ -69,7 +75,7 @@ inline void AddToDrawList(DrawableEntity *_draw_list[DRAW_LIST_SIZE], DrawableEn
 }
 
 
-inline void DrawListDraw(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
+inline void DrawListDraw(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         if(_draw_list[i] != nullptr){
             _draw_list[i]->Draw();
@@ -77,12 +83,12 @@ inline void DrawListDraw(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
     }
 }
 
-inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
+inline void DrawListUpdate(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
     for(int i = 0; i < 100; i++) {
         if(_draw_list[i] != nullptr){
             _draw_list[i]->Update();
             if(_draw_list[i]->should_delete) {
-                //TraceLog(LOG_INFO, "DELETING ENTITY");
+                TraceLog(LOG_INFO, "DELETING ENTITY");
                 delete _draw_list[i];
                 _draw_list[i] = nullptr;
             }
@@ -90,7 +96,7 @@ inline void DrawListUpdate(DrawableEntity *_draw_list[DRAW_LIST_SIZE]) {
     }
 }
 
-inline bool CheckCollisionWithEntities(DrawableEntity *checker, collisionResult &collision_result) {
+inline bool CheckCollisionWithEntities(BaseEntity *checker, collisionResult &collision_result) {
     if(checker->should_delete) {
         return false;
     }
@@ -113,7 +119,7 @@ inline bool CheckCollisionWithEntities(DrawableEntity *checker, collisionResult 
 }
 
 
-inline bool CheckCollisionWithBullets(DrawableEntity *checker, collisionResult &collision_result) {
+inline bool CheckCollisionWithBullets(BaseEntity *checker, collisionResult &collision_result) {
     if(checker->should_delete or checker->should_delete) {
         return false;
     }
@@ -133,10 +139,10 @@ inline bool CheckCollisionWithBullets(DrawableEntity *checker, collisionResult &
     return false;
 }
 
-inline bool CheckCollisionWithLevel(DrawableEntity *checker, collisionResult &collision_result) {
+inline bool CheckCollisionWithLevel(BaseEntity *checker, collisionResult &collision_result, int _range) {
     //================TILE COLLISION=========================
-    for(int x = -1; x <  COLLISION_RANGE; x++) {
-        for(int y = -1; y < COLLISION_RANGE; y++) {
+    for(int x = -1; x <  _range; x++) {
+        for(int y = -1; y < _range; y++) {
 
             //float fx = checker->collision_rect.x + (TILE_SIZE + x); 
             //float fy = checker->collision_rect.y + (TILE_SIZE + y);

@@ -5,14 +5,17 @@
 
 //#include "../../core/entities.h"
 #define MAX_HEALTH 10
+#define DETECT_RANGE 3
 
-PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
+PlayerShip::PlayerShip(Vector2 _position) : AnimatedSpriteEntity() {
 
     position = _position;
     velocity = {0};
     rotation = 0.0f;
     id = 1;
-    LoadSpriteCentered(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
+    points = 0;
+
+    LoadSpriteCentered(sprite, LoadTexture("assets/player_ship_frames.png"), {32*TILE_SIZE, 32*TILE_SIZE}, 3, 32.0f, 0.2f);
     
     centered_offset = {PLAYER_SIZE/2, PLAYER_SIZE/2};
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PLAYER_SIZE, PLAYER_SIZE };
@@ -36,14 +39,29 @@ PlayerShip::PlayerShip(Vector2 _position) : BaseShip() {
     engine_sound = LoadSound("assets/engine1.wav");
     SetSoundVolume(engine_sound, 0.6f);
 
+    alert_sound = LoadSound("assets/alert.wav");
+
+    //LoadSpriteCentered(flame, LoadTexture("assets/flame_frames.png"), {position.x, position.y}, 3, 16.0f, 0.2f);
+    //flame.center = {20, 0};
+
 }
 
 void PlayerShip::Update() {
     if(health <= 0) {
         return;
     }
+    if(health < MAX_HEALTH * 0.5f) {
+        if(!IsSoundPlaying(alert_sound)) {
+            PlaySound(alert_sound);
+        }
+    }
+    else {
+        StopSound(alert_sound);
+    }
 
     float dt = GetFrameTime();
+
+    AnimateSprite(sprite);
 
     gun_power += GetFrameTime() * GUN_REGEN;
     if (  gun_power > GUN_MAX_POWER) {
@@ -69,6 +87,13 @@ void PlayerShip::Update() {
     DoMovement(dt);
     DoWeapons();
     gun_timer->Update();
+
+    
+    //AnimateSprite(flame);
+    //flame_sprite.dest.x = position.x;
+    //flame_sprite.dest.y = position.y;
+
+    
 }
 
 void PlayerShip::Draw() {
@@ -79,8 +104,28 @@ void PlayerShip::Draw() {
 
     DrawSprite(sprite);
     DrawSprite(turret);
+    //DrawSprite(flame);
+    //DrawSprite(flame_sprite);
 
     if(settings.show_debug){
+
+        for(int x = -1; x <  DETECT_RANGE; x++) {
+            for(int y = -1; y < DETECT_RANGE; y++) {
+                float fx = collision_rect.x + (TILE_SIZE + x);
+                float fy = collision_rect.y + (TILE_SIZE + y);
+                int ix = (collision_rect.x/TILE_SIZE) + x;
+                int iy = (collision_rect.y/TILE_SIZE) + y;
+
+                if(level_array_data[(iy) * LEVEL_SIZE + (ix)] == 0) {
+                    DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, PINK);
+                }
+                else {
+                    DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, BLUE);
+                }
+            }
+        }
+
+
         if(collided and settings.show_debug) {
         //DrawCircleV(position, PLAYER_SIZE * 0.5, RED);
         DrawRectangleRec(collision_rect, RED);
@@ -142,7 +187,7 @@ void PlayerShip::DoMovement(float dt) {
    
     collided = false;
     collisionResult collision_data = {0};
-    if(CheckCollisionWithLevel(this, collision_data)) {
+    if(CheckCollisionWithLevel(this, collision_data, DETECT_RANGE)) {
         collided = true;
         //TraceLog(LOG_INFO, "COLLIED");
     }
@@ -165,6 +210,10 @@ void PlayerShip::DoMovement(float dt) {
     Vector2 pp = GetWorldToScreen2D(position, *camera);
 
     turret.roataion = GetAngleFromTo(pp, mp);
+
+    //flame.dest.x = position.x -20.0f;
+    //flame.dest.y = position.y;
+    //flame.roataion = rotation;
 }
 
 
@@ -215,6 +264,7 @@ PlayerShip::~PlayerShip()
     UnloadSound(gun_sound);
     UnloadSound(hit_sound);
     UnloadSound(engine_sound);
+    UnloadSound(alert_sound);
     UnloadTexture(sprite.texture);
     UnloadTexture(turret.texture);
 }
@@ -222,4 +272,5 @@ PlayerShip::~PlayerShip()
 void PlayerShip::Reset() {
     health = MAX_HEALTH;
     gun_power = GUN_MAX_POWER;
+    points = 0;
 }

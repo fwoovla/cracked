@@ -36,7 +36,7 @@ void BulletHit::Update() {
     //Lerp(sprite.modulate.a, 0, 0.01);
     if(sprite.modulate.a <= 20) {
         should_delete = true;
-        //TraceLog(LOG_INFO, "Effect should delete %i", id);
+        TraceLog(LOG_INFO, "Effect should delete %i", id);
     }
 }
 

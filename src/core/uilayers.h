@@ -2,6 +2,7 @@
 #include "ships.h"
 #include "baseuilayer.h"
 #include "button.h"
+#include "label.h"
 
 class TitleUiLayer : public BaseUILayer {
 
@@ -33,8 +34,12 @@ class GameUILayer : public BaseUILayer {
     void OnPlayerShoot();
     void OnPlayerHit();
     void OnHitEffectTimeout();
+    void OnPlayerKilledEnemy();
     
     
+    Label points_tag_label;
+    Label points_value_label;
+
     Button quit_button;
     Signal quit_pressed;
 
@@ -49,6 +54,8 @@ class GameUILayer : public BaseUILayer {
     float hit_effect_alpha_value;
     float hit_effect_alpha_step;
     bool show_hit_effect;
+
+    bool animating_points;
 
 };
 

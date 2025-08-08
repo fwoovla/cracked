@@ -21,8 +21,10 @@
 
 #define MAX_HEALTH 5
 
+#define DETECT_RANGE 4
 
-EnemyShip::EnemyShip(Vector2 _position) : BaseShip() {
+
+EnemyShip::EnemyShip(Vector2 _position) : SpriteEntity() {
 
     position = _position;
     velocity = {0};
@@ -71,26 +73,29 @@ EnemyShip::EnemyShip(Vector2 _position) : BaseShip() {
     hit_sound = LoadSound("assets/laserhit1.wav");
     //SetSoundVolume(hit_sound, 1.5f);
 
+    detect_ray = {
+        .position = {position.x, position.y, 0.0},
+        .direction = {100, 0, 0},
+    };
+
 }
+
 
 void EnemyShip::Update() {
     if(should_delete) {
         return;
     }
 
-/*     if(!target) {
-        return;
-    } */
-
     float dt = GetFrameTime();
 
     gun_power += GetFrameTime() * GUN_REGEN;
     if (  gun_power > GUN_MAX_POWER) {
         gun_power = GUN_MAX_POWER;
-
     }
-    //TraceLog(LOG_INFO, "PLAYER GUN POWER %f  %i", gun_power, shots);
     DoMovement(dt);
+
+    detect_ray.position = {position.x, position.y};
+
     DoWeapons();
     gun_timer->Update();
     burst_timer->Update();
@@ -104,26 +109,42 @@ void EnemyShip::Update() {
         Bullet *bullet = dynamic_cast<Bullet *>(result.collider);
         //TraceLog(LOG_INFO, "collided %i", bullet->shooter_id);
         if(bullet->shooter_id != id) {
-            result.collider->should_delete = true;
+            bullet->should_delete = true;
             health -=1;
             PlaySound(hit_sound);
             if(health <= 0) {
                 should_delete = true;
-
+                if(bullet->shooter_id == 1) {
+                    player_killed_enemy.EmitSignal();
+                }
             }
         }
     }
-
 }
 
 void EnemyShip::Draw() {
-    //TraceLog(LOG_INFO, "PLAYER DRAW");
 
     DrawSprite(sprite);
     //DrawSprite(turret);
 
     if(settings.show_debug){
-        if(collided and settings.show_debug) {
+        for(int x = -1; x <  DETECT_RANGE; x++) {
+            for(int y = -1; y < DETECT_RANGE; y++) {
+                float fx = collision_rect.x + (TILE_SIZE + x);
+                float fy = collision_rect.y + (TILE_SIZE + y);
+                int ix = (collision_rect.x/TILE_SIZE) + x;
+                int iy = (collision_rect.y/TILE_SIZE) + y;
+
+                if(level_array_data[(iy) * LEVEL_SIZE + (ix)] == 0) {
+                    DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, PINK);
+                }
+                else {
+                    DrawRectangle((float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE,TILE_SIZE, BLUE);
+                }
+            }
+        }
+
+        if(collided) {
         //DrawCircleV(position, PLAYER_SIZE * 0.5, RED);
         DrawRectangleRec(collision_rect, RED);
         }
@@ -131,14 +152,15 @@ void EnemyShip::Draw() {
         //DrawCircleV(position, PLAYER_SIZE * 0.5, GREEN);
         DrawRectangleRec(collision_rect, GREEN);
         }
+        DrawLineV({detect_ray.position.x, detect_ray.position.y}, {detect_ray.position.x + detect_ray.direction.x, detect_ray.position.y + detect_ray.direction.y}, WHITE );
     }
+
 }
 
 
 void EnemyShip::DoMovement(float dt) {
 
     if(target) {
-        //TraceLog(LOG_INFO, "MOVING TO TARGET         (%f %f)", target->position.x, target->position.y);
         Vector2 p1 = target->position;
         Vector2 p2 = position;
         rotation = GetAngleFromTo(p2, p1);
@@ -172,7 +194,6 @@ void EnemyShip::DoMovement(float dt) {
 
     vClamp(velocity, 1.0);
 
-
     velocity = Vector2ClampValue(velocity, -max_speed, max_speed);
 
     collision_rect.x += velocity.x;
@@ -180,7 +201,7 @@ void EnemyShip::DoMovement(float dt) {
    
     collided = false;
     collisionResult collision_data = {0};
-    if(CheckCollisionWithLevel(this, collision_data)) {
+    if(CheckCollisionWithLevel(this, collision_data, DETECT_RANGE)) {
         collided = true;
         //TraceLog(LOG_INFO, "COLLIED");
     }
@@ -206,8 +227,8 @@ void EnemyShip::DoWeapons() {
             //TraceLog(LOG_INFO, "BURSTING");
             burst_timer->wait_time = GetRandomValue(MIN_BURST_TIME, MAX_BURST_TIME) * 0.1;
             bursting = true;
-            burst_timer->Start();
             can_burst = false;
+            burst_timer->Start();
         }
     }
     if(bursting and gun_can_shoot) {
@@ -258,5 +279,4 @@ EnemyShip::~EnemyShip()
     UnloadSound(gun_sound);
     UnloadSound(hit_sound);
     UnloadTexture(sprite.texture);
-    //UnloadTexture(turret.texture);
 }

@@ -37,7 +37,7 @@ void TitleUiLayer::Update() {
             PlaySound(button_sound);
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
+            //TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
             quit_pressed.EmitSignal();
         }
     }
@@ -47,7 +47,7 @@ void TitleUiLayer::Update() {
             PlaySound(button_sound);
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "PLAY BUTTON PRESSED ");
+            //TraceLog(LOG_INFO, "PLAY BUTTON PRESSED ");
             play_pressed.EmitSignal();
         }        
     }

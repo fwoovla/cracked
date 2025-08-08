@@ -51,6 +51,8 @@ class TitleScene : public  BaseScene{
     float alpha_step;
     bool transitioning;
 
+    Music bg_music;
+
 };
 
 
@@ -66,6 +68,7 @@ class GameScene : public  BaseScene{
     void OnPickUpPickedUp();
     void OnEnemySpawnTimerTimeout();
     void OnEnemyDead();
+    void OnPlayerKilledEnemy();
     void OnPlayerDead();
     void OnMenuExit();
     void OnMenuRestart();
@@ -93,6 +96,8 @@ class GameScene : public  BaseScene{
     Sound enemy_explosion_sound;
     Sound game_over_sound;
     Sound pickup_sound;
+
+    Music bg_music;
 };
 
 

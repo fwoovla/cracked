@@ -5,6 +5,7 @@
 #define BULLET_SIZE 10
 #define BULLET_SPEED 500
 #define BULLET_LIFETIME 1.0f
+#define DETECT_RANGE 3
 
 Bullet::Bullet(Vector2 _position, float _rotation, int _shooter_id) {
     id = GetRandomValue(0, 10000);
@@ -30,6 +31,7 @@ Bullet::Bullet(Vector2 _position, float _rotation, int _shooter_id) {
 
 
 Bullet::~Bullet() {
+    TraceLog(LOG_INFO, "BULLET should delete %i", id);
     AddToDrawList(effects_list, new BulletHit(position));
     UnloadTexture(sprite.texture);
     delete lifetime;
@@ -47,7 +49,7 @@ void Bullet::Update() {
     collision_rect.y += velocity.y * dt;
 
     collisionResult result = {{0}, };
-    collided = CheckCollisionWithLevel(this, result);
+    collided = CheckCollisionWithLevel(this, result, DETECT_RANGE);
 
     if(collided) {
         should_delete = true;
@@ -78,6 +80,6 @@ void Bullet::Draw() {
 
 
 void Bullet::OnLifetimeTimeout() {
-    //TraceLog(LOG_INFO, "BULLET should delete %i", id);
+    TraceLog(LOG_INFO, "BULLET should delete %i", id);
     should_delete = true;
 }
