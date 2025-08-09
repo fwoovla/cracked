@@ -4,7 +4,7 @@
 #include "global_types.h"
 
 
-#define PLAYER_SPEED 3.5f
+#define PLAYER_SPEED 3.0f
 #define PLAYER_SIZE 30
 #define SHIP_THRUST 0.1f
 #define SHIP_ROT_SPEED 180.0f
@@ -79,6 +79,7 @@ class EnemyShip : public SpriteEntity {
     void OnBurstTimerTimeout();
     void OnBurstWaitTimerTimeout();
     void OnPickup();
+    void OnAvoidTimerTimeout();
 
     
     Vector2 centered_offset;
@@ -119,5 +120,9 @@ class EnemyShip : public SpriteEntity {
     Sound hit_sound;
     
 
-    Ray detect_ray;
+    RayCast detect_ray;
+    bool ray_colliding;
+    Timer *avoid_timer;
+    bool avoiding;
+
 };

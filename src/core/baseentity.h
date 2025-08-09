@@ -8,6 +8,7 @@
 //#include "global_types.h"
 #include "global_def.h"
 #include <raylib.h>
+#include <raymath.h>
 #include "sprite.h"
 
 
@@ -55,6 +56,11 @@ struct  collisionResult {
     
 };
 
+struct  RayCast {
+    Vector2 position;
+    Vector2 direction;
+    
+};
 
 extern BaseEntity *bullet_list[DRAW_LIST_SIZE];
 extern BaseEntity *entity_list[DRAW_LIST_SIZE];
@@ -168,3 +174,21 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, collisionResult &collis
     return false;
 }
 
+inline bool GetRayCollisionWithLevel(RayCast &_ray, collisionResult &result, int range) {
+    Vector2 end = Vector2Add(_ray.position, _ray.direction);
+    Vector2 step = _ray.direction * 0.1;
+    //Vector2 mid = Vector2Add(_ray.position, _ray.direction * 0.5f);
+
+    for (int i = 1; i <= 10; i++) {
+
+        int ix = ( ((step.x * i) + _ray.position.x) * INV_TILE_SIZE);
+        int iy = ( ((step.y * i) + _ray.position.y) * INV_TILE_SIZE);
+
+        TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
+
+        if(level_array_data[(iy * LEVEL_SIZE + ix)] == 1) {
+            return true;
+        }
+    }
+    return false;
+}

@@ -1,9 +1,7 @@
 #include "../../core/global_def.h"
 #include<cmath>
 #include <raymath.h>
-//#include "ships.h"
 
-//#include "../../core/entities.h"
 
 #define MIN_THRUST_TIME 50
 #define MAX_THRUST_TIME 150
@@ -22,6 +20,8 @@
 #define MAX_HEALTH 5
 
 #define DETECT_RANGE 4
+
+const float ROTATION_SPEED = PI * 0.4f; //<-do this more
 
 
 EnemyShip::EnemyShip(Vector2 _position) : SpriteEntity() {
@@ -60,24 +60,27 @@ EnemyShip::EnemyShip(Vector2 _position) : SpriteEntity() {
 
     burst_timer = new Timer(1.0f, false, false);
     bursting = false;
-    burst_timer->timout.Connect( [&](){this->OnBurstTimerTimeout();} );
+    burst_timer->timout.Connect( [&](){OnBurstTimerTimeout();} );
 
     burst_wait_timer = new Timer(GetRandomValue(0, 100) * 0.1f, false, false);
     can_burst = false;
-    burst_wait_timer->timout.Connect( [&](){this->OnBurstWaitTimerTimeout();} );
+    burst_wait_timer->timout.Connect( [&](){OnBurstWaitTimerTimeout();} );
     burst_wait_timer->Start();
 
     gun_sound = LoadSound("assets/laser2.wav");
     SetSoundVolume(gun_sound, 0.5f);
 
     hit_sound = LoadSound("assets/laserhit1.wav");
-    //SetSoundVolume(hit_sound, 1.5f);
 
     detect_ray = {
-        .position = {position.x, position.y, 0.0},
-        .direction = {100, 0, 0},
+        .position = {position.x, position.y},
+        .direction = {100.0f, 0.0f},
     };
 
+    ray_colliding = false;
+
+    avoid_timer = new Timer(2.0f, false, false);
+    avoid_timer->timout.Connect( [&](){OnAvoidTimerTimeout();} );
 }
 
 
@@ -93,8 +96,6 @@ void EnemyShip::Update() {
         gun_power = GUN_MAX_POWER;
     }
     DoMovement(dt);
-
-    detect_ray.position = {position.x, position.y};
 
     DoWeapons();
     gun_timer->Update();
@@ -152,20 +153,59 @@ void EnemyShip::Draw() {
         //DrawCircleV(position, PLAYER_SIZE * 0.5, GREEN);
         DrawRectangleRec(collision_rect, GREEN);
         }
-        DrawLineV({detect_ray.position.x, detect_ray.position.y}, {detect_ray.position.x + detect_ray.direction.x, detect_ray.position.y + detect_ray.direction.y}, WHITE );
     }
 
+    Vector2 a = {detect_ray.position.x, detect_ray.position.y};
+    Vector2 b = {detect_ray.position.x + detect_ray.direction.x, detect_ray.position.y + detect_ray.direction.y};
+
+    if(ray_colliding) {
+        DrawLineV(a, b, RED);
+    }
+    else{
+        DrawLineV(a, b, WHITE);
+    }
 }
 
 
 void EnemyShip::DoMovement(float dt) {
 
+
     if(target) {
-        Vector2 p1 = target->position;
-        Vector2 p2 = position;
-        rotation = GetAngleFromTo(p2, p1);
+
+        detect_ray.position = {position.x, position.y};
+        detect_ray.direction.x = Vector2Rotate({100,0}, DEG2RAD * rotation).x;
+        detect_ray.direction.y = Vector2Rotate({100,0}, DEG2RAD * rotation).y;
+
+        ray_colliding = false;
+        collisionResult ray_result;
+        if(GetRayCollisionWithLevel(detect_ray, ray_result, 0)) {
+            ray_colliding = true;
+        }
+
+        Vector2 p1 = position;
+        Vector2 p2 = {0};
+
+        if(ray_colliding) {
+            //p2 =  Vector2Add(position, detect_ray.direction) * -1.0f;
+            avoid_timer->Start();
+            avoiding = true;
+        }
+        if(avoiding) {
+            avoid_timer->Update();
+            rotation += 0.5f;
+        }
+        else {
+            Vector2 p1 = position;
+            Vector2 p2 = target->position;
+            
+            //        Vector2Rotate()
+            float target_rotation = GetAngleFromTo(p1, p2);
+            rotation = rotateTowardsRad(rotation * DEG2RAD, target_rotation, ROTATION_SPEED, dt) * RAD2DEG;
+        }
     }
-    
+
+
+    //return;
     
     Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
     
@@ -269,6 +309,11 @@ void EnemyShip::OnBurstWaitTimerTimeout() {
     can_burst = true;
 }
 
+void EnemyShip::OnAvoidTimerTimeout() {
+    //TraceLog(LOG_INFO, "CAN BURST");
+    avoiding = false;
+}
+
 EnemyShip::~EnemyShip()
 {
     AddToDrawList(effects_list, new ExplosionEffect(position));
@@ -276,6 +321,7 @@ EnemyShip::~EnemyShip()
     delete gun_timer;
     delete thrust_timer;
     delete thrust_wait_timer;
+    delete avoid_timer;
     UnloadSound(gun_sound);
     UnloadSound(hit_sound);
     UnloadTexture(sprite.texture);

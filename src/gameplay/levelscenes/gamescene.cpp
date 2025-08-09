@@ -4,7 +4,7 @@
 //#include "scenes.h"
 //#include "scenes.h"
 
-#define MAX_ENEMIES 4
+#define MAX_ENEMIES 1
 
 int* level_array_data;
 

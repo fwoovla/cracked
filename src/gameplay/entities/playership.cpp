@@ -209,7 +209,7 @@ void PlayerShip::DoMovement(float dt) {
     Vector2 mp = GetMousePosition();
     Vector2 pp = GetWorldToScreen2D(position, *camera);
 
-    turret.roataion = GetAngleFromTo(pp, mp);
+    turret.roataion = GetAngleFromTo(pp, mp) * RAD2DEG;
 
     //flame.dest.x = position.x -20.0f;
     //flame.dest.y = position.y;
