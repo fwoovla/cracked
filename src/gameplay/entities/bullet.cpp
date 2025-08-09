@@ -48,7 +48,7 @@ void Bullet::Update() {
     collision_rect.x += velocity.x * dt;
     collision_rect.y += velocity.y * dt;
 
-    collisionResult result = {{0}, };
+    CollisionResult result = {{0}, };
     collided = CheckCollisionWithLevel(this, result, DETECT_RANGE);
 
     if(collided) {

@@ -17,6 +17,8 @@ TitleUiLayer::TitleUiLayer() {
 
     button_sound = LoadSound("assets/button.wav");
     
+    CreatePanel(menu_panel, {screen_center.x - 300, screen_center.y - 100}, {600, 400}, Fade(WHITE, 0.0f), 5.0f) ;
+    
 }
 
 TitleUiLayer::~TitleUiLayer() {
@@ -24,7 +26,9 @@ TitleUiLayer::~TitleUiLayer() {
 }
 
 void TitleUiLayer::Draw() {
-    DrawRectangleV( {screen_center.x - 200, screen_center.y - 100}, {400, 400}, DARKGRAY);
+    DrawPanel(menu_panel);
+
+    //DrawRectangleV( {screen_center.x - 200, screen_center.y - 100}, {400, 400}, DARKGRAY);
     DrawButton(start_button);
     DrawButton(settings_button);
     DrawButton(quit_button);
@@ -32,6 +36,7 @@ void TitleUiLayer::Draw() {
 
 void TitleUiLayer::Update() {
 
+    UpdatePanel(menu_panel);
     if(IsButtonHovered(quit_button)) {
         if(quit_button.already_hovered == false) {
             PlaySound(button_sound);

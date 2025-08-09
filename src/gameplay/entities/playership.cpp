@@ -4,11 +4,13 @@
 //#include "ships.h"
 
 //#include "../../core/entities.h"
+
 #define MAX_HEALTH 10
 #define DETECT_RANGE 3
 
-PlayerShip::PlayerShip(Vector2 _position) : AnimatedSpriteEntity() {
+PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntity() {
 
+    data = _data;
     position = _position;
     velocity = {0};
     rotation = 0.0f;
@@ -17,17 +19,17 @@ PlayerShip::PlayerShip(Vector2 _position) : AnimatedSpriteEntity() {
 
     LoadSpriteCentered(sprite, LoadTexture("assets/player_ship_frames.png"), {32*TILE_SIZE, 32*TILE_SIZE}, 3, 32.0f, 0.2f);
     
-    centered_offset = {PLAYER_SIZE/2, PLAYER_SIZE/2};
-    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PLAYER_SIZE, PLAYER_SIZE };
+    centered_offset = {data.SIZE/2, data.SIZE/2};
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, data.SIZE, data.SIZE };
     
     LoadSpriteCentered(turret, LoadTexture("assets/turret.png"), position);
     
     should_delete = false;
 
-    gun_timer = new Timer(GUN_DELAY, true, false);
+    gun_timer = new Timer(data.GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
     gun_can_shoot = false;
-    gun_power = GUN_MAX_POWER;
+    gun_power = data.GUN_MAX_POWER;
     shots = 0;
 
     health = MAX_HEALTH;
@@ -63,13 +65,13 @@ void PlayerShip::Update() {
 
     AnimateSprite(sprite);
 
-    gun_power += GetFrameTime() * GUN_REGEN;
-    if (  gun_power > GUN_MAX_POWER) {
-        gun_power = GUN_MAX_POWER;
+    gun_power += GetFrameTime() * data.GUN_REGEN;
+    if (  gun_power > data.GUN_MAX_POWER) {
+        gun_power = data.GUN_MAX_POWER;
 
     }
     
-    collisionResult result = {0};
+    CollisionResult result = {0};
     if(CheckCollisionWithBullets(this, result)) {
         Bullet *bullet = dynamic_cast<Bullet *>(result.collider);
         //TraceLog(LOG_INFO, "collided %i", bullet->shooter_id);
@@ -88,12 +90,7 @@ void PlayerShip::Update() {
     DoWeapons();
     gun_timer->Update();
 
-    
-    //AnimateSprite(flame);
-    //flame_sprite.dest.x = position.x;
-    //flame_sprite.dest.y = position.y;
-
-    
+       
 }
 
 void PlayerShip::Draw() {
@@ -104,8 +101,6 @@ void PlayerShip::Draw() {
 
     DrawSprite(sprite);
     DrawSprite(turret);
-    //DrawSprite(flame);
-    //DrawSprite(flame_sprite);
 
     if(settings.show_debug){
 
@@ -140,12 +135,12 @@ void PlayerShip::Draw() {
 
 void PlayerShip::DoMovement(float dt) {
     if(settings.control_type == 0) {
-        if (IsKeyDown(KEY_A)) {rotation -= SHIP_ROT_SPEED * dt;}
-        if (IsKeyDown(KEY_D)) {rotation += SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_A)) {rotation -= data.SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_D)) {rotation += data.SHIP_ROT_SPEED * dt;}
     }
     else if(settings.control_type == 1) {
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= SHIP_ROT_SPEED * dt;}
-        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= data.SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += data.SHIP_ROT_SPEED * dt;}
     }
 
     sprite.roataion = rotation;
@@ -157,8 +152,8 @@ void PlayerShip::DoMovement(float dt) {
         if(!IsSoundPlaying(engine_sound)) {
             PlaySound(engine_sound);
         }
-        velocity.x += cosf(rad) * SHIP_THRUST;
-        velocity.y += sinf(rad) * SHIP_THRUST;
+        velocity.x += cosf(rad) * data.SHIP_THRUST;
+        velocity.y += sinf(rad) * data.SHIP_THRUST;
     }
     //else {StopSound(engine_sound);}
 
@@ -167,26 +162,26 @@ void PlayerShip::DoMovement(float dt) {
             PlaySound(engine_sound);
         }
         float rad = rotation * DEG2RAD;
-        velocity.x -= cosf(rad) * SHIP_THRUST * .2;
-        velocity.y -= sinf(rad) * SHIP_THRUST * .2;
+        velocity.x -= cosf(rad) * data.SHIP_THRUST * .2;
+        velocity.y -= sinf(rad) * data.SHIP_THRUST * .2;
     }
     //else {StopSound(engine_sound);}
     if(!IsKeyDown(KEY_W) and !IsKeyDown(KEY_S)) {
         StopSound(engine_sound);
     }
 
-    velocity.x *= AIR_FRICTION;
-    velocity.y *= AIR_FRICTION;
+    velocity.x *= data.AIR_FRICTION;
+    velocity.y *= data.AIR_FRICTION;
 
     vClamp(velocity, 1.0);
 
-    velocity = Vector2ClampValue(velocity, -PLAYER_SPEED, PLAYER_SPEED);
+    velocity = Vector2ClampValue(velocity, -data.SPEED, data.SPEED);
 
     collision_rect.x += velocity.x;
     collision_rect.y += velocity.y;
    
     collided = false;
-    collisionResult collision_data = {0};
+    CollisionResult collision_data = {0};
     if(CheckCollisionWithLevel(this, collision_data, DETECT_RANGE)) {
         collided = true;
         //TraceLog(LOG_INFO, "COLLIED");
@@ -195,7 +190,7 @@ void PlayerShip::DoMovement(float dt) {
     if(collided) {
         collision_rect.x = previous_collision_position.x;
         collision_rect.y = previous_collision_position.y;
-        velocity = {-velocity.x * SHIP_BOUNCE_SCALEAR, -velocity.y * SHIP_BOUNCE_SCALEAR};
+        velocity = {-velocity.x * data.SHIP_BOUNCE_SCALEAR, -velocity.y * data.SHIP_BOUNCE_SCALEAR};
     }
     else {
         position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
@@ -210,10 +205,6 @@ void PlayerShip::DoMovement(float dt) {
     Vector2 pp = GetWorldToScreen2D(position, *camera);
 
     turret.roataion = GetAngleFromTo(pp, mp) * RAD2DEG;
-
-    //flame.dest.x = position.x -20.0f;
-    //flame.dest.y = position.y;
-    //flame.roataion = rotation;
 }
 
 
@@ -221,10 +212,10 @@ void PlayerShip::DoWeapons() {
 
     if(settings.control_type == 0) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            if(gun_can_shoot and gun_power > GUN_POWER_USE ) {
+            if(gun_can_shoot and gun_power > data.GUN_POWER_USE ) {
                 gun_can_shoot = false;
                 AddToDrawList(bullet_list, new Bullet(position, turret.roataion, id));
-                gun_power -= GUN_POWER_USE;
+                gun_power -= data.GUN_POWER_USE;
                 shoot.EmitSignal();
                 shots++;
                 PlaySound(gun_sound);
@@ -271,6 +262,6 @@ PlayerShip::~PlayerShip()
 
 void PlayerShip::Reset() {
     health = MAX_HEALTH;
-    gun_power = GUN_MAX_POWER;
+    gun_power = data.GUN_MAX_POWER;
     points = 0;
 }

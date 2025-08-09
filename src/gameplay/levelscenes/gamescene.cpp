@@ -4,7 +4,7 @@
 //#include "scenes.h"
 //#include "scenes.h"
 
-#define MAX_ENEMIES 1
+#define MAX_ENEMIES 50
 
 int* level_array_data;
 
@@ -18,7 +18,6 @@ GameScene::GameScene(char level_data[]) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     //delete draw_list;
-
  
     for(int i = 0; i < LEVEL_SIZE*LEVEL_SIZE; i++) {
         if(collision_data[i] != nullptr) {
@@ -83,7 +82,8 @@ GameScene::GameScene(char level_data[]) {
     show_menu = false;
     
     //LOAD PLAYER------------------------------------
-    this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2} );
+    PlayerData player_data;
+    this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2}, player_data );
     entity_list[0] = this_player;
     this_player->camera = &camera;
     //TraceLog(LOG_INFO, "PLAYER CREATED");
@@ -129,7 +129,7 @@ SCENE_ID GameScene::Update() {
 
     camera.target = (Vector2){this_player->collision_rect.x, this_player->collision_rect.y};
 
-    if( abs(this_player->velocity.x) > PLAYER_SPEED * 0.7f or abs(this_player->velocity.y) > PLAYER_SPEED * 0.7f) {
+    if( abs(this_player->velocity.x) > this_player->data.SPEED * 0.7f or abs(this_player->velocity.y) > this_player->data.SPEED * 0.7f) {
         camera.zoom = Lerp(camera.zoom, 1.0f, .005);
     }
     else {
@@ -246,7 +246,7 @@ void GameScene::OnEnemySpawnTimerTimeout(){
     //return;
     spawned_eney_amount++;
 
-    EnemyShip *np = new EnemyShip( enemy_positions[GetRandomValue(0, enemy_positions.size() - 1)] );
+    EnemyShip *np = new EnemyShip( enemy_positions[GetRandomValue(0, enemy_positions.size() - 1)], CreateEnemy(0) );
     AddToDrawList(entity_list, np);
     np->dead.Connect( [&](){OnEnemyDead();} );
     np->player_killed_enemy.Connect( [&](){OnPlayerKilledEnemy();} );

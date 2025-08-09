@@ -19,9 +19,8 @@ TitleScene::TitleScene() {
     ui->play_pressed.Connect( [&](){this->OnPlayPressed();} );
     ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
 
-    double wait_time = 1.0;
+    double wait_time = 0.5;
     fade_timer = new Timer(wait_time, false, false);
-    //timer->ConnectSignalTo(this);
     fade_timer->timout.Connect([&](){this->OnFadeOut();});
     alpha_value = 0;  
     alpha_step = 255/wait_time;

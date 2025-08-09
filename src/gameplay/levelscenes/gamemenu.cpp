@@ -3,11 +3,16 @@
 #define GUN_POWER_SCALER 20.0f
 
 GameMenu::GameMenu(){
+
+    screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
+
     CreateButton(exit_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2}, {300, 50}, RED, "exit");
     
     CreateButton(continue_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2 + 200 }, {300, 50}, GREEN, "retry");
 
     button_sound = LoadSound("assets/button.wav");
+
+    CreatePanel(menu_panel, {screen_center.x - 300, screen_center.y - 100}, {600, 400}, Fade(WHITE, 0.0f), 5.0f) ;
 }
 
 GameMenu::~GameMenu() {
@@ -15,6 +20,7 @@ GameMenu::~GameMenu() {
 }
 
 void GameMenu::Draw() {
+    DrawPanel(menu_panel);
     DrawButton(exit_button);
     DrawButton(continue_button);
 }
@@ -24,6 +30,9 @@ void GameMenu::Update()
 {
 
     float dt = GetFrameTime();
+
+    UpdatePanel(menu_panel);
+
     if(IsButtonHovered(exit_button)) {
         if(exit_button.already_hovered == false) {
             PlaySound(button_sound);
@@ -39,6 +48,8 @@ void GameMenu::Update()
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             reset.EmitSignal();
+            
+            CreatePanel(menu_panel, {screen_center.x - 300, screen_center.y - 100}, {600, 400}, Fade(WHITE, 0.0f), 5.0f);
         }
     }
 }

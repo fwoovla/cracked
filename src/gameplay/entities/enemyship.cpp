@@ -3,49 +3,34 @@
 #include <raymath.h>
 
 
-#define MIN_THRUST_TIME 50
-#define MAX_THRUST_TIME 150
-#define MIN_THRUST_WAIT 20
-#define MAX_THRUST_WAIT 100
+EnemyShip::EnemyShip(Vector2 _position, EnemyData _data) : AnimatedSpriteEntity() {
 
-
-#define MIN_BURST_TIME 3
-#define MAX_BURST_TIME 10
-
-#define MIN_BURST_WAIT 50
-#define MAX_BURST_WAIT 80
-
-#define ENEMY_GUN_DELAY 0.1f
-
-#define MAX_HEALTH 5
-
-#define DETECT_RANGE 4
-
-const float ROTATION_SPEED = PI * 0.4f; //<-do this more
-
-
-EnemyShip::EnemyShip(Vector2 _position) : SpriteEntity() {
-
+    data = _data;
     position = _position;
     velocity = {0};
     rotation = 0.0f;
     id = GetRandomValue(0, 10000);
-    LoadSpriteCentered(sprite, LoadTexture("assets/player.png"), {32*TILE_SIZE, 32*TILE_SIZE});
+
+
+    LoadSpriteCentered(sprite, data.texture, {32*TILE_SIZE, 32*TILE_SIZE}, 3, 32.0f, 0.1f);
+    //LoadSpriteCentered(sprite, data.texture, {32*TILE_SIZE, 32*TILE_SIZE});
+
     
-    centered_offset = {PLAYER_SIZE/2, PLAYER_SIZE/2};
-    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PLAYER_SIZE, PLAYER_SIZE };
+    centered_offset = {data.SIZE/2, data.SIZE/2};
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, data.SIZE, data.SIZE };
         
     sprite.dest.x = position.x;
     sprite.dest.y = position.y;
     
     should_delete = false;
 
-    gun_timer = new Timer(GUN_DELAY, true, false);
+    gun_timer = new Timer(data.GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
     gun_can_shoot = false;
-    gun_power = GUN_MAX_POWER;
+    //gun_power = data.GUN_MAX_POWER;
     shots = 0;
     target = nullptr;
+    target_dist_sq = 0.0f;
 
     thrust_timer = new Timer(0.0f, false, false);
     thrust_timer->timout.Connect( [&](){this->OnThrustTimerTimeout();} );
@@ -56,7 +41,7 @@ EnemyShip::EnemyShip(Vector2 _position) : SpriteEntity() {
     thrust_wait_timer->Start();
     can_thrust = false;
 
-    health = MAX_HEALTH;
+    health = data.MAX_HEALTH;
 
     burst_timer = new Timer(1.0f, false, false);
     bursting = false;
@@ -91,10 +76,13 @@ void EnemyShip::Update() {
 
     float dt = GetFrameTime();
 
-    gun_power += GetFrameTime() * GUN_REGEN;
+    AnimateSprite(sprite);
+
+/*     gun_power += GetFrameTime() * GUN_REGEN;
     if (  gun_power > GUN_MAX_POWER) {
         gun_power = GUN_MAX_POWER;
-    }
+    } */
+
     DoMovement(dt);
 
     DoWeapons();
@@ -105,7 +93,7 @@ void EnemyShip::Update() {
     thrust_wait_timer->Update();
 
 
-    collisionResult result = {0};
+    CollisionResult result = {0};
     if(CheckCollisionWithBullets(this, result)) {
         Bullet *bullet = dynamic_cast<Bullet *>(result.collider);
         //TraceLog(LOG_INFO, "collided %i", bullet->shooter_id);
@@ -129,8 +117,8 @@ void EnemyShip::Draw() {
     //DrawSprite(turret);
 
     if(settings.show_debug){
-        for(int x = -1; x <  DETECT_RANGE; x++) {
-            for(int y = -1; y < DETECT_RANGE; y++) {
+        for(int x = -1; x <  data.DETECT_RANGE; x++) {
+            for(int y = -1; y < data.DETECT_RANGE; y++) {
                 float fx = collision_rect.x + (TILE_SIZE + x);
                 float fy = collision_rect.y + (TILE_SIZE + y);
                 int ix = (collision_rect.x/TILE_SIZE) + x;
@@ -153,22 +141,28 @@ void EnemyShip::Draw() {
         //DrawCircleV(position, PLAYER_SIZE * 0.5, GREEN);
         DrawRectangleRec(collision_rect, GREEN);
         }
-    }
 
-    Vector2 a = {detect_ray.position.x, detect_ray.position.y};
-    Vector2 b = {detect_ray.position.x + detect_ray.direction.x, detect_ray.position.y + detect_ray.direction.y};
+        Vector2 a = {detect_ray.position.x, detect_ray.position.y};
+        Vector2 b = {detect_ray.position.x + detect_ray.direction.x, detect_ray.position.y + detect_ray.direction.y};
 
-    if(ray_colliding) {
-        DrawLineV(a, b, RED);
-    }
-    else{
-        DrawLineV(a, b, WHITE);
+        if(ray_colliding) {
+            DrawLineV(a, b, RED);
+        }
+        else{
+            DrawLineV(a, b, WHITE);
+        }
+
+        if(target_dist_sq > 150000.0f) {
+           DrawCircle(position.x, position.y, 10, RED);
+        }
+        else {
+            DrawCircle(position.x, position.y, 10, DARKGREEN);
+        }
     }
 }
 
 
 void EnemyShip::DoMovement(float dt) {
-
 
     if(target) {
 
@@ -177,7 +171,7 @@ void EnemyShip::DoMovement(float dt) {
         detect_ray.direction.y = Vector2Rotate({100,0}, DEG2RAD * rotation).y;
 
         ray_colliding = false;
-        collisionResult ray_result;
+        CollisionResult ray_result;
         if(GetRayCollisionWithLevel(detect_ray, ray_result, 0)) {
             ray_colliding = true;
         }
@@ -186,7 +180,6 @@ void EnemyShip::DoMovement(float dt) {
         Vector2 p2 = {0};
 
         if(ray_colliding) {
-            //p2 =  Vector2Add(position, detect_ray.direction) * -1.0f;
             avoid_timer->Start();
             avoiding = true;
         }
@@ -200,17 +193,21 @@ void EnemyShip::DoMovement(float dt) {
             
             //        Vector2Rotate()
             float target_rotation = GetAngleFromTo(p1, p2);
-            rotation = rotateTowardsRad(rotation * DEG2RAD, target_rotation, ROTATION_SPEED, dt) * RAD2DEG;
+            rotation = RotateTowardsRad(rotation * DEG2RAD, target_rotation, data.ROTATION_SPEED, dt) * RAD2DEG;
         }
     }
-
+    Vector2 end = Vector2Subtract(position, target->position);
+    float x_sq = abs(end.x * end.x);
+    float y_sq = abs(end.y * end.y);
+    target_dist_sq = x_sq + y_sq;
+    //TraceLog(LOG_INFO, "DISTANCE TO PLAYER %f", target_dist_sq);
 
     //return;
     
     Vector2 previous_collision_position = {collision_rect.x, collision_rect.y};
     
-    float thrust = SHIP_THRUST * 0.4f;
-    float max_speed = PLAYER_SPEED * 0.4f;
+    float thrust = data.SHIP_THRUST * 0.4f;
+    float max_speed = data.SPEED * 0.4f;
     if(can_thrust) {
         if(GetRandomValue(0, 100) > 70) {
             //TraceLog(LOG_INFO, "THRUSTING");
@@ -219,9 +216,9 @@ void EnemyShip::DoMovement(float dt) {
         }
     }
     if(thrusting) {
-        thrust  = SHIP_THRUST * 0.7f;
-        max_speed = PLAYER_SPEED * 0.7f;
-        thrust_timer->wait_time = GetRandomValue(MIN_THRUST_TIME, MAX_THRUST_TIME) * 0.1;
+        thrust  = data.SHIP_THRUST * 0.7f;
+        max_speed = data.SPEED * 0.7f;
+        thrust_timer->wait_time = GetRandomValue(data.MIN_THRUST_TIME, data.MAX_THRUST_TIME) * 0.1;
         thrust_timer->Start();
     }
 
@@ -229,8 +226,8 @@ void EnemyShip::DoMovement(float dt) {
     velocity.x += cosf(rad) * thrust;
     velocity.y += sinf(rad) * thrust;
 
-    velocity.x *= AIR_FRICTION;
-    velocity.y *= AIR_FRICTION;
+    velocity.x *= data.AIR_FRICTION;
+    velocity.y *= data.AIR_FRICTION;
 
     vClamp(velocity, 1.0);
 
@@ -240,8 +237,8 @@ void EnemyShip::DoMovement(float dt) {
     collision_rect.y += velocity.y;
    
     collided = false;
-    collisionResult collision_data = {0};
-    if(CheckCollisionWithLevel(this, collision_data, DETECT_RANGE)) {
+    CollisionResult collision_data = {0};
+    if(CheckCollisionWithLevel(this, collision_data, data.DETECT_RANGE)) {
         collided = true;
         //TraceLog(LOG_INFO, "COLLIED");
     }
@@ -249,7 +246,7 @@ void EnemyShip::DoMovement(float dt) {
     if(collided) {
         collision_rect.x = previous_collision_position.x;
         collision_rect.y = previous_collision_position.y;
-        velocity = {-velocity.x * SHIP_BOUNCE_SCALEAR, -velocity.y * SHIP_BOUNCE_SCALEAR};
+        velocity = {-velocity.x * data.SHIP_BOUNCE_SCALEAR, -velocity.y * data.SHIP_BOUNCE_SCALEAR};
     }
     else {
         position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
@@ -262,10 +259,14 @@ void EnemyShip::DoMovement(float dt) {
 
 
 void EnemyShip::DoWeapons() {
+    if(target_dist_sq > 150000.0f) {
+        return;
+    }
+
     if(can_burst) {
         if(GetRandomValue(0, 100) > 70) {
             //TraceLog(LOG_INFO, "BURSTING");
-            burst_timer->wait_time = GetRandomValue(MIN_BURST_TIME, MAX_BURST_TIME) * 0.1;
+            burst_timer->wait_time = GetRandomValue(data.MIN_BURST_TIME, data.MAX_BURST_TIME) * 0.1;
             bursting = true;
             can_burst = false;
             burst_timer->Start();
@@ -278,7 +279,6 @@ void EnemyShip::DoWeapons() {
     }
 }
 
-
 void EnemyShip::OnGunTimerTimeout() {
     //TraceLog(LOG_INFO, "SIGNAL RECIEVED");
     gun_can_shoot = true;
@@ -287,7 +287,7 @@ void EnemyShip::OnGunTimerTimeout() {
 void EnemyShip::OnThrustTimerTimeout() {
     thrusting = false;
     //TraceLog(LOG_INFO, "END THRUSTING");
-    thrust_wait_timer->wait_time = GetRandomValue(MIN_THRUST_WAIT, MAX_THRUST_WAIT) * 0.1f;
+    thrust_wait_timer->wait_time = GetRandomValue(data.MIN_THRUST_WAIT, data.MAX_THRUST_WAIT) * 0.1f;
     thrust_wait_timer->Start();
 }
 
@@ -296,11 +296,10 @@ void EnemyShip::OnThrustWaitTimerTimeout() {
     can_thrust = true;
 }
 
-
 void EnemyShip::OnBurstTimerTimeout() {
     bursting = false;
     //TraceLog(LOG_INFO, "END BURSTING");
-    burst_wait_timer->wait_time = GetRandomValue(MIN_BURST_WAIT, MAX_BURST_WAIT) * 0.1f;
+    burst_wait_timer->wait_time = GetRandomValue(data.MIN_BURST_WAIT, data.MAX_BURST_WAIT) * 0.1f;
     burst_wait_timer->Start();
 }
 

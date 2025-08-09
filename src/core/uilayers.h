@@ -1,8 +1,7 @@
 #pragma once
 #include "ships.h"
 #include "baseuilayer.h"
-#include "button.h"
-#include "label.h"
+
 
 class TitleUiLayer : public BaseUILayer {
 
@@ -21,6 +20,8 @@ class TitleUiLayer : public BaseUILayer {
 
     Sound button_sound;
     Vector2 screen_center;
+
+    AnimatedPanel menu_panel;
     
 };
 
@@ -68,6 +69,7 @@ class GameUILayer : public BaseUILayer {
     void Draw() override;
     void OnPlayerShoot();
     
+    Vector2 screen_center;
     
     Button exit_button;
     Signal exit;
@@ -79,4 +81,6 @@ class GameUILayer : public BaseUILayer {
     Color gun_power_color;
 
     Sound button_sound;
+
+    AnimatedPanel menu_panel;
 };

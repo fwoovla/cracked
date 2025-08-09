@@ -50,7 +50,7 @@ class AnimatedSpriteEntity : public BaseEntity {
 
 
 
-struct  collisionResult {
+struct  CollisionResult {
     Vector2 collision_dir;
     BaseEntity *collider;
     
@@ -69,7 +69,7 @@ extern int* level_array_data;
 
 
 
-inline void AddToDrawList(BaseEntity *_draw_list[DRAW_LIST_SIZE], SpriteEntity *new_entity) {
+inline void AddToDrawList(BaseEntity *_draw_list[DRAW_LIST_SIZE], BaseEntity *new_entity) {
     
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         if(_draw_list[i] == nullptr){
@@ -102,7 +102,7 @@ inline void DrawListUpdate(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
     }
 }
 
-inline bool CheckCollisionWithEntities(BaseEntity *checker, collisionResult &collision_result) {
+inline bool CheckCollisionWithEntities(BaseEntity *checker, CollisionResult &collision_result) {
     if(checker->should_delete) {
         return false;
     }
@@ -125,7 +125,7 @@ inline bool CheckCollisionWithEntities(BaseEntity *checker, collisionResult &col
 }
 
 
-inline bool CheckCollisionWithBullets(BaseEntity *checker, collisionResult &collision_result) {
+inline bool CheckCollisionWithBullets(BaseEntity *checker, CollisionResult &collision_result) {
     if(checker->should_delete or checker->should_delete) {
         return false;
     }
@@ -145,7 +145,7 @@ inline bool CheckCollisionWithBullets(BaseEntity *checker, collisionResult &coll
     return false;
 }
 
-inline bool CheckCollisionWithLevel(BaseEntity *checker, collisionResult &collision_result, int _range) {
+inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_result, int _range) {
     //================TILE COLLISION=========================
     for(int x = -1; x <  _range; x++) {
         for(int y = -1; y < _range; y++) {
@@ -174,7 +174,7 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, collisionResult &collis
     return false;
 }
 
-inline bool GetRayCollisionWithLevel(RayCast &_ray, collisionResult &result, int range) {
+inline bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
     Vector2 end = Vector2Add(_ray.position, _ray.direction);
     Vector2 step = _ray.direction * 0.1;
     //Vector2 mid = Vector2Add(_ray.position, _ray.direction * 0.5f);
@@ -184,7 +184,7 @@ inline bool GetRayCollisionWithLevel(RayCast &_ray, collisionResult &result, int
         int ix = ( ((step.x * i) + _ray.position.x) * INV_TILE_SIZE);
         int iy = ( ((step.y * i) + _ray.position.y) * INV_TILE_SIZE);
 
-        TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
+        //TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
 
         if(level_array_data[(iy * LEVEL_SIZE + ix)] == 1) {
             return true;

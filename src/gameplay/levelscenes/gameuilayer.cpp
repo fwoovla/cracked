@@ -6,7 +6,7 @@ GameUILayer::GameUILayer(){
     CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED, "X");
     quit_button.default_color = DARKGRAY;
 
-    gun_power_rect = {10, 100, 20, GUN_MAX_POWER * GUN_POWER_SCALER};
+    gun_power_rect = {10, 100, 20, 0.0 * GUN_POWER_SCALER};
     gun_power_color = YELLOW;
 
     button_sound = LoadSound("assets/button.wav");
@@ -70,7 +70,7 @@ void GameUILayer::Update()
     float dt = GetFrameTime();
     gun_power_rect.y = GetScreenHeight() -10.0f - player->gun_power * GUN_POWER_SCALER;
     gun_power_rect.height = player->gun_power * GUN_POWER_SCALER;
-    if(player->gun_power < GUN_MAX_POWER * 0.3f) {
+    if(player->gun_power < player->data.GUN_MAX_POWER * 0.3f) {
         gun_power_color = MAGENTA;
     }
     else {
@@ -105,7 +105,7 @@ void GameUILayer::OnHitEffectTimeout(){
 }
 
 void GameUILayer::OnPlayerKilledEnemy(){
-    TraceLog(LOG_INFO, "STRTING ANIMATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    //TraceLog(LOG_INFO, "STRTING ANIMATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     animating_points = true;
     points_value_label.text_size = 10;
 }

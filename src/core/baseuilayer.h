@@ -8,6 +8,9 @@
 #include "../globals.h"
 */
 #include "../utils/utils.h"
+#include "button.h"
+#include "label.h"
+#include "panel.h"
 
 class BaseUILayer{
     public:
@@ -15,7 +18,5 @@ class BaseUILayer{
     virtual void Update() = 0;
     virtual void Draw() = 0;
 
-
     //std::vector<SignalObserver *> observers;
-
 };

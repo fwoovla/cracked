@@ -65,20 +65,20 @@ inline float GetAngleFromTo(Vector2 from, Vector2 to) {
     return angle;
 }
 
-inline float wrapAngle(float a) {
+inline float WrapAngle(float a) {
     a = std::fmod(a + PI, 2*PI);
     if (a < 0) a += 2*PI;
     return a - PI;
 }
 
-inline float shortestAngleDiffRad(float from, float to) {
-    return wrapAngle(to - from);
+inline float ShortestAngleDiffRad(float from, float to) {
+    return WrapAngle(to - from);
 }
 
 // dt = seconds since last frame, maxTurn = radians per second
 
- inline float rotateTowardsRad(float current, float target, float maxTurn, float dt) {
-    float diff = shortestAngleDiffRad(current, target);
+ inline float RotateTowardsRad(float current, float target, float maxTurn, float dt) {
+    float diff = ShortestAngleDiffRad(current, target);
     float maxStep = maxTurn * dt;
     if (std::fabs(diff) <= 1e-4f) return target;
     if (std::fabs(diff) <= maxStep) return target;

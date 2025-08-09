@@ -37,7 +37,7 @@ void Pickup::Update() {
 
     collided = false;
 
-    collisionResult result = {{0}, };
+    CollisionResult result = {{0}, };
     collided = CheckCollisionWithEntities(this, result);
     if(collided) {
         if(result.collider->id == 1) {
