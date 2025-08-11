@@ -85,11 +85,12 @@ GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamemenu.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
+GENERATED += $(OBJDIR)/healthpickup.o
 GENERATED += $(OBJDIR)/main.o
-GENERATED += $(OBJDIR)/pickup.o
 GENERATED += $(OBJDIR)/player.o
 GENERATED += $(OBJDIR)/playership.o
 GENERATED += $(OBJDIR)/scenemanager.o
+GENERATED += $(OBJDIR)/scrappickup.o
 GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
@@ -101,11 +102,12 @@ OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamemenu.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
+OBJECTS += $(OBJDIR)/healthpickup.o
 OBJECTS += $(OBJDIR)/main.o
-OBJECTS += $(OBJDIR)/pickup.o
 OBJECTS += $(OBJDIR)/player.o
 OBJECTS += $(OBJDIR)/playership.o
 OBJECTS += $(OBJDIR)/scenemanager.o
+OBJECTS += $(OBJDIR)/scrappickup.o
 OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
@@ -182,13 +184,16 @@ $(OBJDIR)/bullet.o: src/gameplay/entities/bullet.cpp
 $(OBJDIR)/enemyship.o: src/gameplay/entities/enemyship.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pickup.o: src/gameplay/entities/pickup.cpp
+$(OBJDIR)/healthpickup.o: src/gameplay/entities/healthpickup.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/player.o: src/gameplay/entities/player.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playership.o: src/gameplay/entities/playership.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/scrappickup.o: src/gameplay/entities/scrappickup.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/game.o: src/gameplay/game.cpp

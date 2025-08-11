@@ -43,7 +43,7 @@ void HealthPickup::Update() {
         if(result.collider->id == 1) {
             PlayerShip *playership = dynamic_cast<PlayerShip *>(result.collider);
             if(playership) {
-                playership->OnPickup();
+                playership->OnHealthPickup();
                 should_delete = true;
                 pickedup.EmitSignal();
             }

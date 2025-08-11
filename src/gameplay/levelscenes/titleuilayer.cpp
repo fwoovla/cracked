@@ -1,6 +1,5 @@
 #include "../../core/global_def.h"
 
-//#include "../../core/uilayers.h"
 
 TitleUiLayer::TitleUiLayer() {
     screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
@@ -28,7 +27,6 @@ TitleUiLayer::~TitleUiLayer() {
 void TitleUiLayer::Draw() {
     DrawPanel(menu_panel);
 
-    //DrawRectangleV( {screen_center.x - 200, screen_center.y - 100}, {400, 400}, DARKGRAY);
     DrawButton(start_button);
     DrawButton(settings_button);
     DrawButton(quit_button);

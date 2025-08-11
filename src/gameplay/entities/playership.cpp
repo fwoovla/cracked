@@ -5,7 +5,6 @@
 
 //#include "../../core/entities.h"
 
-#define MAX_HEALTH 10
 #define DETECT_RANGE 3
 
 PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntity() {
@@ -15,7 +14,6 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
     velocity = {0};
     rotation = 0.0f;
     id = 1;
-    points = 0;
 
     LoadSpriteCentered(sprite, LoadTexture("assets/player_ship_frames.png"), {32*TILE_SIZE, 32*TILE_SIZE}, 3, 32.0f, 0.2f);
     
@@ -29,10 +27,10 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
     gun_timer = new Timer(data.GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
     gun_can_shoot = false;
-    gun_power = data.GUN_MAX_POWER;
-    shots = 0;
+    data.gun_power = data.GUN_MAX_POWER;
+    data.shots = 0;
 
-    health = MAX_HEALTH;
+    data.health = data.MAX_HEALTH;
 
     gun_sound = LoadSound("assets/laser.wav");
     SetSoundVolume(gun_sound, 0.6f);
@@ -42,17 +40,13 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
     SetSoundVolume(engine_sound, 0.6f);
 
     alert_sound = LoadSound("assets/alert.wav");
-
-    //LoadSpriteCentered(flame, LoadTexture("assets/flame_frames.png"), {position.x, position.y}, 3, 16.0f, 0.2f);
-    //flame.center = {20, 0};
-
 }
 
 void PlayerShip::Update() {
-    if(health <= 0) {
+    if(data.health <= 0) {
         return;
     }
-    if(health < MAX_HEALTH * 0.5f) {
+    if(data.health <= data.MAX_HEALTH * 0.2f) {
         if(!IsSoundPlaying(alert_sound)) {
             PlaySound(alert_sound);
         }
@@ -65,9 +59,9 @@ void PlayerShip::Update() {
 
     AnimateSprite(sprite);
 
-    gun_power += GetFrameTime() * data.GUN_REGEN;
-    if (  gun_power > data.GUN_MAX_POWER) {
-        gun_power = data.GUN_MAX_POWER;
+    data.gun_power += GetFrameTime() * data.GUN_REGEN;
+    if (  data.gun_power > data.GUN_MAX_POWER) {
+        data.gun_power = data.GUN_MAX_POWER;
 
     }
     
@@ -79,8 +73,8 @@ void PlayerShip::Update() {
             PlaySound(hit_sound);
             player_hit.EmitSignal();
             result.collider->should_delete = true;
-            health -=1;
-            if(health <= 0) {
+            data.health -=1;
+            if(data.health <= 0) {
                 dead.EmitSignal();
             }
         }
@@ -94,7 +88,7 @@ void PlayerShip::Update() {
 }
 
 void PlayerShip::Draw() {
-    if(health <= 0) {
+    if(data.health <= 0) {
         return;
     }
     //TraceLog(LOG_INFO, "PLAYER DRAW");
@@ -212,12 +206,12 @@ void PlayerShip::DoWeapons() {
 
     if(settings.control_type == 0) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            if(gun_can_shoot and gun_power > data.GUN_POWER_USE ) {
+            if(gun_can_shoot and data.gun_power > data.GUN_POWER_USE ) {
                 gun_can_shoot = false;
                 AddToDrawList(bullet_list, new Bullet(position, turret.roataion, id));
-                gun_power -= data.GUN_POWER_USE;
+                data.gun_power -= data.GUN_POWER_USE;
                 shoot.EmitSignal();
-                shots++;
+                data.shots++;
                 PlaySound(gun_sound);
             }
         }
@@ -244,10 +238,15 @@ void PlayerShip::OnGunTimerTimeout() {
 
 }
 
-void PlayerShip::OnPickup() {
-    //TraceLog(LOG_INFO, "PLAYER GOT A PICKUP!!");
-    health = MAX_HEALTH;
+void PlayerShip::OnHealthPickup() {
+    data.health = data.MAX_HEALTH;
 }
+
+void PlayerShip::OnScrapPickup() {
+    data.scrap_amount += 1;
+    scrap_picked_up.EmitSignal();
+}
+
 
 PlayerShip::~PlayerShip()
 {
@@ -261,7 +260,9 @@ PlayerShip::~PlayerShip()
 }
 
 void PlayerShip::Reset() {
-    health = MAX_HEALTH;
-    gun_power = data.GUN_MAX_POWER;
-    points = 0;
+    data.health = data.MAX_HEALTH;
+    data.gun_power = data.GUN_MAX_POWER;
+    data.points = 0;
+    data.shots = 0;
+    data.scrap_amount = 0;
 }

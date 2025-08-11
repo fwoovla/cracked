@@ -20,10 +20,10 @@ class Bullet :public SpriteEntity{
 };
 
 
-class Pickup :public SpriteEntity{
+class HealthPickup :public SpriteEntity{
     public:
-    Pickup(Vector2 _position);
-    ~Pickup() override;
+    HealthPickup(Vector2 _position);
+    ~HealthPickup() override;
     void Update() override;
     void Draw() override;
 
@@ -61,4 +61,24 @@ class ExplosionEffect :public SpriteEntity{
     //void OnLifetimeTimeout();
 
     //Timer *lifetime;
+};
+
+class ScrapPickup :public SpriteEntity{
+    public:
+    ScrapPickup(Vector2 _position);
+    ~ScrapPickup() override;
+    void Update() override;
+    void Draw() override;
+    void OnLifetimeTimeout();
+
+    Vector2 velocity;
+    Timer *lifetime;
+
+    float detect_radius;
+    bool detected;
+
+    BaseEntity *target;
+
+    Signal pickedup;
+
 };

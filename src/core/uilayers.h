@@ -34,12 +34,21 @@ class GameUILayer : public BaseUILayer {
     void Draw() override;
     void OnPlayerShoot();
     void OnPlayerHit();
+    void OnPlayerPickedUpScrap();
     void OnHitEffectTimeout();
     void OnPlayerKilledEnemy();
+    void OnCountdownTimerTimeout();
     
-    
+    int countdown_time;
+    Label countdown_label;
+    Timer *countdown_timer;
+    float countdown_fade;
+
     Label points_tag_label;
     Label points_value_label;
+
+    Label scrap_tag_label;
+    Label scrap_value_label;
 
     Button quit_button;
     Signal quit_pressed;
@@ -57,6 +66,10 @@ class GameUILayer : public BaseUILayer {
     bool show_hit_effect;
 
     bool animating_points;
+    bool animating_scrap;
+
+    Sound beep;
+    Sound long_beep;
 
 };
 
@@ -67,7 +80,6 @@ class GameUILayer : public BaseUILayer {
     ~GameMenu() override;
     void Update() override;
     void Draw() override;
-    void OnPlayerShoot();
     
     Vector2 screen_center;
     

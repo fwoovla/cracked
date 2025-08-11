@@ -3,23 +3,8 @@
 #include "../utils/utils.h"
 #include "global_types.h"
 
-
-/* #define PLAYER_SPEED 3.0f
-#define PLAYER_SIZE 30
-#define SHIP_THRUST 0.1f
-#define SHIP_ROT_SPEED 180.0f
-#define AIR_FRICTION 0.99f
-
-#define SHIP_BOUNCE_SCALEAR 0.6f
-
-#define PLAYER_GUN_MAX_POWER 10.0f
-#define PLAYER_GUN_POWER_USE 1.0f
-#define PLAYER_GUN_REGEN 3.0f
-#define PLAYER_GUN_DELAY 0.2f */
-
-
-
 struct PlayerData {
+    int id = 1;
     float SPEED = 3.0f;
     float SIZE = 30;
     float SHIP_THRUST = 0.1f;
@@ -30,10 +15,19 @@ struct PlayerData {
     float GUN_POWER_USE = 1.0f;
     float GUN_REGEN = 3.0f;
     float GUN_DELAY = 0.2f;
+    int MAX_HEALTH = 10;
+
+
+    float gun_power = GUN_MAX_POWER;
+    int shots = 0;
+    int health = MAX_HEALTH;
+    int points = 0;
+    int scrap_amount = 0;
 };
 
 
 struct EnemyData {
+    int id = GetRandomValue(1000, 100000);
     int TYPE;
     float SPEED = 3.0;
     float SIZE = 30;
@@ -50,12 +44,17 @@ struct EnemyData {
     float MIN_BURST_WAIT = 50.0f;
     float MAX_BURST_WAIT = 80.0f;
     float GUN_DELAY = 0.1f;
-    int MAX_HEALTH = 5;
     int DETECT_RANGE = 4;
     float ROTATION_SPEED = PI * 0.4f;
     float SHOOT_RANGE = 150000.0f;
     Texture2D texture;
+    int MAX_HEALTH = 3;
+
+    int health = MAX_HEALTH;
+    int shots = 0;
 };
+
+
 
 class PlayerShip : public AnimatedSpriteEntity {
     public:
@@ -68,11 +67,13 @@ class PlayerShip : public AnimatedSpriteEntity {
     void DoWeapons();
 
     void OnGunTimerTimeout();
-    void OnPickup();
+    void OnHealthPickup();
+    void OnScrapPickup();
     void OnHitEffectTimeout();
 
     
     PlayerData data;
+
     Vector2 centered_offset;
     Vector2 velocity;
     Timer *lifetime;
@@ -84,22 +85,21 @@ class PlayerShip : public AnimatedSpriteEntity {
 
     Timer *gun_timer;
     bool gun_can_shoot;
-    float gun_power;
-    int shots;
-
+    
     Signal shoot;
-
-    int health;
-
     Signal dead;
     Signal player_hit;
-
+    Signal scrap_picked_up;
+    
     Sound gun_sound;
     Sound hit_sound;
     Sound engine_sound;
     Sound alert_sound;
-
-    int points;
+    
+/*     float gun_power;
+    int shots;
+    int health;
+    int points; */
 
 };
 
@@ -135,12 +135,11 @@ class EnemyShip : public AnimatedSpriteEntity {
     bool gun_can_shoot;
     bool shooting;
     //float gun_power;
-    int shots;
-
+    
     Signal shoot;
     Signal dead;
     Signal player_killed_enemy;
-
+    
     BaseEntity *target;
     Vector2 target_position;
     float target_dist_sq;
@@ -149,24 +148,23 @@ class EnemyShip : public AnimatedSpriteEntity {
     Timer *thrust_wait_timer;
     bool thrusting;
     bool can_thrust;
-
-    int health;
-
+    
+    
     Timer *burst_timer;
     Timer *burst_wait_timer;
-
+    
     bool can_burst;
     bool bursting;
-
+    
     Sound gun_sound;
     Sound hit_sound;
     
-
+    
     RayCast detect_ray;
     bool ray_colliding;
     Timer *avoid_timer;
     bool avoiding;
-
+    
 };
 
 inline EnemyData CreateEnemy(int type) {
@@ -189,11 +187,14 @@ inline EnemyData CreateEnemy(int type) {
         new_data.MIN_BURST_WAIT = 50.0f;
         new_data.MAX_BURST_WAIT = 80.0f;
         new_data.GUN_DELAY = 0.2f;
-        new_data.MAX_HEALTH = 5;
         new_data.DETECT_RANGE = 4;
         new_data.ROTATION_SPEED = PI * 0.4f;
         new_data.SHOOT_RANGE = 150000.0f;
         new_data.texture = LoadTexture("assets/enemy_ship_frames_1.png");
+        new_data.MAX_HEALTH = 3;
+
+        new_data.shots = 0;
+        new_data.health = new_data.MAX_HEALTH;
     };
     return new_data;
 }

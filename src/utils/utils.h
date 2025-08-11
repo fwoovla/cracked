@@ -32,6 +32,7 @@ class Timer{
     void Stop();
     void Update(); //false if finished
     bool IsDone();
+    bool IsActive();
     double TimeRemaining();
     double TimeElapsed();
     double GetWaitTime();

@@ -62,10 +62,12 @@ class GameScene : public  BaseScene{
     ~GameScene() override;
     SCENE_ID Update() override;
     void Draw() override;
+
     void DrawLevel();
     void DrawDebug();
     void OnQuitPressed();
-    void OnPickUpPickedUp();
+    void OnHealthPickedUp();
+    void OnPlayerPickedUpScrap();
     void OnEnemySpawnTimerTimeout();
     void OnEnemyDead();
     void OnPlayerKilledEnemy();
@@ -74,8 +76,7 @@ class GameScene : public  BaseScene{
     void OnMenuRestart();
 
 
-
-    GameUILayer*ui;
+    GameUILayer *ui;
     Camera2D camera;
 
     //int* level_array;

@@ -4,7 +4,7 @@
 //#include "scenes.h"
 //#include "scenes.h"
 
-#define MAX_ENEMIES 50
+#define MAX_ENEMIES 2
 
 int* level_array_data;
 
@@ -89,6 +89,8 @@ GameScene::GameScene(char level_data[]) {
     //TraceLog(LOG_INFO, "PLAYER CREATED");
     this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
     this_player->player_hit.Connect( [&](){ui->OnPlayerHit();} );
+    this_player->scrap_picked_up.Connect( [&](){ui->OnPlayerPickedUpScrap();} );
+    this_player->scrap_picked_up.Connect( [&](){OnPlayerPickedUpScrap();} );
     this_player->dead.Connect( [&](){OnPlayerDead();} );
     ui->player = this_player;
 
@@ -99,9 +101,9 @@ GameScene::GameScene(char level_data[]) {
     camera.rotation = 0.0f;
     camera.zoom = 2.0f;
 
-    Pickup *np = new Pickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
+    HealthPickup *np = new HealthPickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
     AddToDrawList(entity_list, np);
-    np->pickedup.Connect( [&](){OnPickUpPickedUp();} );
+    np->pickedup.Connect( [&](){OnHealthPickedUp();} );
 
     enemy_explosion_sound = LoadSound("assets/explode1.wav");
     game_over_sound = LoadSound("assets/gameover.wav");
@@ -232,18 +234,23 @@ void GameScene::OnQuitPressed() {
     return_scene = SPLASH_SCENE;
 }
 
-void GameScene::OnPickUpPickedUp() {
+void GameScene::OnHealthPickedUp() {
     PlaySound(pickup_sound);
-    Pickup *np = new Pickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
+    HealthPickup *np = new HealthPickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
     AddToDrawList(entity_list, np);
-    np->pickedup.Connect( [&](){OnPickUpPickedUp();} );
+    np->pickedup.Connect( [&](){OnHealthPickedUp();} );
     TraceLog(LOG_INFO, "NEW PICKUP");
 }
+
+void GameScene::OnPlayerPickedUpScrap() {
+    PlaySound(pickup_sound);
+}
+
+
 void GameScene::OnEnemySpawnTimerTimeout(){
     if(spawned_eney_amount >= MAX_ENEMIES) {
         return;
     }
-    //return;
     spawned_eney_amount++;
 
     EnemyShip *np = new EnemyShip( enemy_positions[GetRandomValue(0, enemy_positions.size() - 1)], CreateEnemy(0) );
@@ -261,8 +268,7 @@ void GameScene::OnEnemyDead(){
 }
 
 void GameScene::OnPlayerKilledEnemy(){
-    TraceLog(LOG_INFO, "NEW POINTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!NEW POINTS");
-    this_player->points += 100;
+    this_player->data.points += 100;
 }
 
 void GameScene::OnPlayerDead(){
@@ -302,7 +308,7 @@ void GameScene::OnMenuRestart(){
     enemy_spawn_timer->Start();
     this_player->Reset();
     show_menu = false;
-    Pickup *np = new Pickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
+    HealthPickup *np = new HealthPickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
     AddToDrawList(entity_list, np);
-    np->pickedup.Connect( [&](){OnPickUpPickedUp();} );
+    np->pickedup.Connect( [&](){OnHealthPickedUp();} );
 }

@@ -70,7 +70,6 @@ inline void DrawPanel(Panel &_panel) {
 inline void DrawPanel(AnimatedPanel &_panel) {
     DrawRectangleV(_panel.position, _panel.size, _panel.default_color);
 
-    //DrawCircleV(_panel.ball1, _panel.ball_radius, WHITE);
     DrawCircleV({_panel.ball1.x, _panel.ball1.y}, _panel.ball_radius, GOLD);
     DrawCircleV({_panel.ball2.x, _panel.ball2.y}, _panel.ball_radius, GOLD);
 
@@ -80,30 +79,24 @@ inline void DrawPanel(AnimatedPanel &_panel) {
 
     if(_panel.points1.size() > 1) {
         for(int i = 0; i+1 < _panel.points1.size(); i++) {
-            TraceLog(LOG_INFO, "DRAWING");
             DrawLineV(_panel.points1[i], _panel.points1[i+1], WHITE);
         }
     }
     if(_panel.points2.size() > 1) {
         for(int i = 0; i+1 < _panel.points2.size(); i++) {
-            TraceLog(LOG_INFO, "DRAWING");
             DrawLineV(_panel.points2[i], _panel.points2[i+1], WHITE);
         }
     }
     if(_panel.points3.size() > 1) {
         for(int i = 0; i+1 < _panel.points3.size(); i++) {
-            TraceLog(LOG_INFO, "DRAWING");
             DrawLineV(_panel.points3[i], _panel.points3[i+1], WHITE);
         }
     }
     if(_panel.points4.size() > 1) {
         for(int i = 0; i+1 < _panel.points4.size(); i++) {
-            TraceLog(LOG_INFO, "DRAWING");
             DrawLineV(_panel.points4[i], _panel.points4[i+1], WHITE);
         }
     }
-
-    
 }
 
 inline void UpdatePanel(Panel &_panel) {
@@ -121,7 +114,6 @@ inline void UpdatePanel(AnimatedPanel &_panel) {
 
         _panel.ball2.x -= _panel.step;
         _panel.points2.push_back(_panel.ball2);
-        //TraceLog(LOG_INFO, "ball1 x: %f   position.x: %f ", _panel.ball1.x, _panel.position.x-10);
     }
     else if (_panel.ball1.x <= _panel.position.x - 10)
      {
@@ -130,7 +122,6 @@ inline void UpdatePanel(AnimatedPanel &_panel) {
 
         _panel.ball2.y -= _panel.step;
         _panel.points2.push_back(_panel.ball2);
-        //TraceLog(LOG_INFO, "ball1 y: %f    ", _panel.ball1.y);
     }
 
     if(_panel.ball3.x <  _panel.position.x +_panel.size.x + 10) {
@@ -150,7 +141,6 @@ inline void UpdatePanel(AnimatedPanel &_panel) {
     }
 
      if (_panel.ball1.y > _panel.position.y + 200) {
-        TraceLog(LOG_INFO, ": %f    ", _panel.position.y + 200);
         _panel.animating = false;
     }
 }

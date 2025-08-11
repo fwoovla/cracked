@@ -1,8 +1,8 @@
-#include "../core/game.h"
+#include "../core/global_def.h"
 bool game_running;
 
 Game::Game(){
-    TraceLog(LOG_INFO, "GAME-- SETTINGS,%i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
+    TraceLog(LOG_INFO, "GAME-- SETTINGS, %i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
     game_running = false;
     scene_manager = new SceneManager;
     render_texture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
@@ -31,7 +31,7 @@ void Game::StartGame() {
         DrawTextureRec(render_texture.texture, {0,0,(float)render_texture.texture.width,-(float)render_texture.texture.height}, {0,0}, WHITE);
         EndDrawing();
 
-        if(IsKeyPressed(KEY_ESCAPE)) {
+        if(WindowShouldClose()) {
             game_running = false;
         }
     }

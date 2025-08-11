@@ -28,7 +28,7 @@ EnemyShip::EnemyShip(Vector2 _position, EnemyData _data) : AnimatedSpriteEntity(
     gun_timer->timout.Connect( [&](){this->OnGunTimerTimeout();} );
     gun_can_shoot = false;
     //gun_power = data.GUN_MAX_POWER;
-    shots = 0;
+    data.shots = 0;
     target = nullptr;
     target_dist_sq = 0.0f;
 
@@ -41,7 +41,7 @@ EnemyShip::EnemyShip(Vector2 _position, EnemyData _data) : AnimatedSpriteEntity(
     thrust_wait_timer->Start();
     can_thrust = false;
 
-    health = data.MAX_HEALTH;
+    data.health = data.MAX_HEALTH;
 
     burst_timer = new Timer(1.0f, false, false);
     bursting = false;
@@ -99,12 +99,15 @@ void EnemyShip::Update() {
         //TraceLog(LOG_INFO, "collided %i", bullet->shooter_id);
         if(bullet->shooter_id != id) {
             bullet->should_delete = true;
-            health -=1;
+            data.health -=1;
             PlaySound(hit_sound);
-            if(health <= 0) {
+            if(data.health <= 0) {
                 should_delete = true;
                 if(bullet->shooter_id == 1) {
                     player_killed_enemy.EmitSignal();
+                    if(GetRandomValue(0, 100) > 50 ) {
+                        AddToDrawList(entity_list, new ScrapPickup(position));
+                    }
                 }
             }
         }
@@ -315,6 +318,7 @@ void EnemyShip::OnAvoidTimerTimeout() {
 
 EnemyShip::~EnemyShip()
 {
+
     AddToDrawList(effects_list, new ExplosionEffect(position));
     dead.EmitSignal();
     delete gun_timer;

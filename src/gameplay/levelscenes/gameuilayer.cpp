@@ -1,6 +1,6 @@
 #include "../../core/global_def.h"
 
-#define GUN_POWER_SCALER 20.0f
+#define GUN_POWER_SCALER 50.0f
 
 GameUILayer::GameUILayer(){
     CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED, "X");
@@ -22,16 +22,39 @@ GameUILayer::GameUILayer(){
     CreateLabel(points_value_label, {300, 30}, 50, GOLD, "0");
     animating_points = false;
 
+    CreateLabel(scrap_tag_label, {(float)GetScreenWidth() - 300, 30}, 40, RAYWHITE, "SCRAP:");
+    CreateLabel(scrap_value_label, {(float)GetScreenWidth() - 100, 30}, 50, GOLD, "0");
+
+    countdown_time = 5;
+    CreateLabel(countdown_label, {(float)GetScreenWidth() /2, (float)GetScreenHeight() /2}, 200, RAYWHITE, TextFormat("%i", countdown_time));
+    countdown_timer = new Timer(1.0f, true, false);
+    countdown_timer->timout.Connect( [&](){OnCountdownTimerTimeout();} );
+    countdown_fade = 1.0;
+
+    beep = LoadSound("assets/beep.wav");
+    long_beep = LoadSound("assets/longbeep.wav");
+
 }
 
 GameUILayer::~GameUILayer() {
+    delete countdown_timer;
+    delete hit_effect_timer;
     UnloadSound(button_sound);
+    UnloadSound(beep);
+    UnloadSound(long_beep);
 }
 
 void GameUILayer::Draw() {
+
+    if(!countdown_timer->IsDone()) {
+        DrawLabel(countdown_label);
+    }
     
     DrawLabel(points_tag_label);
     DrawLabel(points_value_label);
+
+    DrawLabel(scrap_tag_label);
+    DrawLabel(scrap_value_label);
 
     DrawButton(quit_button);
 
@@ -39,7 +62,7 @@ void GameUILayer::Draw() {
     DrawRectangleRec(gun_power_rect, gun_power_color);
 
     Vector2 health_center = {(float)(GetScreenWidth() - 20 ) * 0.5f , 50};
-    for(int i = 0; i < player->health; i++) {
+    for(int i = 0; i < player->data.health; i++) {
         DrawRectangle(health_center.x-1 + (i * 25) , health_center.y-1, 22, 22, WHITE );
         DrawRectangle(health_center.x + (i * 25) , health_center.y, 20, 20, RED );
         DrawRectangle(health_center.x-1 - (i * 25) , health_center.y-1, 22, 22, WHITE );
@@ -54,23 +77,46 @@ void GameUILayer::Draw() {
 
 void GameUILayer::Update()
 {
+    if(!countdown_timer->IsDone()) {
+        countdown_timer->Update();
+        if(countdown_time > 0) {
+            countdown_label.text = TextFormat("%i", countdown_time);
+        }
+        else {
+            countdown_label.text = "GO!";
+            countdown_label.default_color = GOLD;
+        }
+        countdown_fade -= GetFrameTime();
+        countdown_label.default_color = Fade(countdown_label.default_color, countdown_fade );
+
+    }
+
     if(player == nullptr) {
         return;
     }
-     if(animating_points) {
+
+    if(animating_points) {
         points_value_label.text_size += 5;
         if(points_value_label.text_size >= 60) {
             points_value_label.text_size = 50;
             animating_points = false;
         }
     }
+    points_value_label.text = TextFormat("%i", player->data.points);
 
-    points_value_label.text = TextFormat("%i", player->points);
+    if(animating_scrap){
+        scrap_value_label.text_size += 5;
+        if(scrap_value_label.text_size >= 60) {
+            scrap_value_label.text_size = 50;
+            animating_scrap = false;
+        }
+    }
+    scrap_value_label.text = TextFormat("%i", player->data.scrap_amount);
 
     float dt = GetFrameTime();
-    gun_power_rect.y = GetScreenHeight() -10.0f - player->gun_power * GUN_POWER_SCALER;
-    gun_power_rect.height = player->gun_power * GUN_POWER_SCALER;
-    if(player->gun_power < player->data.GUN_MAX_POWER * 0.3f) {
+    gun_power_rect.y = GetScreenHeight() -10.0f - player->data.gun_power * GUN_POWER_SCALER;
+    gun_power_rect.height = player->data.gun_power * GUN_POWER_SCALER;
+    if(player->data.gun_power < player->data.GUN_MAX_POWER * 0.3f) {
         gun_power_color = MAGENTA;
     }
     else {
@@ -100,6 +146,11 @@ void GameUILayer::OnPlayerHit(){
     hit_effect_timer->Start();
 }
 
+void GameUILayer::OnPlayerPickedUpScrap(){
+    animating_scrap = true;
+    scrap_value_label.text_size = 10;
+}
+
 void GameUILayer::OnHitEffectTimeout(){
     show_hit_effect = false;
 }
@@ -108,4 +159,18 @@ void GameUILayer::OnPlayerKilledEnemy(){
     //TraceLog(LOG_INFO, "STRTING ANIMATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     animating_points = true;
     points_value_label.text_size = 10;
+}
+
+void GameUILayer::OnCountdownTimerTimeout(){
+    countdown_time -=1;
+    countdown_fade = 1.0;
+    //countdown_label.default_color = WHITE;
+    
+    if(countdown_time < 1) {
+        countdown_timer->Stop();
+        PlaySound(long_beep);
+    }
+    else {
+        PlaySound(beep);
+    }
 }
