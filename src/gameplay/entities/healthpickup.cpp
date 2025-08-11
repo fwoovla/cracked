@@ -1,0 +1,69 @@
+#include "../../core/global_def.h"
+#include <raymath.h>
+
+
+
+#define PICKUP_SIZE 32
+//#define PICKUP_LIFETIME 1.0f
+
+HealthPickup::HealthPickup(Vector2 _position) {
+    id = GetRandomValue(0, 10000);
+    collided = false;
+    should_delete = false;
+
+    position = _position;
+    LoadSpriteCentered(sprite, LoadTexture("assets/pickup1.png"), position );
+
+    centered_offset = {PICKUP_SIZE/2, PICKUP_SIZE/2};
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, PICKUP_SIZE, PICKUP_SIZE };
+}
+
+
+HealthPickup::~HealthPickup() {
+    AddToDrawList(effects_list, new PickupEffect(position));
+    UnloadTexture(sprite.texture);
+}
+
+
+void HealthPickup::Update() {
+
+    if(should_delete) {
+        return;
+    }
+
+    float scalar = sin(GetTime());
+    //TraceLog(LOG_INFO, "scalar %f, ", scalar);
+    ScaleSprite(sprite, {scalar, scalar});
+
+    collided = false;
+
+    CollisionResult result = {{0}, };
+    collided = CheckCollisionWithEntities(this, result);
+    if(collided) {
+        if(result.collider->id == 1) {
+            PlayerShip *playership = dynamic_cast<PlayerShip *>(result.collider);
+            if(playership) {
+                playership->OnPickup();
+                should_delete = true;
+                pickedup.EmitSignal();
+            }
+        }
+    }
+
+    collided = CheckCollisionWithBullets(this, result);
+    if(collided) {
+        result.collider->should_delete = true;
+    } 
+}
+
+void HealthPickup::Draw() {
+    DrawSprite(sprite);
+    if(settings.show_debug){
+        if(collided) {
+            DrawRectangleRec(collision_rect, RED);
+        }
+        else {
+            DrawRectangleRec(collision_rect, GREEN);
+        }
+    }
+}
