@@ -105,8 +105,12 @@ void EnemyShip::Update() {
                 should_delete = true;
                 if(bullet->shooter_id == 1) {
                     player_killed_enemy.EmitSignal();
+                    
                     if(GetRandomValue(0, 100) > 50 ) {
-                        AddToDrawList(entity_list, new ScrapPickup(position));
+                        int amount = GetRandomValue(1, 6);
+                        for (int i = 0; i <= amount; i++){
+                            AddToDrawList(entity_list, new ScrapPickup(position));
+                        }
                     }
                 }
             }

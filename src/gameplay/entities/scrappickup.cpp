@@ -74,8 +74,8 @@ void ScrapPickup::Update() {
 
 
     if(detected and target) {
-        TraceLog(LOG_INFO, "TARGET POSITION = %f %f", target->position.x, target->position.y);
-        TraceLog(LOG_INFO, "ROTATION = %f", rotation);
+        //TraceLog(LOG_INFO, "TARGET POSITION = %f %f", target->position.x, target->position.y);
+        //TraceLog(LOG_INFO, "ROTATION = %f", rotation);
 
         float target_rotation = GetAngleFromTo(position, target->position);
         //rotation = RotateTowardsRad(rotation * DEG2RAD, target_rotation, PI * 20, GetFrameTime()) * RAD2DEG;

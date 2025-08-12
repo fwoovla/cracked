@@ -1,8 +1,6 @@
 
 #include "../../core/global_def.h"
 #include <raymath.h>
-//#include "scenes.h"
-//#include "scenes.h"
 
 #define MAX_ENEMIES 2
 

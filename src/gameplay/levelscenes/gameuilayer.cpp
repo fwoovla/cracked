@@ -58,9 +58,17 @@ void GameUILayer::Draw() {
 
     DrawButton(quit_button);
 
-    DrawRectangle(gun_power_rect.x-2, gun_power_rect.y-2, gun_power_rect.width+4, gun_power_rect.y, WHITE);
-    DrawRectangleRec(gun_power_rect, gun_power_color);
+    DrawRectangle(  gun_power_rect.x-2,
+                    GetScreenHeight() -10.0f - player->data.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    gun_power_rect.width+4,
+                    player->data.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    DARKGRAY);
 
+    DrawRectangleRec(gun_power_rect, gun_power_color);
+    DrawRectangleV( {gun_power_rect.x, (float)GetScreenHeight() - player->data.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
+                    {gun_power_rect.width, 5},
+                    RED);
+    
     Vector2 health_center = {(float)(GetScreenWidth() - 20 ) * 0.5f , 50};
     for(int i = 0; i < player->data.health; i++) {
         DrawRectangle(health_center.x-1 + (i * 25) , health_center.y-1, 22, 22, WHITE );
@@ -137,11 +145,9 @@ void GameUILayer::Update()
 }
 
 void GameUILayer::OnPlayerShoot(){
-    //TraceLog(LOG_INFO, "PLAYER SHOOT");
 }
 
 void GameUILayer::OnPlayerHit(){
-    //TraceLog(LOG_INFO, "PLAYER HIT");
     show_hit_effect = true;
     hit_effect_timer->Start();
 }
@@ -156,7 +162,6 @@ void GameUILayer::OnHitEffectTimeout(){
 }
 
 void GameUILayer::OnPlayerKilledEnemy(){
-    //TraceLog(LOG_INFO, "STRTING ANIMATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     animating_points = true;
     points_value_label.text_size = 10;
 }
@@ -164,7 +169,6 @@ void GameUILayer::OnPlayerKilledEnemy(){
 void GameUILayer::OnCountdownTimerTimeout(){
     countdown_time -=1;
     countdown_fade = 1.0;
-    //countdown_label.default_color = WHITE;
     
     if(countdown_time < 1) {
         countdown_timer->Stop();

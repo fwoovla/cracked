@@ -1,11 +1,6 @@
 #pragma once
 
 
-
-/* 
-#include "../utils/utils.h"
-*/
-//#include "global_types.h"
 #include "global_def.h"
 #include <raylib.h>
 #include <raymath.h>
@@ -150,20 +145,10 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     for(int x = -1; x <  _range; x++) {
         for(int y = -1; y < _range; y++) {
 
-            //float fx = checker->collision_rect.x + (TILE_SIZE + x); 
-            //float fy = checker->collision_rect.y + (TILE_SIZE + y);
             int ix = (checker->collision_rect.x * INV_TILE_SIZE) + x;
             int iy = (checker->collision_rect.y * INV_TILE_SIZE) + y;
             if(level_array_data[(iy * LEVEL_SIZE + ix)] == 1) {
 
-/*              TraceLog(LOG_INFO, "checking %i ", level_array[(y + iy) * LEVEL_SIZE + (x + ix)]);
-                TraceLog(LOG_INFO, "checking cell at FLOAT %f %f ", fx, fy);
-                TraceLog(LOG_INFO, "checking cell at index%i %i ", ix, iy);
-                TraceLog(LOG_INFO, "checking rect at FLOAT %f %f \n", (float)ix * TILE_SIZE, (float)iy * TILE_SIZE);
-                 if(CheckCollisionCircleRec( position, PLAYER_SIZE * 0.5, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
-                    return true;
-                } 
-*/
                 if(CheckCollisionRecs( checker->collision_rect, {(float)ix * TILE_SIZE, (float)iy * TILE_SIZE, TILE_SIZE, TILE_SIZE} )) {
                     return true;
                 }

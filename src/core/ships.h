@@ -67,6 +67,7 @@ class PlayerShip : public AnimatedSpriteEntity {
     void DoWeapons();
 
     void OnGunTimerTimeout();
+    void OnThrustTimerTimeout();
     void OnHealthPickup();
     void OnScrapPickup();
     void OnHitEffectTimeout();
@@ -85,6 +86,11 @@ class PlayerShip : public AnimatedSpriteEntity {
 
     Timer *gun_timer;
     bool gun_can_shoot;
+
+    Timer *thrust_timer;
+    bool thrusting;
+    float speed_cap;
+    float thrust_cap;
     
     Signal shoot;
     Signal dead;

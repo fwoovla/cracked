@@ -32,6 +32,12 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
 
     data.health = data.MAX_HEALTH;
 
+    thrust_timer = new Timer(0.5f, false, true);
+    thrust_timer->timout.Connect( [&](){this->OnThrustTimerTimeout();} );
+    thrusting = false;
+    speed_cap = data.SPEED;
+    thrust_cap = data.SHIP_THRUST;
+
     gun_sound = LoadSound("assets/laser.wav");
     SetSoundVolume(gun_sound, 0.6f);
 
@@ -146,22 +152,34 @@ void PlayerShip::DoMovement(float dt) {
         if(!IsSoundPlaying(engine_sound)) {
             PlaySound(engine_sound);
         }
-        velocity.x += cosf(rad) * data.SHIP_THRUST;
-        velocity.y += sinf(rad) * data.SHIP_THRUST;
+        velocity.x += cosf(rad) * thrust_cap;
+        velocity.y += sinf(rad) * thrust_cap;
     }
-    //else {StopSound(engine_sound);}
 
     if (IsKeyDown(KEY_S)) {
         if(!IsSoundPlaying(engine_sound)) {
             PlaySound(engine_sound);
         }
         float rad = rotation * DEG2RAD;
-        velocity.x -= cosf(rad) * data.SHIP_THRUST * .2;
-        velocity.y -= sinf(rad) * data.SHIP_THRUST * .2;
+        velocity.x -= cosf(rad) * thrust_cap * .2;
+        velocity.y -= sinf(rad) * thrust_cap * .2;
     }
     //else {StopSound(engine_sound);}
     if(!IsKeyDown(KEY_W) and !IsKeyDown(KEY_S)) {
         StopSound(engine_sound);
+    }
+
+    if(IsKeyDown(KEY_SPACE) and !thrusting and data.gun_power > data.GUN_MAX_POWER * 0.3) {
+        data.gun_power -= (data.GUN_MAX_POWER * 0.3);
+        speed_cap = data.SPEED * 5.0;
+        thrust_cap = data.SHIP_THRUST * 5.0f;
+        thrusting = true;
+        thrust_timer->Start();
+    }
+    
+    if(thrusting) {
+        thrust_timer->Update();
+        TraceLog(LOG_INFO, "THRUSTING");
     }
 
     velocity.x *= data.AIR_FRICTION;
@@ -169,7 +187,7 @@ void PlayerShip::DoMovement(float dt) {
 
     vClamp(velocity, 1.0);
 
-    velocity = Vector2ClampValue(velocity, -data.SPEED, data.SPEED);
+    velocity = Vector2ClampValue(velocity, -speed_cap, speed_cap);
 
     collision_rect.x += velocity.x;
     collision_rect.y += velocity.y;
@@ -233,10 +251,16 @@ void PlayerShip::DoWeapons() {
 
 void PlayerShip::OnGunTimerTimeout() {
     //TraceLog(LOG_INFO, "SIGNAL RECIEVED");
-    
     gun_can_shoot = true;
-
 }
+
+void PlayerShip::OnThrustTimerTimeout() {
+    TraceLog(LOG_INFO, "END THRUST");
+    thrusting = false;
+    speed_cap = data.SPEED;
+    thrust_cap = data.SHIP_THRUST;
+}
+
 
 void PlayerShip::OnHealthPickup() {
     data.health = data.MAX_HEALTH;
@@ -251,6 +275,7 @@ void PlayerShip::OnScrapPickup() {
 PlayerShip::~PlayerShip()
 {
     delete gun_timer;
+    delete thrust_timer;
     UnloadSound(gun_sound);
     UnloadSound(hit_sound);
     UnloadSound(engine_sound);
