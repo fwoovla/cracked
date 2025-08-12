@@ -1,6 +1,7 @@
 #pragma once
 #include "ships.h"
 #include "baseuilayer.h"
+#include "global_def.h"
 
 
 class TitleUiLayer : public BaseUILayer {
@@ -43,12 +44,17 @@ class GameUILayer : public BaseUILayer {
     Label countdown_label;
     Timer *countdown_timer;
     float countdown_fade;
+    Signal countdown_over;
 
     Label points_tag_label;
     Label points_value_label;
 
     Label scrap_tag_label;
     Label scrap_value_label;
+
+    //Label time_tag_label;
+    Label int_time_value_label;
+    Label float_time_value_label;
 
     Button quit_button;
     Signal quit_pressed;
@@ -67,6 +73,8 @@ class GameUILayer : public BaseUILayer {
 
     bool animating_points;
     bool animating_scrap;
+
+    float _game_time;
 
     Sound beep;
     Sound long_beep;

@@ -25,6 +25,10 @@ GameUILayer::GameUILayer(){
     CreateLabel(scrap_tag_label, {(float)GetScreenWidth() - 300, 30}, 40, RAYWHITE, "SCRAP:");
     CreateLabel(scrap_value_label, {(float)GetScreenWidth() - 100, 30}, 50, GOLD, "0");
 
+    CreateLabel(int_time_value_label, {(float)GetScreenWidth()/2, 50}, 70, GOLD, "0");
+    CreateLabel(float_time_value_label, {(float)int_time_value_label.position.x + (float)int_time_value_label.text_size/2, 40}, 20, RAYWHITE, ".00");
+    _game_time = 0.0f;
+
     countdown_time = 5;
     CreateLabel(countdown_label, {(float)GetScreenWidth() /2, (float)GetScreenHeight() /2}, 200, RAYWHITE, TextFormat("%i", countdown_time));
     countdown_timer = new Timer(1.0f, true, false);
@@ -56,6 +60,18 @@ void GameUILayer::Draw() {
     DrawLabel(scrap_tag_label);
     DrawLabel(scrap_value_label);
 
+
+    DrawLabel(int_time_value_label);
+
+    if((int)_game_time >= 10) {
+        float_time_value_label.position.x =  (float)int_time_value_label.position.x + (float)int_time_value_label.text_size;    
+    }
+    if((int)_game_time >= 100) {
+        float_time_value_label.position.x =  (float)int_time_value_label.position.x + (float)int_time_value_label.text_size * 1.5;    
+    }
+
+    DrawLabel(float_time_value_label);
+
     DrawButton(quit_button);
 
     DrawRectangle(  gun_power_rect.x-2,
@@ -69,7 +85,7 @@ void GameUILayer::Draw() {
                     {gun_power_rect.width, 5},
                     RED);
     
-    Vector2 health_center = {(float)(GetScreenWidth() - 20 ) * 0.5f , 50};
+    Vector2 health_center = {(float)(GetScreenWidth() - 20 ) * 0.5f , 100};
     for(int i = 0; i < player->data.health; i++) {
         DrawRectangle(health_center.x-1 + (i * 25) , health_center.y-1, 22, 22, WHITE );
         DrawRectangle(health_center.x + (i * 25) , health_center.y, 20, 20, RED );
@@ -102,6 +118,12 @@ void GameUILayer::Update()
     if(player == nullptr) {
         return;
     }
+
+    int_time_value_label.text = TextFormat("%i", (int)_game_time);
+    //TraceLog(LOG_INFO, "int part %i", (int)_game_time);
+    //TraceLog(LOG_INFO, "dec part %i", (int)((_game_time - (int)_game_time) * 100));
+
+    float_time_value_label.text = TextFormat(".%i", (int)((_game_time - (int)_game_time) * 100));
 
     if(animating_points) {
         points_value_label.text_size += 5;
@@ -173,6 +195,7 @@ void GameUILayer::OnCountdownTimerTimeout(){
     if(countdown_time < 1) {
         countdown_timer->Stop();
         PlaySound(long_beep);
+        countdown_over.EmitSignal();
     }
     else {
         PlaySound(beep);

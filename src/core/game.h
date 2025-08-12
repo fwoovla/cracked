@@ -19,6 +19,7 @@ class Game{
     //bool running;
     SceneManager *scene_manager;
     RenderTexture2D render_texture;
+
     
     //gameSettings &game_settings;
 

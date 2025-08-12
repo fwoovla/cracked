@@ -69,6 +69,7 @@ class GameScene : public  BaseScene{
     void OnHealthPickedUp();
     void OnPlayerPickedUpScrap();
     void OnEnemySpawnTimerTimeout();
+    void OnCountdownTimeout();
     void OnEnemyDead();
     void OnPlayerKilledEnemy();
     void OnPlayerDead();
@@ -99,6 +100,10 @@ class GameScene : public  BaseScene{
     Sound pickup_sound;
 
     Music bg_music;
+
+    //Timer *game_timer;
+    bool time_running;
+    float game_time;
 };
 
 

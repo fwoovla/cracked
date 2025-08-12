@@ -32,7 +32,7 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
 
     data.health = data.MAX_HEALTH;
 
-    thrust_timer = new Timer(0.5f, false, true);
+    thrust_timer = new Timer(0.4f, false, true);
     thrust_timer->timout.Connect( [&](){this->OnThrustTimerTimeout();} );
     thrusting = false;
     speed_cap = data.SPEED;
@@ -171,8 +171,8 @@ void PlayerShip::DoMovement(float dt) {
 
     if(IsKeyDown(KEY_SPACE) and !thrusting and data.gun_power > data.GUN_MAX_POWER * 0.3) {
         data.gun_power -= (data.GUN_MAX_POWER * 0.3);
-        speed_cap = data.SPEED * 5.0;
-        thrust_cap = data.SHIP_THRUST * 5.0f;
+        speed_cap = data.SPEED * 10.0;
+        thrust_cap = data.SHIP_THRUST * 10.0f;
         thrusting = true;
         thrust_timer->Start();
     }

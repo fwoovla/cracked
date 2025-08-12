@@ -70,9 +70,13 @@ GameScene::GameScene(char level_data[]) {
     enemy_spawn_timer->timout.Connect( [&](){this->OnEnemySpawnTimerTimeout();} );
     spawned_eney_amount = 0;
 
+    game_time = 0.0f;
+    time_running = false;;
+
 //LOAD UI----------------------------------------------
     ui = new GameUILayer();
     ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
+    ui->countdown_over.Connect( [&](){this->OnCountdownTimeout();} );
 
     menu = new GameMenu();
     menu->exit.Connect( [&](){this->OnMenuExit();} );
@@ -84,7 +88,6 @@ GameScene::GameScene(char level_data[]) {
     this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2}, player_data );
     entity_list[0] = this_player;
     this_player->camera = &camera;
-    //TraceLog(LOG_INFO, "PLAYER CREATED");
     this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
     this_player->player_hit.Connect( [&](){ui->OnPlayerHit();} );
     this_player->scrap_picked_up.Connect( [&](){ui->OnPlayerPickedUpScrap();} );
@@ -124,19 +127,24 @@ SCENE_ID GameScene::Update() {
     DrawListUpdate(entity_list);
     DrawListUpdate(effects_list);
 
-    enemy_spawn_timer->Update();
+    ui->_game_time = game_time; //smelly
     ui->Update();
-
+    
     camera.target = (Vector2){this_player->collision_rect.x, this_player->collision_rect.y};
-
+    
     if( abs(this_player->velocity.x) > this_player->data.SPEED * 0.7f or abs(this_player->velocity.y) > this_player->data.SPEED * 0.7f) {
-        camera.zoom = Lerp(camera.zoom, 1.0f, .005);
+        camera.zoom = Lerp(camera.zoom, 1.5f, .005);
     }
     else {
         camera.zoom = Lerp(camera.zoom, 2.2f, .01);
     }
     if(show_menu) {
         menu->Update();
+    }
+    
+    if(time_running) {
+        enemy_spawn_timer->Update();
+        game_time += GetFrameTime();
     }
 
     return return_scene;
@@ -265,9 +273,19 @@ void GameScene::OnEnemyDead(){
     spawned_eney_amount--;
 }
 
+/* void GameScene::OnGameTimerTimeout(){
+    game_time += 1;
+    spawned_eney_amount--;
+} */
+
 void GameScene::OnPlayerKilledEnemy(){
     this_player->data.points += 100;
 }
+
+void GameScene::OnCountdownTimeout(){
+    time_running = true;
+}
+
 
 void GameScene::OnPlayerDead(){
     TraceLog(LOG_INFO, "                               -------------------------------------------------PLAYER DEAD");
