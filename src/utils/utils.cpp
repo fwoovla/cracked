@@ -16,8 +16,7 @@ Timer::Timer(double _wait_time, bool _autostart, bool _one_shot) {
 
 void Timer::Start() {
     active = true;
-    finished = false;
-    
+    finished = false;    
 }
 
 void Timer::Stop() {

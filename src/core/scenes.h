@@ -75,7 +75,7 @@ class GameScene : public  BaseScene{
     void OnPlayerDead();
     void OnMenuExit();
     void OnMenuRestart();
-
+    void ClearEntitiesExceptPlayer();
 
     GameUILayer *ui;
     Camera2D camera;
@@ -89,7 +89,7 @@ class GameScene : public  BaseScene{
     std::vector<Vector2> enemy_positions;
 
     Timer *enemy_spawn_timer;
-    int spawned_eney_amount;
+    int spawned_enemy_amount;
 
     GameMenu *menu;
 

@@ -39,6 +39,7 @@ class GameUILayer : public BaseUILayer {
     void OnHitEffectTimeout();
     void OnPlayerKilledEnemy();
     void OnCountdownTimerTimeout();
+    void StartCountdown();
     
     int countdown_time;
     Label countdown_label;

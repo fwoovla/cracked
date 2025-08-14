@@ -4,7 +4,7 @@
 #include <vector>
 
 
-#define LEVEL_SIZE 64
+#define LEVEL_SIZE 48
 #define TILE_SIZE 32
 #define INV_TILE_SIZE 1.0f/TILE_SIZE
 
@@ -21,5 +21,4 @@
 
 extern gameSettings settings;
 extern int* level_array_data;
-extern  std::vector<SpriteEntity*> *collision_data_array[LEVEL_SIZE * LEVEL_SIZE];
 extern bool game_running;

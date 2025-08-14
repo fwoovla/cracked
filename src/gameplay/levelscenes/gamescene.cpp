@@ -2,26 +2,18 @@
 #include "../../core/global_def.h"
 #include <raymath.h>
 
-#define MAX_ENEMIES 2
+#define MAX_ENEMIES 10
+#define ROUND_TIME 10.0f
 
 int* level_array_data;
-
 BaseEntity *bullet_list[DRAW_LIST_SIZE] = {nullptr};
 BaseEntity *entity_list[DRAW_LIST_SIZE] = {nullptr};
 BaseEntity *effects_list[DRAW_LIST_SIZE] = {nullptr};
-std::vector<BaseEntity*> *collision_data[LEVEL_SIZE * LEVEL_SIZE] = {nullptr};
 
 
 GameScene::GameScene(char level_data[]) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
-    //delete draw_list;
- 
-    for(int i = 0; i < LEVEL_SIZE*LEVEL_SIZE; i++) {
-        if(collision_data[i] != nullptr) {
-            collision_data[i]->clear();
-        }
-    }
 
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         delete bullet_list[i];
@@ -53,39 +45,38 @@ GameScene::GameScene(char level_data[]) {
             }
             else if (colors[y * level_image.width + x].g == 255) {
                 pickup_positions.push_back((Vector2){(float)x * TILE_SIZE,(float)y * TILE_SIZE});
-                TraceLog(LOG_INFO, "PICKUP ADDED,                         %i %i",x*TILE_SIZE, y*TILE_SIZE);
+                TraceLog(LOG_INFO, "PICKUP SPAWN POSITION ADDED,                         %i %i",x*TILE_SIZE, y*TILE_SIZE);
             }
             else if (colors[y * level_image.width + x].r == 255) {
                 enemy_positions.push_back((Vector2){(float)x * TILE_SIZE,(float)y * TILE_SIZE});
-                TraceLog(LOG_INFO, "ENEMY ADDED,                         %i %i",x*TILE_SIZE, y*TILE_SIZE);
+                TraceLog(LOG_INFO, "ENEMY SPAWN POSITION ADDED,                         %i %i",x*TILE_SIZE, y*TILE_SIZE);
             }
         }      
     } 
 
     UnloadImage(level_image);
-    //LoadSprite(space_tile, space_tile_texture,);
 //-----------------------------------------------
 
     enemy_spawn_timer = new Timer(1.0, true, false);
-    enemy_spawn_timer->timout.Connect( [&](){this->OnEnemySpawnTimerTimeout();} );
-    spawned_eney_amount = 0;
+    enemy_spawn_timer->timout.Connect( [&](){OnEnemySpawnTimerTimeout();} );
+    spawned_enemy_amount = 0;
 
     game_time = 0.0f;
-    time_running = false;;
+    time_running = false;
 
 //LOAD UI----------------------------------------------
     ui = new GameUILayer();
-    ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
-    ui->countdown_over.Connect( [&](){this->OnCountdownTimeout();} );
+    ui->quit_pressed.Connect( [&](){OnQuitPressed();} );
+    ui->countdown_over.Connect( [&](){OnCountdownTimeout();} );
 
     menu = new GameMenu();
-    menu->exit.Connect( [&](){this->OnMenuExit();} );
-    menu->reset.Connect( [&](){this->OnMenuRestart();} );
+    menu->exit.Connect( [&](){OnMenuExit();} );
+    menu->reset.Connect( [&](){OnMenuRestart();} );
     show_menu = false;
     
-    //LOAD PLAYER------------------------------------
+//LOAD PLAYER------------------------------------
     PlayerData player_data;
-    this_player = new PlayerShip( { (float)GetScreenWidth()/2 , (float)GetScreenHeight()/2}, player_data );
+    this_player = new PlayerShip( { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, player_data );
     entity_list[0] = this_player;
     this_player->camera = &camera;
     this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
@@ -97,8 +88,8 @@ GameScene::GameScene(char level_data[]) {
 
 //SETUP CAMERA--------------------------------------
     camera = { 0 };
-    camera.target = (Vector2){ this_player->collision_rect.x, this_player->collision_rect.y};
-    camera.offset = (Vector2){ this_player->position.x, this_player->position.y };
+    camera.target = (Vector2){ this_player->position.x, this_player->position.y };
+    camera.offset = (Vector2){ this_player->position.x, this_player->position.y};
     camera.rotation = 0.0f;
     camera.zoom = 2.0f;
 
@@ -113,12 +104,15 @@ GameScene::GameScene(char level_data[]) {
     SetMusicVolume(bg_music, 0.5f);
     PlayMusicStream(bg_music);
 
+    ui->StartCountdown();
+
 }
 
 
 SCENE_ID GameScene::Update() {
 
     UpdateMusicStream(bg_music);
+    camera.target = (Vector2){this_player->position.x, this_player->position.y};
 
     if(IsKeyPressed(KEY_TAB)) {
         settings.show_debug = !settings.show_debug;
@@ -130,7 +124,6 @@ SCENE_ID GameScene::Update() {
     ui->_game_time = game_time; //smelly
     ui->Update();
     
-    camera.target = (Vector2){this_player->collision_rect.x, this_player->collision_rect.y};
     
     if( abs(this_player->velocity.x) > this_player->data.SPEED * 0.7f or abs(this_player->velocity.y) > this_player->data.SPEED * 0.7f) {
         camera.zoom = Lerp(camera.zoom, 1.5f, .005);
@@ -145,29 +138,31 @@ SCENE_ID GameScene::Update() {
     if(time_running) {
         enemy_spawn_timer->Update();
         game_time += GetFrameTime();
+        if(game_time >= ROUND_TIME) {
+            time_running = false;
+            ClearEntitiesExceptPlayer();
+        }
     }
-
     return return_scene;
 }
 
 void GameScene::Draw() {
     ClearBackground(BLACK);
-    
-    DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
-                                {0,0,(float)GetScreenWidth(),
-                                (float)GetScreenHeight()},
-                                {0},
-                                0.0,
-                                WHITE);
 
+    DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
+    {0,0,(float)GetScreenWidth(),
+        (float)GetScreenHeight()},
+        {0},
+        0.0,
+        WHITE);
+        
 //------------------------BEGIN WORLDSPACE
     BeginMode2D(camera);
-
     DrawLevel();
 
-    if(settings.show_debug) {
+/*     if(settings.show_debug) {
         DrawDebug();
-    }
+    } */
  
     DrawListDraw(bullet_list);
     DrawListDraw(entity_list);
@@ -231,7 +226,6 @@ void GameScene::DrawLevel() {
 
 void GameScene::DrawDebug() {
     if(settings.show_debug){
-        
     }
 }
 
@@ -245,7 +239,7 @@ void GameScene::OnHealthPickedUp() {
     HealthPickup *np = new HealthPickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
     AddToDrawList(entity_list, np);
     np->pickedup.Connect( [&](){OnHealthPickedUp();} );
-    TraceLog(LOG_INFO, "NEW PICKUP");
+    //TraceLog(LOG_INFO, "NEW PICKUP");
 }
 
 void GameScene::OnPlayerPickedUpScrap() {
@@ -254,10 +248,11 @@ void GameScene::OnPlayerPickedUpScrap() {
 
 
 void GameScene::OnEnemySpawnTimerTimeout(){
-    if(spawned_eney_amount >= MAX_ENEMIES) {
+    if(spawned_enemy_amount >= (int)(MAX_ENEMIES * settings.level_num * 1.5)) {
         return;
     }
-    spawned_eney_amount++;
+
+    spawned_enemy_amount++;
 
     EnemyShip *np = new EnemyShip( enemy_positions[GetRandomValue(0, enemy_positions.size() - 1)], CreateEnemy(0) );
     AddToDrawList(entity_list, np);
@@ -265,31 +260,37 @@ void GameScene::OnEnemySpawnTimerTimeout(){
     np->player_killed_enemy.Connect( [&](){OnPlayerKilledEnemy();} );
     np->player_killed_enemy.Connect( [&](){ui->OnPlayerKilledEnemy();} );
     np->target = this_player;
-    TraceLog(LOG_INFO, "NEW ENEMY, %i  (%f %f)", spawned_eney_amount, np->position.x, np->position.y);
+    //TraceLog(LOG_INFO, "NEW ENEMY, %i  (%f %f)", spawned_enemy_amount, np->position.x, np->position.y);
 }
 
 void GameScene::OnEnemyDead(){
     PlaySound(enemy_explosion_sound);
-    spawned_eney_amount--;
+    spawned_enemy_amount--;
 }
-
-/* void GameScene::OnGameTimerTimeout(){
-    game_time += 1;
-    spawned_eney_amount--;
-} */
 
 void GameScene::OnPlayerKilledEnemy(){
     this_player->data.points += 100;
 }
 
 void GameScene::OnCountdownTimeout(){
+    //TraceLog(LOG_INFO, "                               -------------------------------------------------STARTING ENEMY SPAWNER");
+    enemy_spawn_timer->Start();
     time_running = true;
 }
 
 
 void GameScene::OnPlayerDead(){
-    TraceLog(LOG_INFO, "                               -------------------------------------------------PLAYER DEAD");
+    //TraceLog(LOG_INFO, "                               -------------------------------------------------PLAYER DEAD");
     PlaySound(game_over_sound);
+
+    ClearEntitiesExceptPlayer();
+
+    AddToDrawList(effects_list, new ExplosionEffect(this_player->position));
+    enemy_spawn_timer->Stop();
+    show_menu = true;
+}
+
+void GameScene::ClearEntitiesExceptPlayer(){
     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
         if(bullet_list[i] != nullptr) {
             delete(bullet_list[i]);
@@ -301,30 +302,24 @@ void GameScene::OnPlayerDead(){
                 entity_list[i] = nullptr;
             }
         }
-
         if(effects_list[i] != nullptr) {
             delete(effects_list[i]);
             effects_list[i] = nullptr;
         }
-    }
-    AddToDrawList(effects_list, new ExplosionEffect(this_player->position));
-
-    //this_player = nullptr;
-    enemy_spawn_timer->Stop();
-
-    show_menu = true;
-}
+    }}
 
 void GameScene::OnMenuExit(){
     return_scene = SPLASH_SCENE;
 }
 
 void GameScene::OnMenuRestart(){
-    spawned_eney_amount = 0;
-    enemy_spawn_timer->Start();
+    spawned_enemy_amount = 0;
+    game_time = 0.0;
+    time_running = false;
     this_player->Reset();
     show_menu = false;
     HealthPickup *np = new HealthPickup( pickup_positions[GetRandomValue(0, pickup_positions.size() - 1)] );
     AddToDrawList(entity_list, np);
     np->pickedup.Connect( [&](){OnHealthPickedUp();} );
+    ui->StartCountdown();
 }

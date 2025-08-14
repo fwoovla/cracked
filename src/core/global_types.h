@@ -10,6 +10,8 @@ struct  gameSettings {
     Vector2 window_size;
     bool show_debug;
     int control_type;
+    int level_num;
+    Vector2 starting_position;
 };
 
 enum SCENE_ID {

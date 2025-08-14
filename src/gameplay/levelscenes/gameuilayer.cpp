@@ -31,7 +31,7 @@ GameUILayer::GameUILayer(){
 
     countdown_time = 5;
     CreateLabel(countdown_label, {(float)GetScreenWidth() /2, (float)GetScreenHeight() /2}, 200, RAYWHITE, TextFormat("%i", countdown_time));
-    countdown_timer = new Timer(1.0f, true, false);
+    countdown_timer = new Timer(1.0f, false, false);
     countdown_timer->timout.Connect( [&](){OnCountdownTimerTimeout();} );
     countdown_fade = 1.0;
 
@@ -120,9 +120,6 @@ void GameUILayer::Update()
     }
 
     int_time_value_label.text = TextFormat("%i", (int)_game_time);
-    //TraceLog(LOG_INFO, "int part %i", (int)_game_time);
-    //TraceLog(LOG_INFO, "dec part %i", (int)((_game_time - (int)_game_time) * 100));
-
     float_time_value_label.text = TextFormat(".%i", (int)((_game_time - (int)_game_time) * 100));
 
     if(animating_points) {
@@ -200,4 +197,10 @@ void GameUILayer::OnCountdownTimerTimeout(){
     else {
         PlaySound(beep);
     }
+}
+
+void GameUILayer::StartCountdown(){
+    countdown_time = 5;
+    countdown_fade = 1.0;
+    countdown_timer->Start();
 }

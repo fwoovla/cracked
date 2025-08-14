@@ -1,6 +1,7 @@
 #include "../core/global_def.h"
 
 char level1_data[] = "assets/level1.png";
+char level2_data[] = "assets/level2.png";
 
 SceneManager::SceneManager() {
     current_scene = new SplashScreen();
@@ -46,7 +47,7 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
             break;
     
         case GAME_SCENE:
-            current_scene = new GameScene(level1_data);
+            current_scene = new GameScene(level2_data);
             break;
 
         default:

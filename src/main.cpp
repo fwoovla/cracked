@@ -12,7 +12,9 @@
 gameSettings settings = {
    .window_size = {1280, 720},
    .show_debug = false,
-   .control_type = 0
+   .control_type = 0,
+   .level_num = 1,
+   //.starting_position = 
 };
 
 int main(int argc, char *argv[]) {
@@ -24,6 +26,8 @@ int main(int argc, char *argv[]) {
    ToggleFullscreen();
    InitAudioDevice();
    SetTargetFPS(60);
+
+   settings.starting_position = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2};
 
    Game game;
    game.StartGame();

@@ -48,12 +48,11 @@ struct EnemyData {
     float ROTATION_SPEED = PI * 0.4f;
     float SHOOT_RANGE = 150000.0f;
     Texture2D texture;
-    int MAX_HEALTH = 3;
+    int MAX_HEALTH = 1;
 
     int health = MAX_HEALTH;
     int shots = 0;
 };
-
 
 
 class PlayerShip : public AnimatedSpriteEntity {
@@ -194,10 +193,10 @@ inline EnemyData CreateEnemy(int type) {
         new_data.MAX_BURST_WAIT = 80.0f;
         new_data.GUN_DELAY = 0.2f;
         new_data.DETECT_RANGE = 4;
-        new_data.ROTATION_SPEED = PI * 0.4f;
-        new_data.SHOOT_RANGE = 150000.0f;
+        new_data.ROTATION_SPEED = PI * 0.8f;
+        new_data.SHOOT_RANGE = 150000.0f; //dist squared
         new_data.texture = LoadTexture("assets/enemy_ship_frames_1.png");
-        new_data.MAX_HEALTH = 3;
+        new_data.MAX_HEALTH = 1;
 
         new_data.shots = 0;
         new_data.health = new_data.MAX_HEALTH;

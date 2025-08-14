@@ -70,13 +70,6 @@ inline void DrawPanel(Panel &_panel) {
 inline void DrawPanel(AnimatedPanel &_panel) {
     DrawRectangleV(_panel.position, _panel.size, _panel.default_color);
 
-    DrawCircleV({_panel.ball1.x, _panel.ball1.y}, _panel.ball_radius, GOLD);
-    DrawCircleV({_panel.ball2.x, _panel.ball2.y}, _panel.ball_radius, GOLD);
-
-
-    DrawCircleV({_panel.ball3.x, _panel.ball3.y}, _panel.ball_radius, GOLD);
-    DrawCircleV({_panel.ball4.x, _panel.ball4.y}, _panel.ball_radius, GOLD);
-
     if(_panel.points1.size() > 1) {
         for(int i = 0; i+1 < _panel.points1.size(); i++) {
             DrawLineV(_panel.points1[i], _panel.points1[i+1], WHITE);
@@ -97,6 +90,12 @@ inline void DrawPanel(AnimatedPanel &_panel) {
             DrawLineV(_panel.points4[i], _panel.points4[i+1], WHITE);
         }
     }
+
+    DrawCircleV({_panel.ball1.x, _panel.ball1.y}, _panel.ball_radius, GOLD);
+    DrawCircleV({_panel.ball2.x, _panel.ball2.y}, _panel.ball_radius, GOLD);
+
+    DrawCircleV({_panel.ball3.x, _panel.ball3.y}, _panel.ball_radius, GOLD);
+    DrawCircleV({_panel.ball4.x, _panel.ball4.y}, _panel.ball_radius, GOLD);
 }
 
 inline void UpdatePanel(Panel &_panel) {
