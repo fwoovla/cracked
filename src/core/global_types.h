@@ -18,6 +18,7 @@ enum SCENE_ID {
     NO_SCENE,
     SPLASH_SCENE,
     TITLE_SCENE,
+    STAGING_SCENE,
     GAME_SCENE,
 };
 

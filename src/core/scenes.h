@@ -56,6 +56,31 @@ class TitleScene : public  BaseScene{
 };
 
 
+class StagingScene : public  BaseScene{
+    public:
+    StagingScene();
+    ~StagingScene() override;
+    SCENE_ID Update() override;
+    void Draw() override;
+    void OnPlayPressed();
+    void OnQuitPressed();
+    void OnFadeOut();
+
+    StagingUILayer *ui;
+    //Button play_button;
+    Sprite logo;
+    Texture2D bg_texture;
+    //gameSettings &game_settings;
+    Timer *fade_timer;
+    float alpha_value;
+    float alpha_step;
+    bool transitioning;
+
+    Music bg_music;
+
+};
+
+
 class GameScene : public  BaseScene{
     public:
     GameScene(char level_data[]);

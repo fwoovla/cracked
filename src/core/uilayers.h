@@ -26,6 +26,30 @@ class TitleUiLayer : public BaseUILayer {
     
 };
 
+
+class StagingUILayer : public BaseUILayer {
+
+    public:
+    StagingUILayer();
+    ~StagingUILayer() override;
+    
+    void Update() override;
+    void Draw() override;
+
+    Button start_button;
+    Button settings_button;
+    Button quit_button;
+    Signal play_pressed;
+    Signal quit_pressed;
+
+    Sound button_sound;
+    Vector2 screen_center;
+
+    AnimatedPanel menu_panel;
+    
+};
+
+
 class GameUILayer : public BaseUILayer {
 
     public:

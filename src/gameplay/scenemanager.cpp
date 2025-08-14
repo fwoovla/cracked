@@ -45,7 +45,11 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
         case TITLE_SCENE:
             current_scene = new TitleScene();
             break;
-    
+
+        case STAGING_SCENE:
+            current_scene = new StagingScene();
+            break;
+
         case GAME_SCENE:
             current_scene = new GameScene(level2_data);
             break;

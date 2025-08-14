@@ -89,6 +89,6 @@ void TitleScene::OnQuitPressed() {
 }
 void TitleScene::OnFadeOut() {
     //TraceLog(LOG_INFO, "SCENE QUIT");
-    return_scene = GAME_SCENE;
+    return_scene = STAGING_SCENE;
 
 }
