@@ -68,13 +68,18 @@ class StagingScene : public  BaseScene{
 
     StagingUILayer *ui;
     //Button play_button;
-    Sprite logo;
+    //Sprite logo;
     Texture2D bg_texture;
     //gameSettings &game_settings;
     Timer *fade_timer;
     float alpha_value;
     float alpha_step;
     bool transitioning;
+
+    AnimatedSprite door_light;
+
+    Rectangle shop_area;
+    Rectangle battle_area;
 
     Music bg_music;
 

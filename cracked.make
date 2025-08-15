@@ -92,6 +92,8 @@ GENERATED += $(OBJDIR)/playership.o
 GENERATED += $(OBJDIR)/scenemanager.o
 GENERATED += $(OBJDIR)/scrappickup.o
 GENERATED += $(OBJDIR)/splashscene.o
+GENERATED += $(OBJDIR)/stagingscene.o
+GENERATED += $(OBJDIR)/staginguilayer.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
@@ -109,6 +111,8 @@ OBJECTS += $(OBJDIR)/playership.o
 OBJECTS += $(OBJDIR)/scenemanager.o
 OBJECTS += $(OBJDIR)/scrappickup.o
 OBJECTS += $(OBJDIR)/splashscene.o
+OBJECTS += $(OBJDIR)/stagingscene.o
+OBJECTS += $(OBJDIR)/staginguilayer.o
 OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
 OBJECTS += $(OBJDIR)/utils.o
@@ -209,6 +213,12 @@ $(OBJDIR)/gameuilayer.o: src/gameplay/levelscenes/gameuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/splashscene.o: src/gameplay/levelscenes/splashscene.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/stagingscene.o: src/gameplay/levelscenes/stagingscene.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/staginguilayer.o: src/gameplay/levelscenes/staginguilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/titlescene.o: src/gameplay/levelscenes/titlescene.cpp

@@ -4,27 +4,25 @@
 StagingScene::StagingScene() {
     scene_id = STAGING_SCENE;
     return_scene = NO_SCENE;
-    //game_settings = _game_settings;
 
-
-    bg_texture = LoadTexture("assets/levelbg1.png");
+    bg_texture = LoadTexture("assets/staging_bg.png");
 
     Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 - GetScreenHeight() / 3 };
 
-    LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
-    //ScaleSprite(logo, {2,2});
-
+    //LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
 
     ui = new StagingUILayer();
-    ui->play_pressed.Connect( [&](){this->OnPlayPressed();} );
-    ui->quit_pressed.Connect( [&](){this->OnQuitPressed();} );
+    ui->quit_pressed.Connect( [&](){OnQuitPressed();} );
 
     double wait_time = 0.5;
     fade_timer = new Timer(wait_time, false, false);
-    fade_timer->timout.Connect([&](){this->OnFadeOut();});
-    alpha_value = 0;  
+    fade_timer->timout.Connect([&](){OnFadeOut();});
+    alpha_value = 0;
     alpha_step = 255/wait_time;
     transitioning = false;
+
+    LoadSpriteCentered(door_light, LoadTexture("assets/doorlight.png"), {50, 350}, 2, 30.0f, 0.5f);
+    ScaleSprite(door_light, {2,2});
 
     bg_music = LoadMusicStream("assets/intromusic.wav");
     SetMusicVolume(bg_music, 0.5f);
@@ -33,10 +31,10 @@ StagingScene::StagingScene() {
 
 
 SCENE_ID StagingScene::Update() {
-
     UpdateMusicStream(bg_music);
 
     ui->Update();
+    AnimateSprite(door_light);
 
     if(transitioning) {
         fade_timer->Update();
@@ -50,15 +48,17 @@ SCENE_ID StagingScene::Update() {
 }
 
 void StagingScene::Draw() {
-    ClearBackground(BLUE);
+    ClearBackground(GetColor(0x251f0f));
     DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
                                 {0,0,(float)GetScreenWidth(),
                                 (float)GetScreenHeight()},
                                 {0},
                                 0.0,
                                 WHITE);
-    DrawSprite(logo);
+    //DrawSprite(logo);
+    DrawSprite(door_light);
     ui->Draw();
+
 
     if(transitioning) {
         DrawRectangle( 0,0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, (unsigned char)alpha_value} );
@@ -66,29 +66,23 @@ void StagingScene::Draw() {
 }
 
 StagingScene::~StagingScene() {
-    //TraceLog(LOG_INFO, "DESTROY TITLE");
-    UnloadTexture(logo.texture);
+    //UnloadTexture(logo.texture);
     UnloadTexture(bg_texture);
+    UnloadTexture(door_light.texture);
     UnloadMusicStream(bg_music);
     delete ui;
 }
 
 void StagingScene::OnPlayPressed() {
-    //TraceLog(LOG_INFO, "SCENE PLAY");
     transitioning = true;
     fade_timer->Start();
-    //return_scene = GAME_SCENE;
-
 }
 
 void StagingScene::OnQuitPressed() {
-    //TraceLog(LOG_INFO, "SCENE QUIT");
     game_running = false;
-    return_scene = SPLASH_SCENE;
 
 }
 void StagingScene::OnFadeOut() {
-    //TraceLog(LOG_INFO, "SCENE QUIT");
-    return_scene = STAGING_SCENE;
+    return_scene = GAME_SCENE;
 
 }

@@ -28,6 +28,7 @@ void Game::StartGame() {
 
         //do render stuff
         BeginDrawing();
+        ClearBackground(BLACK);
         DrawTextureRec(render_texture.texture, {0,0,(float)render_texture.texture.width,-(float)render_texture.texture.height}, {0,0}, WHITE);
         EndDrawing();
 

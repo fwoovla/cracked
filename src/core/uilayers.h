@@ -36,16 +36,14 @@ class StagingUILayer : public BaseUILayer {
     void Update() override;
     void Draw() override;
 
-    Button start_button;
-    Button settings_button;
     Button quit_button;
-    Signal play_pressed;
     Signal quit_pressed;
 
     Sound button_sound;
     Vector2 screen_center;
 
-    AnimatedPanel menu_panel;
+    Panel battle_panel;
+    Panel shop_panel;
     
 };
 
