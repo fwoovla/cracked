@@ -13,6 +13,9 @@ StagingScene::StagingScene() {
 
     ui = new StagingUILayer();
     ui->quit_pressed.Connect( [&](){OnQuitPressed();} );
+    ui->parts_pressed.Connect( [&](){OnPartsPressed();} );
+    ui->shipyard_pressed.Connect( [&](){OnShipyardPressed();} );
+    ui->battle_pressed.Connect( [&](){OnBattlePressed();} );
 
     double wait_time = 0.5;
     fade_timer = new Timer(wait_time, false, false);
@@ -23,6 +26,9 @@ StagingScene::StagingScene() {
 
     LoadSpriteCentered(door_light, LoadTexture("assets/doorlight.png"), {50, 350}, 2, 30.0f, 0.5f);
     ScaleSprite(door_light, {2,2});
+
+    shop_area = {10, 400, 450, 450};
+    battle_area = {1100, 100, 750, 500};
 
     bg_music = LoadMusicStream("assets/intromusic.wav");
     SetMusicVolume(bg_music, 0.5f);
@@ -41,6 +47,22 @@ SCENE_ID StagingScene::Update() {
         alpha_value += (float)alpha_step * GetFrameTime();
     }
 
+    if(!ui->menus_are_open) {
+
+        if(CheckCollisionPointRec(GetMousePosition(), shop_area)) {
+            ui->ShowShopPanel();
+        }
+        else {
+            ui->HideShopPanel();
+        }
+        if(CheckCollisionPointRec(GetMousePosition(), battle_area)) {
+            ui->ShowBattlePanel();
+        }
+        else {
+            ui->HideBattlePanel();
+        }
+
+    }
     if(IsKeyPressed(KEY_ENTER)) {
         return_scene = GAME_SCENE;
     }
@@ -57,7 +79,10 @@ void StagingScene::Draw() {
                                 WHITE);
     //DrawSprite(logo);
     DrawSprite(door_light);
+   // DrawRectangleRec(shop_area, YELLOW);
+    //DrawRectangleRec(battle_area, RED);
     ui->Draw();
+
 
 
     if(transitioning) {
@@ -73,16 +98,23 @@ StagingScene::~StagingScene() {
     delete ui;
 }
 
-void StagingScene::OnPlayPressed() {
-    transitioning = true;
-    fade_timer->Start();
-}
-
 void StagingScene::OnQuitPressed() {
     game_running = false;
 
 }
 void StagingScene::OnFadeOut() {
     return_scene = GAME_SCENE;
-
 }
+
+void StagingScene::OnPartsPressed() {
+    TraceLog(LOG_INFO, "PARTS PRESSED");
+}
+
+void StagingScene::OnShipyardPressed() {
+}
+
+void StagingScene::OnBattlePressed() {
+    transitioning = true;
+    fade_timer->Start();
+}
+

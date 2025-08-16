@@ -28,6 +28,30 @@ struct AnimatedPanel : public Panel {
 };
 
 
+inline void ResetPanel(AnimatedPanel &_panel) {
+    _panel.ball1 = {_panel.position.x + (_panel.size.x *0.5f), _panel.position.y - 10};
+    _panel.ball2 = {_panel.position.x + (_panel.size.x *0.5f), _panel.position.y + _panel.size.y + 10};
+
+    _panel.ball3 = {_panel.position.x + (_panel.size.x *0.5f), _panel.position.y - 10};
+    _panel.ball4 = {_panel.position.x + (_panel.size.x *0.5f), _panel.position.y + _panel.size.y + 10};
+
+    _panel.ball_radius = 10;
+    _panel.animating = true;
+    
+    _panel.points1.clear();
+    _panel.points1.push_back(_panel.ball1);
+
+    _panel.points2.clear();
+    _panel.points2.push_back(_panel.ball2);
+
+    _panel.points3.clear();
+    _panel.points3.push_back(_panel.ball3);
+
+    _panel.points4.clear();
+    _panel.points4.push_back(_panel.ball4);
+
+}
+
 inline void CreatePanel(Panel &_panel, Vector2 _position, Vector2 _size, Color _default_color) {
     _panel.position = _position;
     _panel.size = _size;

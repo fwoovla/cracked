@@ -3,6 +3,79 @@
 #include "baseuilayer.h"
 #include "global_def.h"
 
+ class GameMenu : public BaseUILayer {
+
+    public:
+    GameMenu();
+    ~GameMenu() override;
+    void Update() override;
+    void Draw() override;
+    
+    Vector2 screen_center;
+    
+    Button exit_button;
+    Signal exit;
+
+    Button continue_button;
+    Signal reset;
+
+    Sound button_sound;
+
+    AnimatedPanel menu_panel;
+};
+
+ class PartsMenu : public BaseUILayer {
+
+    public:
+    PartsMenu();
+    ~PartsMenu() override;
+    void Update() override;
+    void Draw() override;
+    
+    Vector2 screen_center;
+    
+    Button exit_button;
+    Signal parts_close;
+    AnimatedPanel menu_panel;
+
+    Label header;
+
+    Sprite ship_outline_sprite;
+    Sprite engine_outline_sprite;
+    Sprite gun_outline_sprite;
+
+    Rectangle engine_area;
+    Rectangle gun_area;
+
+    Label equipped_part_label;
+
+    Sound button_sound;
+};
+
+ class ShipyardMenu : public BaseUILayer {
+
+    public:
+    ShipyardMenu();
+    ~ShipyardMenu() override;
+    void Update() override;
+    void Draw() override;
+    
+    Vector2 screen_center;
+    
+    Button exit_button;
+    Signal exit;
+
+    Signal shipyard_close;
+
+    Rectangle gun_power_rect;
+    Color gun_power_color;
+
+    AnimatedPanel menu_panel;
+    Label header;
+    
+    Sound button_sound;
+
+};
 
 class TitleUiLayer : public BaseUILayer {
 
@@ -36,6 +109,20 @@ class StagingUILayer : public BaseUILayer {
     void Update() override;
     void Draw() override;
 
+    void ShowShopPanel();
+    void ShowBattlePanel();
+    void HideShopPanel();
+    void HideBattlePanel();
+    void DrawShopPanel();
+    void UpdateShopPanel();
+    void DrawBattlePanel();
+    void UpdateBattlePanel();
+    void OnPartsClosed();
+    void OnShipyardClosed();
+
+    PartsMenu parts_menu;
+    ShipyardMenu shipyard_menu;
+
     Button quit_button;
     Signal quit_pressed;
 
@@ -43,8 +130,22 @@ class StagingUILayer : public BaseUILayer {
     Vector2 screen_center;
 
     Panel battle_panel;
+    Button battle_button;
+    Signal battle_pressed;
+
     Panel shop_panel;
-    
+    Button parts_button;
+    Button shipyard_button;
+    Signal parts_pressed;
+    Signal shipyard_pressed;
+
+
+
+    bool shop_panel_visible;
+    bool battle_panel_visible;
+    bool parts_visible;
+    bool shipyard_visible;
+    bool menus_are_open;
 };
 
 
@@ -75,7 +176,6 @@ class GameUILayer : public BaseUILayer {
     Label scrap_tag_label;
     Label scrap_value_label;
 
-    //Label time_tag_label;
     Label int_time_value_label;
     Label float_time_value_label;
 
@@ -104,26 +204,3 @@ class GameUILayer : public BaseUILayer {
 
 };
 
- class GameMenu : public BaseUILayer {
-
-    public:
-    GameMenu();
-    ~GameMenu() override;
-    void Update() override;
-    void Draw() override;
-    
-    Vector2 screen_center;
-    
-    Button exit_button;
-    Signal exit;
-
-    Button continue_button;
-    Signal reset;
-
-    Rectangle gun_power_rect;
-    Color gun_power_color;
-
-    Sound button_sound;
-
-    AnimatedPanel menu_panel;
-};

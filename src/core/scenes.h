@@ -7,10 +7,6 @@
 #include "sprite.h"
 #include "uilayers.h"
 #include "../utils/utils.h"
-/* 
-#include "entities.h"
-#include "ships.h"
- */
 
 
 class SplashScreen : public  BaseScene{
@@ -26,8 +22,6 @@ class SplashScreen : public  BaseScene{
     float alpha_value;
     float alpha_step;
     Sprite logo;
-    //gameSettings &game_settings;
-
 };
 
 
@@ -42,10 +36,8 @@ class TitleScene : public  BaseScene{
     void OnFadeOut();
 
     TitleUiLayer *ui;
-    //Button play_button;
     Sprite logo;
     Texture2D bg_texture;
-    //gameSettings &game_settings;
     Timer *fade_timer;
     float alpha_value;
     float alpha_step;
@@ -65,12 +57,13 @@ class StagingScene : public  BaseScene{
     void OnPlayPressed();
     void OnQuitPressed();
     void OnFadeOut();
+    void OnPartsPressed();
+    void OnShipyardPressed();
+    void OnBattlePressed();
 
     StagingUILayer *ui;
-    //Button play_button;
-    //Sprite logo;
+
     Texture2D bg_texture;
-    //gameSettings &game_settings;
     Timer *fade_timer;
     float alpha_value;
     float alpha_step;
@@ -110,7 +103,6 @@ class GameScene : public  BaseScene{
     GameUILayer *ui;
     Camera2D camera;
 
-    //int* level_array;
     PlayerShip *this_player;
     Texture space_tile_texture;
     Texture2D asteroid_texture;
@@ -131,7 +123,6 @@ class GameScene : public  BaseScene{
 
     Music bg_music;
 
-    //Timer *game_timer;
     bool time_running;
     float game_time;
 };
