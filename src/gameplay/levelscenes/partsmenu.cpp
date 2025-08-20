@@ -1,12 +1,11 @@
 #include "../../core/global_def.h"
 
-#define GUN_POWER_SCALER 20.0f
 
 PartsMenu::PartsMenu(){
 
     screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
     float margin = 100.0f;
-    CreateLabel(header, {screen_center.x, 50 + margin}, 50, RAYWHITE, "Parts Shop");
+    CreateLabel(header, {screen_center.x, 50 + margin}, 50, GOLD, "Parts Shop");
     CreatePanel(menu_panel, {margin, margin}, {(float)GetScreenWidth() - (margin*2), (float)GetScreenHeight() - (margin*2)}, BLACK, 1.0f) ;;
     CreateButton(exit_button, { screen_center.x, screen_center.y + 400}, {300, 50}, RED, "back");
     button_sound = LoadSound("assets/button.wav");
@@ -26,7 +25,13 @@ PartsMenu::PartsMenu(){
     engine_area.x -= (engine_area.width * 0.5f);
     engine_area.y -= (engine_area.height * 0.5f);
 
-    CreateLabel(equipped_part_label, {margin + 50, margin + 50}, 40, RAYWHITE, "...");
+    CreateLabel(equipped_part_label, {margin + 100, margin + 200}, 30, RAYWHITE, "");
+    //equipped_part_label_text = "";
+    //equipped_part_label_position = {margin + 100, margin + 200};
+    CreateLabelList(equipped_part_stat_list, {margin + 100, margin + 300}, 200, 20, 50, YELLOW, RAYWHITE, "...");
+    AddLabelToList(equipped_part_stat_list, "stat: fun");
+
+    selected_location = NONE;
 }
 
 PartsMenu::~PartsMenu() {
@@ -44,12 +49,11 @@ void PartsMenu::Draw() {
     DrawSprite(gun_outline_sprite);
 
     DrawButton(exit_button);
-    DrawLabel(header);
+    DrawLabelCentered(header);
 
     DrawLabel(equipped_part_label);
+    DrawLabelList(equipped_part_stat_list);
 
-    //DrawRectangleRec(gun_area,RED);
-    //DrawRectangleRec(engine_area,RED);
 }
 
 
@@ -70,17 +74,34 @@ void PartsMenu::Update()
         }
     }
 
-    if(CheckCollisionPointRec(GetMousePosition(), engine_area)) {
-        engine_outline_sprite.modulate = ORANGE;
-    }
-    else {
-        engine_outline_sprite.modulate = GRAY;
-    }
 
-    if(CheckCollisionPointRec(GetMousePosition(), gun_area)) {
-        gun_outline_sprite.modulate = ORANGE;
+    if(CheckCollisionPointRec(GetMousePosition(), engine_area)) {
+        if(selected_location != THRUSTERS) {
+            selected_location = THRUSTERS;
+            engine_outline_sprite.modulate = ORANGE;
+            equipped_part_label.text = "THRUSTERS";
+            equipped_part_stat_list.header_text = player_data.thrusters_part.part_name.c_str();
+            AddLabelToList(equipped_part_stat_list, TextFormat("top speed %.f", player_data.thrusters_part.THRUSTER_SPEED) );
+            AddLabelToList(equipped_part_stat_list, TextFormat("weight %.f", player_data.thrusters_part.weight) );
+        }
+    }
+    else if(CheckCollisionPointRec(GetMousePosition(), gun_area)) {
+        if(selected_location != MAIN_GUN) {
+            selected_location = MAIN_GUN;
+            gun_outline_sprite.modulate = ORANGE;
+            equipped_part_label.text = "MAIN GUN";
+            equipped_part_stat_list.header_text = player_data.main_gun_part.part_name.c_str();
+            AddLabelToList(equipped_part_stat_list, TextFormat("weight %.f", player_data.main_gun_part.GUN_DELAY) );
+            AddLabelToList(equipped_part_stat_list, TextFormat("power %.2f", player_data.main_gun_part.GUN_POWER_USE) );
+            AddLabelToList(equipped_part_stat_list, TextFormat("weight %.f", player_data.main_gun_part.weight) );
+        }
     }
     else {
+        selected_location = NONE;
+        equipped_part_stat_list.header_text = "";
+        ClearLabelList(equipped_part_stat_list);
+        equipped_part_label.text = "";
         gun_outline_sprite.modulate = GRAY;
+        engine_outline_sprite.modulate = GRAY;
     }
 }

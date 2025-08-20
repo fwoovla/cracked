@@ -1,12 +1,14 @@
 #include "../core/global_def.h"
 bool game_running;
+PlayerData player_data;
 
 Game::Game(){
     TraceLog(LOG_INFO, "GAME-- SETTINGS, %i  %f, %f", settings.show_debug, settings.window_size.x, settings.window_size.y);
     game_running = false;
     scene_manager = new SceneManager;
     render_texture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
-    //render_texture = LoadRenderTexture(800, 800);
+
+
 }
 
 Game::~Game() {

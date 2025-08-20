@@ -9,7 +9,7 @@
 #define INV_TILE_SIZE 1.0f/TILE_SIZE
 
 
-
+#include "data.h"
 #include "../utils/utils.h"
 #include "uilayers.h"
 #include "entities.h"
@@ -22,3 +22,4 @@
 extern gameSettings settings;
 extern int* level_array_data;
 extern bool game_running;
+extern PlayerData player_data;

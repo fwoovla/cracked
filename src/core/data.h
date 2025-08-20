@@ -17,6 +17,7 @@ enum PART_TYPE {
 
 struct PART_MAIN_GUN{
     std::string part_name = "S.A.D. 1k";
+    float weight = 4.6f;
     float GUN_MAX_POWER = 10.0f;
     float GUN_POWER_USE = 1.0f;
     float GUN_REGEN = 3.0f;
@@ -25,6 +26,7 @@ struct PART_MAIN_GUN{
 
 struct PART_THRUSTERS{
     std::string part_name = "ForWARD 20.1 kV";
+    float weight = 10.0f;
     float THRUSTER_SPEED = 3.0f;
     float THRUSTER_SHIP_THRUST = 0.1f;
     float THRUSTER_SHIP_ROT_SPEED = 180.0f;

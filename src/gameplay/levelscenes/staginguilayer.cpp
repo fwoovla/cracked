@@ -28,6 +28,9 @@ StagingUILayer::StagingUILayer() {
 
     parts_menu.parts_close.Connect( [&](){OnPartsClosed();} );
     shipyard_menu.shipyard_close.Connect( [&](){OnShipyardClosed();} );
+
+    CreateLabel(scrap_label, {50, 20}, 50, PURPLE, "SCRAP:");
+    top_bar_rect = {0,0, (float)GetScreenWidth(), 100};
     
 }
 
@@ -53,6 +56,10 @@ void StagingUILayer::Draw() {
     if(shipyard_visible) {
         shipyard_menu.Draw();
     }
+
+    DrawRectangleRec(top_bar_rect, DARKGRAY);
+    DrawRectangleLines(top_bar_rect.x, top_bar_rect.y, top_bar_rect.width,top_bar_rect.height, RAYWHITE);
+    DrawLabel(scrap_label);
 
     DrawButton(quit_button);
 }
@@ -83,6 +90,8 @@ void StagingUILayer::Update() {
             quit_pressed.EmitSignal();
         }
     }
+
+    scrap_label.text = TextFormat("SCRAP: %i", player_data.scrap_amount);
 }
 
 void StagingUILayer::ShowShopPanel() {

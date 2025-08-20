@@ -51,17 +51,17 @@ GameUILayer::~GameUILayer() {
 void GameUILayer::Draw() {
 
     if(!countdown_timer->IsDone()) {
-        DrawLabel(countdown_label);
+        DrawLabelCentered(countdown_label);
     }
     
-    DrawLabel(points_tag_label);
-    DrawLabel(points_value_label);
+    DrawLabelCentered(points_tag_label);
+    DrawLabelCentered(points_value_label);
 
-    DrawLabel(scrap_tag_label);
-    DrawLabel(scrap_value_label);
+    DrawLabelCentered(scrap_tag_label);
+    DrawLabelCentered(scrap_value_label);
 
 
-    DrawLabel(int_time_value_label);
+    DrawLabelCentered(int_time_value_label);
 
     if((int)_game_time >= 10) {
         float_time_value_label.position.x =  (float)int_time_value_label.position.x + (float)int_time_value_label.text_size;    
@@ -70,23 +70,23 @@ void GameUILayer::Draw() {
         float_time_value_label.position.x =  (float)int_time_value_label.position.x + (float)int_time_value_label.text_size * 1.5;    
     }
 
-    DrawLabel(float_time_value_label);
+    DrawLabelCentered(float_time_value_label);
 
     DrawButton(quit_button);
 
     DrawRectangle(  gun_power_rect.x-2,
-                    GetScreenHeight() -10.0f - player->data.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    GetScreenHeight() -10.0f - player_data.GUN_MAX_POWER * GUN_POWER_SCALER,
                     gun_power_rect.width+4,
-                    player->data.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    player_data.GUN_MAX_POWER * GUN_POWER_SCALER,
                     DARKGRAY);
 
     DrawRectangleRec(gun_power_rect, gun_power_color);
-    DrawRectangleV( {gun_power_rect.x, (float)GetScreenHeight() - player->data.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
+    DrawRectangleV( {gun_power_rect.x, (float)GetScreenHeight() - player_data.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
                     {gun_power_rect.width, 5},
                     RED);
     
     Vector2 health_center = {(float)(GetScreenWidth() - 20 ) * 0.5f , 100};
-    for(int i = 0; i < player->data.health; i++) {
+    for(int i = 0; i < player_data.health; i++) {
         DrawRectangle(health_center.x-1 + (i * 25) , health_center.y-1, 22, 22, WHITE );
         DrawRectangle(health_center.x + (i * 25) , health_center.y, 20, 20, RED );
         DrawRectangle(health_center.x-1 - (i * 25) , health_center.y-1, 22, 22, WHITE );
@@ -129,7 +129,7 @@ void GameUILayer::Update()
             animating_points = false;
         }
     }
-    points_value_label.text = TextFormat("%i", player->data.points);
+    points_value_label.text = TextFormat("%i", player_data.points);
 
     if(animating_scrap){
         scrap_value_label.text_size += 5;
@@ -138,12 +138,12 @@ void GameUILayer::Update()
             animating_scrap = false;
         }
     }
-    scrap_value_label.text = TextFormat("%i", player->data.scrap_amount);
+    scrap_value_label.text = TextFormat("%i", player_data.scrap_amount);
 
     float dt = GetFrameTime();
-    gun_power_rect.y = GetScreenHeight() -10.0f - player->data.gun_power * GUN_POWER_SCALER;
-    gun_power_rect.height = player->data.gun_power * GUN_POWER_SCALER;
-    if(player->data.gun_power < player->data.GUN_MAX_POWER * 0.3f) {
+    gun_power_rect.y = GetScreenHeight() -10.0f - player_data.gun_power * GUN_POWER_SCALER;
+    gun_power_rect.height = player_data.gun_power * GUN_POWER_SCALER;
+    if(player_data.gun_power < player_data.GUN_MAX_POWER * 0.3f) {
         gun_power_color = MAGENTA;
     }
     else {

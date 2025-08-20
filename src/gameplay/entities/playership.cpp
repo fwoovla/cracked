@@ -7,9 +7,9 @@
 
 #define DETECT_RANGE 3
 
-PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntity() {
+PlayerShip::PlayerShip(Vector2 _position): AnimatedSpriteEntity() {
 
-    data = _data;
+    //data = _data;
     position = settings.starting_position;
     velocity = {0};
     rotation = 0.0f;
@@ -17,26 +17,26 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
 
     LoadSpriteCentered(sprite, LoadTexture("assets/player_ship_frames.png"), {32*TILE_SIZE, 32*TILE_SIZE}, 3, 32.0f, 0.2f);
     
-    centered_offset = {data.SIZE/2, data.SIZE/2};
-    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, data.SIZE, data.SIZE };
+    centered_offset = {player_data.SIZE/2, player_data.SIZE/2};
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, player_data.SIZE, player_data.SIZE };
     
     LoadSpriteCentered(turret, LoadTexture("assets/turret.png"), position);
     
     should_delete = false;
 
-    gun_timer = new Timer(data.GUN_DELAY, true, false);
+    gun_timer = new Timer(player_data.GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){OnGunTimerTimeout();} );
     gun_can_shoot = false;
-    data.gun_power = data.GUN_MAX_POWER;
-    data.shots = 0;
+    //player_data.gun_power = player_data.GUN_MAX_POWER;
+    //player_data.shots = 0;
 
-    data.health = data.MAX_HEALTH;
+    //player_data.health = player_data.MAX_HEALTH;
 
     thrust_timer = new Timer(0.3f, false, true);
     thrust_timer->timout.Connect( [&](){OnThrustTimerTimeout();} );
     thrusting = false;
-    speed_cap = data.SPEED;
-    thrust_cap = data.SHIP_THRUST;
+    speed_cap = player_data.SPEED;
+    thrust_cap = player_data.SHIP_THRUST;
 
     gun_sound = LoadSound("assets/laser.wav");
     SetSoundVolume(gun_sound, 0.6f);
@@ -46,16 +46,17 @@ PlayerShip::PlayerShip(Vector2 _position, PlayerData _data): AnimatedSpriteEntit
     SetSoundVolume(engine_sound, 0.6f);
 
     alert_sound = LoadSound("assets/alert.wav");
+    Reset();
 }
 
 void PlayerShip::Update() {
-    if(data.health <= 0) {
+    if(player_data.health <= 0) {
         return;
     }
 
     float dt = GetFrameTime();
 
-    if(data.health <= data.MAX_HEALTH * 0.2f) {
+    if(player_data.health <= player_data.MAX_HEALTH * 0.2f) {
         if(!IsSoundPlaying(alert_sound)) {
             PlaySound(alert_sound);
         }
@@ -66,9 +67,9 @@ void PlayerShip::Update() {
 
     AnimateSprite(sprite);
 
-    data.gun_power += dt * data.GUN_REGEN;
-    if (  data.gun_power > data.GUN_MAX_POWER) {
-        data.gun_power = data.GUN_MAX_POWER;
+    player_data.gun_power += dt * player_data.GUN_REGEN;
+    if (  player_data.gun_power > player_data.GUN_MAX_POWER) {
+        player_data.gun_power = player_data.GUN_MAX_POWER;
     }
     
     CollisionResult result = {0};
@@ -79,8 +80,8 @@ void PlayerShip::Update() {
             PlaySound(hit_sound);
             player_hit.EmitSignal();
             result.collider->should_delete = true;
-            data.health -=1;
-            if(data.health <= 0) {
+            player_data.health -=1;
+            if(player_data.health <= 0) {
                 dead.EmitSignal();
             }
         }
@@ -92,7 +93,7 @@ void PlayerShip::Update() {
 }
 
 void PlayerShip::Draw() {
-    if(data.health <= 0) {
+    if(player_data.health <= 0) {
         return;
     }
 
@@ -130,12 +131,12 @@ void PlayerShip::Draw() {
 
 void PlayerShip::DoMovement(float dt) {
     if(settings.control_type == 0) {
-        if (IsKeyDown(KEY_A)) {rotation -= data.SHIP_ROT_SPEED * dt;}
-        if (IsKeyDown(KEY_D)) {rotation += data.SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_A)) {rotation -= player_data.SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_D)) {rotation += player_data.SHIP_ROT_SPEED * dt;}
     }
     else if(settings.control_type == 1) {
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= data.SHIP_ROT_SPEED * dt;}
-        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += data.SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= player_data.SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += player_data.SHIP_ROT_SPEED * dt;}
     }
 
     sprite.roataion = rotation;
@@ -164,10 +165,10 @@ void PlayerShip::DoMovement(float dt) {
         StopSound(engine_sound);
     }
 
-    if(IsKeyDown(KEY_SPACE) and !thrusting and data.gun_power > data.GUN_MAX_POWER * 0.3) {
-        data.gun_power -= (data.GUN_MAX_POWER * 0.3);
-        speed_cap = data.SPEED * 5.0;
-        thrust_cap = data.SHIP_THRUST * 8.0f;
+    if(IsKeyDown(KEY_SPACE) and !thrusting and player_data.gun_power > player_data.GUN_MAX_POWER * 0.3) {
+        player_data.gun_power -= (player_data.GUN_MAX_POWER * 0.3);
+        speed_cap = player_data.SPEED * 5.0;
+        thrust_cap = player_data.SHIP_THRUST * 8.0f;
         thrusting = true;
         thrust_timer->Start();
     }
@@ -177,8 +178,8 @@ void PlayerShip::DoMovement(float dt) {
         //TraceLog(LOG_INFO, "THRUSTING");
     }
 
-    velocity.x *= data.AIR_FRICTION;
-    velocity.y *= data.AIR_FRICTION;
+    velocity.x *= player_data.AIR_FRICTION;
+    velocity.y *= player_data.AIR_FRICTION;
 
     vClamp(velocity, 1.0);
 
@@ -197,7 +198,7 @@ void PlayerShip::DoMovement(float dt) {
     if(collided) {
         collision_rect.x = previous_collision_position.x;
         collision_rect.y = previous_collision_position.y;
-        velocity = {-velocity.x * data.SHIP_BOUNCE_SCALEAR, -velocity.y * data.SHIP_BOUNCE_SCALEAR};
+        velocity = {-velocity.x * player_data.SHIP_BOUNCE_SCALEAR, -velocity.y * player_data.SHIP_BOUNCE_SCALEAR};
     }
     else {
         position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
@@ -219,12 +220,12 @@ void PlayerShip::DoWeapons() {
 
     if(settings.control_type == 0) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            if(gun_can_shoot and data.gun_power > data.GUN_POWER_USE ) {
+            if(gun_can_shoot and player_data.gun_power > player_data.GUN_POWER_USE ) {
                 gun_can_shoot = false;
                 AddToDrawList(bullet_list, new Bullet(position, turret.roataion, id));
-                data.gun_power -= data.GUN_POWER_USE;
+                player_data.gun_power -= player_data.GUN_POWER_USE;
                 shoot.EmitSignal();
-                data.shots++;
+                player_data.shots++;
                 PlaySound(gun_sound);
             }
         }
@@ -250,17 +251,17 @@ void PlayerShip::OnGunTimerTimeout() {
 
 void PlayerShip::OnThrustTimerTimeout() {
     thrusting = false;
-    speed_cap = data.SPEED;
-    thrust_cap = data.SHIP_THRUST;
+    speed_cap = player_data.SPEED;
+    thrust_cap = player_data.SHIP_THRUST;
 }
 
 
 void PlayerShip::OnHealthPickup() {
-    data.health = data.MAX_HEALTH;
+    player_data.health = player_data.MAX_HEALTH;
 }
 
 void PlayerShip::OnScrapPickup() {
-    data.scrap_amount += 1;
+    player_data.scrap_amount += 1;
     scrap_picked_up.EmitSignal();
 }
 
@@ -278,13 +279,15 @@ PlayerShip::~PlayerShip()
 }
 
 void PlayerShip::Reset() {
-    data.health = data.MAX_HEALTH;
-    data.gun_power = data.GUN_MAX_POWER;
-    data.points = 0;
-    data.shots = 0;
-    data.scrap_amount = 0;
+    speed_cap = player_data.SPEED;
+    thrust_cap = player_data.SHIP_THRUST;
+    player_data.health = player_data.MAX_HEALTH;
+    player_data.gun_power = player_data.GUN_MAX_POWER;
+    player_data.points = 0;
+    player_data.shots = 0;
+    player_data.scrap_amount = 0;
     position = settings.starting_position;
-    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, data.SIZE, data.SIZE };
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, player_data.SIZE, player_data.SIZE };
     velocity = {0,0};
     rotation = 0.0f;
 }

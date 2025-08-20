@@ -11,6 +11,7 @@
 #include "button.h"
 #include "label.h"
 #include "panel.h"
+#include "labellist.h"
 
 class BaseUILayer{
     public:

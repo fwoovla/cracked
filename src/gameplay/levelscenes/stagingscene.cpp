@@ -30,6 +30,7 @@ StagingScene::StagingScene() {
     shop_area = {10, 400, 450, 450};
     battle_area = {1100, 100, 750, 500};
 
+
     bg_music = LoadMusicStream("assets/intromusic.wav");
     SetMusicVolume(bg_music, 0.5f);
     PlayMusicStream(bg_music);

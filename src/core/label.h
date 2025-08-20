@@ -16,8 +16,14 @@ inline void CreateLabel(Label &_label, Vector2 _position, int _text_size, Color 
     _label.text = _text;
 }
 
-inline void DrawLabel(Label &_label) {
+inline void DrawLabelCentered(Label &_label) {
     //TraceLog(LOG_INFO, "text size %i", _label.text_size);
     int tw = MeasureText(_label.text.c_str(), _label.text_size);
     DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), _label.text_size, _label.default_color);
+}
+
+inline void DrawLabel(Label &_label) {
+    //TraceLog(LOG_INFO, "text size %i", _label.text_size);
+    //int tw = MeasureText(_label.text.c_str(), _label.text_size);
+    DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x, _label.position.y, _label.text_size, _label.default_color);
 }

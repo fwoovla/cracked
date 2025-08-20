@@ -3,61 +3,11 @@
 #include "../utils/utils.h"
 #include "global_types.h"
 
-struct PlayerData {
-    int id = 1;
-    float SPEED = 3.0f;
-    float SIZE = 30;
-    float SHIP_THRUST = 0.1f;
-    float SHIP_ROT_SPEED = 180.0f;
-    float AIR_FRICTION = 0.99f;
-    float SHIP_BOUNCE_SCALEAR = 0.6f;
-    float GUN_MAX_POWER = 10.0f;
-    float GUN_POWER_USE = 1.0f;
-    float GUN_REGEN = 3.0f;
-    float GUN_DELAY = 0.2f;
-    int MAX_HEALTH = 10;
-
-
-    float gun_power = GUN_MAX_POWER;
-    int shots = 0;
-    int health = MAX_HEALTH;
-    int points = 0;
-    int scrap_amount = 0;
-};
-
-
-struct EnemyData {
-    int id = GetRandomValue(1000, 100000);
-    int TYPE;
-    float SPEED = 3.0;
-    float SIZE = 30;
-    float SHIP_THRUST = 0.1f;
-    float SHIP_ROT_SPEED = 180.0f;
-    float AIR_FRICTION = 0.99f;
-    float SHIP_BOUNCE_SCALEAR = 0.6f;
-    float MIN_THRUST_TIME = 50.0f;
-    float MAX_THRUST_TIME = 150.0f;
-    float MIN_THRUST_WAIT = 20.0f;
-    float MAX_THRUST_WAIT = 100.0f;
-    float MIN_BURST_TIME = 3.0f;
-    float MAX_BURST_TIME = 10.0f;
-    float MIN_BURST_WAIT = 50.0f;
-    float MAX_BURST_WAIT = 80.0f;
-    float GUN_DELAY = 0.1f;
-    int DETECT_RANGE = 4;
-    float ROTATION_SPEED = PI * 0.4f;
-    float SHOOT_RANGE = 150000.0f;
-    Texture2D texture;
-    int MAX_HEALTH = 1;
-
-    int health = MAX_HEALTH;
-    int shots = 0;
-};
 
 
 class PlayerShip : public AnimatedSpriteEntity {
     public:
-    PlayerShip(Vector2 _position, PlayerData _data);
+    PlayerShip(Vector2 _position);
     ~PlayerShip() override;
     void Update() override;
     void Draw() override;
@@ -72,7 +22,7 @@ class PlayerShip : public AnimatedSpriteEntity {
     void OnHitEffectTimeout();
 
     
-    PlayerData data;
+    //PlayerData *data;
 
     Vector2 centered_offset;
     Vector2 velocity;

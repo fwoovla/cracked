@@ -71,7 +71,7 @@ inline void CreatePanel(AnimatedPanel &_panel, Vector2 _position, Vector2 _size,
     _panel.ball3 = {_position.x + (_size.x *0.5f), _position.y - 10};
     _panel.ball4 = {_position.x + (_size.x *0.5f), _position.y + _size.y + 10};
 
-    _panel.ball_radius = 10;
+    _panel.ball_radius = 5;
     _panel.animating = true;
     
     _panel.points1.clear();

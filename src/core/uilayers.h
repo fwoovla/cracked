@@ -3,6 +3,13 @@
 #include "baseuilayer.h"
 #include "global_def.h"
 
+enum SHIPLOCATIONS {
+    NONE,
+    THRUSTERS,
+    MAIN_GUN,
+};
+
+
  class GameMenu : public BaseUILayer {
 
     public:
@@ -44,10 +51,15 @@
     Sprite engine_outline_sprite;
     Sprite gun_outline_sprite;
 
+    SHIPLOCATIONS selected_location;
+
     Rectangle engine_area;
     Rectangle gun_area;
 
     Label equipped_part_label;
+    //std::string equipped_part_label_text;
+    //Vector2 equipped_part_label_position;
+    LabelList equipped_part_stat_list;
 
     Sound button_sound;
 };
@@ -128,6 +140,9 @@ class StagingUILayer : public BaseUILayer {
 
     Sound button_sound;
     Vector2 screen_center;
+
+    Rectangle top_bar_rect;
+    Label scrap_label;
 
     Panel battle_panel;
     Button battle_button;

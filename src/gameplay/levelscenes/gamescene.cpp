@@ -75,8 +75,7 @@ GameScene::GameScene(char level_data[]) {
     show_menu = false;
     
 //LOAD PLAYER------------------------------------
-    PlayerData player_data;
-    this_player = new PlayerShip( { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, player_data );
+    this_player = new PlayerShip( { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2});
     entity_list[0] = this_player;
     this_player->camera = &camera;
     this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
@@ -125,7 +124,7 @@ SCENE_ID GameScene::Update() {
     ui->Update();
     
     
-    if( abs(this_player->velocity.x) > this_player->data.SPEED * 0.7f or abs(this_player->velocity.y) > this_player->data.SPEED * 0.7f) {
+    if( abs(this_player->velocity.x) > player_data.SPEED * 0.7f or abs(this_player->velocity.y) > player_data.SPEED * 0.7f) {
         camera.zoom = Lerp(camera.zoom, 1.5f, .005);
     }
     else {
@@ -269,7 +268,7 @@ void GameScene::OnEnemyDead(){
 }
 
 void GameScene::OnPlayerKilledEnemy(){
-    this_player->data.points += 100;
+    player_data.points += 100;
 }
 
 void GameScene::OnCountdownTimeout(){
