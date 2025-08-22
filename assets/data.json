@@ -1,0 +1,49 @@
+{
+    "default_player_values": {
+        "size":30,
+        "air_friction":0.99,
+        "max_health":10,
+        "gun_power":10
+
+    },
+
+    "part_main_gun": [
+        {
+            "part_name":"S.A.D1k PUNCHER",
+            "weight":4.6,
+            "GUN_MAX_POWER":10.0,
+            "GUN_POWER_USE":1.0,
+            "GUN_REGEN":3.0,
+            "GUN_DELAY":0.2,
+            "cost":1
+        },
+        {
+            "part_name":"S.A.D2k PUNCHER",
+            "weight":4.6,
+            "GUN_MAX_POWER":10.0,
+            "GUN_POWER_USE":1.0,
+            "GUN_REGEN":2.0,
+            "GUN_DELAY":0.2,
+            "cost":1
+        }
+
+    ],
+    "part_thrusters": [
+        {
+            "part_name":"ForWARD 20.1 kV",
+            "weight":10.6,
+            "THRUSTER_SPEED":3.0,
+            "THRUSTER_SHIP_THRUST":0.1,
+            "THRUSTER_SHIP_ROT_SPEED":180.0,
+            "cost":1
+        },
+        {
+            "part_name":"ForWARD 20.2 kV",
+            "weight":10.6,
+            "THRUSTER_SPEED":3.0,
+            "THRUSTER_SHIP_THRUST":0.1,
+            "THRUSTER_SHIP_ROT_SPEED":180.0,
+            "cost":1
+        }
+    ]
+}
