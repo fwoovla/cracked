@@ -209,7 +209,8 @@ void PlayerShip::DoMovement(float dt) {
     turret.dest.y = position.y;
     
     Vector2 mp = GetMousePosition();
-    Vector2 pp = GetWorldToScreen2D(position, *camera);
+    Vector2 pp = GetWorldToScreen2D( {position.x, position.y}, *camera);
+    pp = {pp.x * settings.game_scale, pp.y*settings.game_scale};
 
     turret.roataion = GetAngleFromTo(pp, mp) * RAD2DEG;
 }

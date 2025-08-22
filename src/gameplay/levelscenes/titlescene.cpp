@@ -9,9 +9,9 @@ TitleScene::TitleScene() {
 
     bg_texture = LoadTexture("assets/levelbg1.png");
 
-    Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 - GetScreenHeight() / 3 };
+    Vector2 screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
 
-    LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
+    LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), {screen_center.x, screen_center.y - 200});
     //ScaleSprite(logo, {2,2});
 
 
@@ -52,8 +52,7 @@ SCENE_ID TitleScene::Update() {
 void TitleScene::Draw() {
     ClearBackground(BLUE);
     DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
-                                {0,0,(float)GetScreenWidth(),
-                                (float)GetScreenHeight()},
+                                {0,0,settings.resolution.x,settings.resolution.y},
                                 {0},
                                 0.0,
                                 WHITE);

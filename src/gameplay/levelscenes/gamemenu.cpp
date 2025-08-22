@@ -33,7 +33,7 @@ void GameMenu::Update()
 
     UpdatePanel(menu_panel);
 
-    if(IsButtonHovered(exit_button)) {
+    if(IsButtonHovered(exit_button, settings.game_scale)) {
         if(exit_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -42,7 +42,7 @@ void GameMenu::Update()
         }
     }
 
-    if(IsButtonHovered(continue_button)) {
+    if(IsButtonHovered(continue_button, settings.game_scale)) {
         if(continue_button.already_hovered == false) {
             PlaySound(button_sound);
         }

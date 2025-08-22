@@ -2,7 +2,7 @@
 
 
 TitleUiLayer::TitleUiLayer() {
-    screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
+    screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
 
     CreateButton(start_button, screen_center, {200, 100}, GREEN, "play");
     start_button.default_color = DARKGREEN;
@@ -11,7 +11,7 @@ TitleUiLayer::TitleUiLayer() {
     CreateButton(settings_button, {screen_center.x, screen_center.y + 150}, {200, 100}, YELLOW, "settings");
     settings_button.default_color = GOLD;
 
-    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED, "X");
+    CreateButton(quit_button, { settings.resolution.x - 40, 20 }, {30, 30}, RED, "X");
     quit_button.default_color = DARKGRAY;
 
     button_sound = LoadSound("assets/button.wav");
@@ -35,7 +35,7 @@ void TitleUiLayer::Draw() {
 void TitleUiLayer::Update() {
 
     UpdatePanel(menu_panel);
-    if(IsButtonHovered(quit_button)) {
+    if(IsButtonHovered(quit_button, settings.game_scale)) {
         if(quit_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -45,7 +45,7 @@ void TitleUiLayer::Update() {
         }
     }
     //TraceLog(LOG_INFO, "UI UPDATE");
-    if(IsButtonHovered(start_button)) {
+    if(IsButtonHovered(start_button, settings.game_scale)){
         if(start_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -54,7 +54,7 @@ void TitleUiLayer::Update() {
             play_pressed.EmitSignal();
         }        
     }
-    if(IsButtonHovered(settings_button)) {
+    if(IsButtonHovered(settings_button, settings.game_scale)) {
         if(settings_button.already_hovered == false) {
             PlaySound(button_sound);
         }

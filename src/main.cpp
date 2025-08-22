@@ -10,11 +10,11 @@
  */
 
 gameSettings settings = {
-   .window_size = {1280, 720},
+   .window_size = {1920, 1084},
+   .resolution = {1280, 720}, // center is 640, 360
    .show_debug = false,
    .control_type = 0,
    .level_num = 1,
-   //.starting_position = 
 };
 
 int main(int argc, char *argv[]) {

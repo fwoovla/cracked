@@ -75,7 +75,7 @@ GameScene::GameScene(char level_data[]) {
     show_menu = false;
     
 //LOAD PLAYER------------------------------------
-    this_player = new PlayerShip( { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2});
+    this_player = new PlayerShip( { settings.resolution.x/2, settings.resolution.y/2});
     entity_list[0] = this_player;
     this_player->camera = &camera;
     this_player->shoot.Connect( [&](){ui->OnPlayerShoot();} );
@@ -88,7 +88,7 @@ GameScene::GameScene(char level_data[]) {
 //SETUP CAMERA--------------------------------------
     camera = { 0 };
     camera.target = (Vector2){ this_player->position.x, this_player->position.y };
-    camera.offset = (Vector2){ this_player->position.x, this_player->position.y};
+    camera.offset = (Vector2){ settings.resolution.x/2, settings.resolution.y/2};
     camera.rotation = 0.0f;
     camera.zoom = 2.0f;
 
@@ -123,13 +123,14 @@ SCENE_ID GameScene::Update() {
     ui->_game_time = game_time; //smelly
     ui->Update();
     
-    
+     
     if( abs(this_player->velocity.x) > player_data.thrusters_part.THRUSTER_SPEED * 0.7f or abs(this_player->velocity.y) > player_data.thrusters_part.THRUSTER_SPEED * 0.7f) {
         camera.zoom = Lerp(camera.zoom, 1.5f, .005);
     }
     else {
         camera.zoom = Lerp(camera.zoom, 2.2f, .01);
     }
+     
     if(show_menu) {
         menu->Update();
     }
@@ -149,11 +150,10 @@ void GameScene::Draw() {
     ClearBackground(BLACK);
 
     DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
-    {0,0,(float)GetScreenWidth(),
-        (float)GetScreenHeight()},
-        {0},
-        0.0,
-        WHITE);
+                                {0,0,settings.resolution.x,settings.resolution.y},
+                                {0},
+                                0.0,
+                                WHITE);
         
 //------------------------BEGIN WORLDSPACE
     BeginMode2D(camera);

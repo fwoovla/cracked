@@ -7,7 +7,7 @@ StagingScene::StagingScene() {
 
     bg_texture = LoadTexture("assets/staging_bg.png");
 
-    Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 - GetScreenHeight() / 3 };
+    Vector2 screen_center = { settings.resolution.x/2, settings.resolution.y/2 };;
 
     //LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
 
@@ -24,11 +24,11 @@ StagingScene::StagingScene() {
     alpha_step = 255/wait_time;
     transitioning = false;
 
-    LoadSpriteCentered(door_light, LoadTexture("assets/doorlight.png"), {50, 350}, 2, 30.0f, 0.5f);
-    ScaleSprite(door_light, {2,2});
+    LoadSpriteCentered(door_light, LoadTexture("assets/doorlight.png"), {50, 250}, 2, 30.0f, 0.5f);
+    //ScaleSprite(door_light, {2,2});
 
-    shop_area = {10, 400, 450, 450};
-    battle_area = {1100, 100, 750, 500};
+    shop_area = {10, 280, 300, 300};
+    battle_area = {750, 50, 500, 350};
 
 
     bg_music = LoadMusicStream("assets/intromusic.wav");
@@ -49,14 +49,14 @@ SCENE_ID StagingScene::Update() {
     }
 
     if(!ui->menus_are_open) {
-
-        if(CheckCollisionPointRec(GetMousePosition(), shop_area)) {
+        float sc = settings.game_scale;
+        if(CheckCollisionPointRec(GetMousePosition(), {shop_area.x*sc, shop_area.y*sc, shop_area.width*sc, shop_area.height*sc } )) {
             ui->ShowShopPanel();
         }
         else {
             ui->HideShopPanel();
         }
-        if(CheckCollisionPointRec(GetMousePosition(), battle_area)) {
+        if(CheckCollisionPointRec(GetMousePosition(), {battle_area.x*sc, battle_area.y*sc, battle_area.width*sc, battle_area.height*sc })) {
             ui->ShowBattlePanel();
         }
         else {
@@ -73,8 +73,7 @@ SCENE_ID StagingScene::Update() {
 void StagingScene::Draw() {
     ClearBackground(GetColor(0x251f0f));
     DrawTexturePro(bg_texture,  {0,0,(float)bg_texture.width,(float)bg_texture.height}, 
-                                {0,0,(float)GetScreenWidth(),
-                                (float)GetScreenHeight()},
+                                {0,0,settings.resolution.x,settings.resolution.y},
                                 {0},
                                 0.0,
                                 WHITE);
@@ -87,7 +86,7 @@ void StagingScene::Draw() {
 
 
     if(transitioning) {
-        DrawRectangle( 0,0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, (unsigned char)alpha_value} );
+        DrawRectangle( 0,0, settings.resolution.x,settings.resolution.y, {0, 0, 0, (unsigned char)alpha_value} );
     }
 }
 

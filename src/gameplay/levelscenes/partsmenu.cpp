@@ -77,7 +77,6 @@ void PartsMenu::Draw() {
             }
         }
     }
-
 }
 
 
@@ -87,7 +86,7 @@ void PartsMenu::Update()
     float dt = GetFrameTime();
     UpdatePanel(menu_panel);
 
-    if(IsButtonHovered(exit_button)) {
+    if(IsButtonHovered(exit_button, settings.game_scale)) {
         if(exit_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -97,7 +96,7 @@ void PartsMenu::Update()
         }
     }
 
-    if(IsButtonHovered(part_exit_button)) {
+    if(IsButtonHovered(part_exit_button, settings.game_scale)) {
         if(part_exit_button.already_hovered == false) {
             PlaySound(button_sound);
         }

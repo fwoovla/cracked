@@ -8,6 +8,8 @@
 
 struct  gameSettings {
     Vector2 window_size;
+    Vector2 resolution;
+    float game_scale;
     bool show_debug;
     int control_type;
     int level_num;

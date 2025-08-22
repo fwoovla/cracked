@@ -3,7 +3,7 @@
 #define GUN_POWER_SCALER 50.0f
 
 GameUILayer::GameUILayer(){
-    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED, "X");
+    CreateButton(quit_button, { settings.resolution.x - 40, 20 }, {30, 30}, RED, "X");
     quit_button.default_color = DARKGRAY;
 
     gun_power_rect = {10, 100, 20, 0.0 * GUN_POWER_SCALER};
@@ -22,15 +22,15 @@ GameUILayer::GameUILayer(){
     CreateLabel(points_value_label, {300, 30}, 50, GOLD, "0");
     animating_points = false;
 
-    CreateLabel(scrap_tag_label, {(float)GetScreenWidth() - 300, 30}, 40, RAYWHITE, "SCRAP:");
-    CreateLabel(scrap_value_label, {(float)GetScreenWidth() - 100, 30}, 50, GOLD, "0");
+    CreateLabel(scrap_tag_label, {settings.resolution.x - 300, 30}, 40, RAYWHITE, "SCRAP:");
+    CreateLabel(scrap_value_label, {settings.resolution.x - 100, 30}, 50, GOLD, "0");
 
-    CreateLabel(int_time_value_label, {(float)GetScreenWidth()/2, 50}, 70, GOLD, "0");
+    CreateLabel(int_time_value_label, {settings.resolution.x/2, 50}, 70, GOLD, "0");
     CreateLabel(float_time_value_label, {(float)int_time_value_label.position.x + (float)int_time_value_label.text_size/2, 40}, 20, RAYWHITE, ".00");
     _game_time = 0.0f;
 
     countdown_time = 5;
-    CreateLabel(countdown_label, {(float)GetScreenWidth() /2, (float)GetScreenHeight() /2}, 200, RAYWHITE, TextFormat("%i", countdown_time));
+    CreateLabel(countdown_label, {settings.resolution.x /2, settings.resolution.y /2}, 200, RAYWHITE, TextFormat("%i", countdown_time));
     countdown_timer = new Timer(1.0f, false, false);
     countdown_timer->timout.Connect( [&](){OnCountdownTimerTimeout();} );
     countdown_fade = 1.0;
@@ -81,11 +81,12 @@ void GameUILayer::Draw() {
                     DARKGRAY);
 
     DrawRectangleRec(gun_power_rect, gun_power_color);
-    DrawRectangleV( {gun_power_rect.x, (float)GetScreenHeight() - player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
+    DrawRectangleV( {gun_power_rect.x, settings.resolution.y - player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
                     {gun_power_rect.width, 5},
                     RED);
     
-    Vector2 health_center = {(float)(GetScreenWidth() - 20 ) * 0.5f , 100};
+    Vector2 health_center = {(settings.resolution.x - 20 ) * 0.5f , 100 };
+
     for(int i = 0; i < player_data.health; i++) {
         DrawRectangle(health_center.x-1 + (i * 25) , health_center.y-1, 22, 22, WHITE );
         DrawRectangle(health_center.x + (i * 25) , health_center.y, 20, 20, RED );
@@ -94,7 +95,7 @@ void GameUILayer::Draw() {
     }
 
     if(show_hit_effect) {
-        DrawRectangle( 0,0, GetScreenWidth(), GetScreenHeight(), {50, 0, 0, (unsigned char)hit_effect_alpha_value} );
+        DrawRectangle( 0,0, settings.resolution.x, settings.resolution.y, {50, 0, 0, (unsigned char)hit_effect_alpha_value} );
     }
 }
 
@@ -149,7 +150,7 @@ void GameUILayer::Update()
     else {
         gun_power_color = YELLOW;
     }
-    if(IsButtonHovered(quit_button)) {
+    if(IsButtonHovered(quit_button, settings.game_scale)) {
         if(quit_button.already_hovered == false) {
             PlaySound(button_sound);
         }

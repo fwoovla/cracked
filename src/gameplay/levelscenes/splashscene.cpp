@@ -12,9 +12,9 @@ SplashScreen::SplashScreen() {
     alpha_value = 0;  
     alpha_step = 255/wait_time;
 
-    Vector2 screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight()/2 };
+    Vector2 screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
     LoadSpriteCentered(logo, LoadTexture("assets/logo_pic_large.png"), screen_center);
-    ScaleSprite(logo, {2.0,2.0});
+    //ScaleSprite(logo, {2.0,2.0});
 }
 
 
@@ -28,7 +28,8 @@ SCENE_ID SplashScreen::Update() {
 void SplashScreen::Draw() {
     ClearBackground(RAYWHITE);
     DrawSprite(logo);
-    DrawRectangle( 0,0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, (unsigned char)alpha_value} );
+    DrawCircle(settings.resolution.x/2, settings.resolution.y/2, 50, RED);
+    DrawRectangle( 0,0, settings.resolution.x, settings.resolution.y, {0, 0, 0, (unsigned char)alpha_value} );
     //DrawText("SPLASH SCENE", 200, 200, 40, BLACK);
 }
 

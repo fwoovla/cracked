@@ -47,9 +47,17 @@ inline void DrawButton(Button &_button) {
     }
 }
 
-inline bool IsButtonHovered(Button &_button) {
+inline bool IsButtonHovered(Button &_button, float _scale) {
     _button.already_hovered = _button.hovered;
-    if(CheckCollisionPointRec(GetMousePosition(), _button.rect)) {
+
+    Rectangle new_rect = {
+        _button.rect.x * _scale,
+        _button.rect.y * _scale,
+        _button.rect.width * _scale,
+        _button.rect.height * _scale
+    };
+
+    if(CheckCollisionPointRec(GetMousePosition(), new_rect )) {
         _button.hovered = true;
         return true;
     }

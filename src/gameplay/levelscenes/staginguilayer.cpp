@@ -2,35 +2,35 @@
 
 
 StagingUILayer::StagingUILayer() {
-    screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
+    screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
 
-    CreateButton(quit_button, { (float)GetScreenWidth() - 40, 20 }, {30, 30}, RED, "X");
+    CreateButton(quit_button, { settings.resolution.x - 40, 20 }, {30, 30}, RED, "X");
     quit_button.default_color = DARKGRAY;
 
     button_sound = LoadSound("assets/button.wav");
     
     menus_are_open = false;
 
-    CreatePanel(shop_panel, {10, 400}, {450, 450}, Fade(DARKGREEN, 0.1f));
+    CreatePanel(shop_panel, {10, 280}, {300, 300}, Fade(DARKGREEN, 0.1f));
     shop_panel_visible = false;
     parts_visible = false;
     shipyard_visible = false;
-    CreateButton(parts_button, {225,500}, {150, 50}, YELLOW, "Parts");
+    CreateButton(parts_button, {150,320}, {150, 50}, YELLOW, "Parts");
     parts_button.default_color = DARKGRAY;
-    CreateButton(shipyard_button, {225,700}, {150, 50}, YELLOW, "Shipyard");
+    CreateButton(shipyard_button, {155,400}, {150, 50}, YELLOW, "Shipyard");
     shipyard_button.default_color = DARKGRAY;
     
     
-    CreatePanel(battle_panel, {1100, 100}, {750, 500}, Fade(DARKPURPLE, 0.1f));
+    CreatePanel(battle_panel, {750, 50}, {500, 350}, Fade(DARKPURPLE, 0.1f));
     battle_panel_visible = false;
-    CreateButton(battle_button, {1400, 300}, {150, 50}, YELLOW, "To Battle");
+    CreateButton(battle_button, {850, 300}, {150, 50}, YELLOW, "To Battle");
     battle_button.default_color = DARKGRAY;
 
     parts_menu.parts_close.Connect( [&](){OnPartsClosed();} );
     shipyard_menu.shipyard_close.Connect( [&](){OnShipyardClosed();} );
 
     CreateLabel(scrap_label, {50, 20}, 50, PURPLE, "SCRAP:");
-    top_bar_rect = {0,0, (float)GetScreenWidth(), 100};
+    top_bar_rect = {0,0, settings.resolution.x, 50};
     
 }
 
@@ -82,7 +82,7 @@ void StagingUILayer::Update() {
         shipyard_menu.Update();
     }
 
-    if(IsButtonHovered(quit_button)) {
+    if(IsButtonHovered(quit_button, settings.game_scale)) {
         if(quit_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -117,7 +117,7 @@ void StagingUILayer::DrawShopPanel() {
 }
 
 void StagingUILayer::UpdateShopPanel() {
-    if(IsButtonHovered(parts_button)) {
+    if(IsButtonHovered(parts_button, settings.game_scale)) {
         if(parts_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -129,7 +129,7 @@ void StagingUILayer::UpdateShopPanel() {
         }
     }
 
-    if(IsButtonHovered(shipyard_button)) {
+    if(IsButtonHovered(shipyard_button, settings.game_scale)) {
         if(shipyard_button.already_hovered == false) {
             PlaySound(button_sound);
         }
@@ -147,7 +147,7 @@ void StagingUILayer::DrawBattlePanel() {
 }
 
 void StagingUILayer::UpdateBattlePanel() {
-    if(IsButtonHovered(battle_button)) {
+    if(IsButtonHovered(battle_button, settings.game_scale)) {
         if(battle_button.already_hovered == false) {
             PlaySound(button_sound);
         }
