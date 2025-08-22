@@ -1,6 +1,4 @@
 #include <stdio.h>
-
-
 #include "core/global_def.h"
 
 /* #include <raylib.h>
