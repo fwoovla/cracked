@@ -1,6 +1,4 @@
 #include <stdio.h>
-
-
 #include "core/global_def.h"
 
 /* #include <raylib.h>
@@ -14,7 +12,6 @@ gameSettings settings = {
    .show_debug = false,
    .control_type = 0,
    .level_num = 1,
-   //.starting_position = 
 };
 
 int main(int argc, char *argv[]) {
