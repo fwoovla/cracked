@@ -4,7 +4,6 @@
 #include "global_types.h"
 
 
-
 class PlayerShip : public AnimatedSpriteEntity {
     public:
     PlayerShip(Vector2 _position);
@@ -21,12 +20,9 @@ class PlayerShip : public AnimatedSpriteEntity {
     void OnScrapPickup();
     void OnHitEffectTimeout();
 
-    
-    //PlayerData *data;
-
     Vector2 centered_offset;
     Vector2 velocity;
-    Timer *lifetime;
+    //Timer *lifetime;
 
     Texture2D turret_texture;
     Sprite turret;
@@ -50,11 +46,6 @@ class PlayerShip : public AnimatedSpriteEntity {
     Sound hit_sound;
     Sound engine_sound;
     Sound alert_sound;
-    
-/*     float gun_power;
-    int shots;
-    int health;
-    int points; */
 
 };
 
@@ -80,10 +71,8 @@ class EnemyShip : public AnimatedSpriteEntity {
 
     Vector2 centered_offset;
     Vector2 velocity;
-    Timer *lifetime;
+    //Timer *lifetime;
 
-    //Texture2D turret_texture;
-    //Sprite turret;
     Camera2D *camera;
 
     Timer *gun_timer;
@@ -121,6 +110,40 @@ class EnemyShip : public AnimatedSpriteEntity {
     bool avoiding;
     
 };
+
+
+inline void InitPlayerShip(PlayerData &_player_data) {
+    _player_data.id = 1;
+
+
+    _player_data.SIZE = 30;
+
+    _player_data.AIR_FRICTION = 0.99f;
+    _player_data.SHIP_BOUNCE_SCALEAR = 0.6f;
+
+    _player_data.MAX_HEALTH = 10;
+
+    _player_data.health = _player_data.MAX_HEALTH;
+    _player_data.shots = 0;
+    _player_data.points = 0;
+    _player_data.scrap_amount = 0;
+    _player_data.gun_power;
+
+    _player_data.main_gun_part.part_name = main_gun_data[0].part_name;
+    _player_data.main_gun_part.weight = main_gun_data[0].weight;
+    _player_data.main_gun_part.GUN_MAX_POWER = main_gun_data[0].GUN_MAX_POWER;
+    _player_data.main_gun_part.GUN_POWER_USE = main_gun_data[0].GUN_POWER_USE;
+    _player_data.main_gun_part.GUN_REGEN = main_gun_data[0].GUN_REGEN;
+    _player_data.main_gun_part.GUN_DELAY = main_gun_data[0].GUN_DELAY;
+
+    _player_data.thrusters_part.part_name = thrusters_data[0].part_name;
+    _player_data.thrusters_part.weight = thrusters_data[0].weight;
+    _player_data.thrusters_part.THRUSTER_SPEED = thrusters_data[0].THRUSTER_SPEED;
+    _player_data.thrusters_part.THRUSTER_SHIP_THRUST = thrusters_data[0].THRUSTER_SHIP_THRUST;
+    _player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED = thrusters_data[0].THRUSTER_SHIP_ROT_SPEED;
+
+}
+
 
 inline EnemyData CreateEnemy(int type) {
 

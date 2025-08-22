@@ -24,7 +24,7 @@ PlayerShip::PlayerShip(Vector2 _position): AnimatedSpriteEntity() {
     
     should_delete = false;
 
-    gun_timer = new Timer(player_data.GUN_DELAY, true, false);
+    gun_timer = new Timer(player_data.main_gun_part.GUN_DELAY, true, false);
     gun_timer->timout.Connect( [&](){OnGunTimerTimeout();} );
     gun_can_shoot = false;
     //player_data.gun_power = player_data.GUN_MAX_POWER;
@@ -35,8 +35,8 @@ PlayerShip::PlayerShip(Vector2 _position): AnimatedSpriteEntity() {
     thrust_timer = new Timer(0.3f, false, true);
     thrust_timer->timout.Connect( [&](){OnThrustTimerTimeout();} );
     thrusting = false;
-    speed_cap = player_data.SPEED;
-    thrust_cap = player_data.SHIP_THRUST;
+    speed_cap = player_data.thrusters_part.THRUSTER_SPEED;
+    thrust_cap = player_data.thrusters_part.THRUSTER_SHIP_THRUST;
 
     gun_sound = LoadSound("assets/laser.wav");
     SetSoundVolume(gun_sound, 0.6f);
@@ -67,9 +67,9 @@ void PlayerShip::Update() {
 
     AnimateSprite(sprite);
 
-    player_data.gun_power += dt * player_data.GUN_REGEN;
-    if (  player_data.gun_power > player_data.GUN_MAX_POWER) {
-        player_data.gun_power = player_data.GUN_MAX_POWER;
+    player_data.gun_power += dt * player_data.main_gun_part.GUN_REGEN;
+    if (  player_data.gun_power > player_data.main_gun_part.GUN_MAX_POWER) {
+        player_data.gun_power = player_data.main_gun_part.GUN_MAX_POWER;
     }
     
     CollisionResult result = {0};
@@ -117,8 +117,7 @@ void PlayerShip::Draw() {
                 }
             }
         }
-
-
+        
         if(collided and settings.show_debug) {
         DrawRectangleRec(collision_rect, RED);
         }
@@ -131,12 +130,12 @@ void PlayerShip::Draw() {
 
 void PlayerShip::DoMovement(float dt) {
     if(settings.control_type == 0) {
-        if (IsKeyDown(KEY_A)) {rotation -= player_data.SHIP_ROT_SPEED * dt;}
-        if (IsKeyDown(KEY_D)) {rotation += player_data.SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_A)) {rotation -= player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED * dt;}
+        if (IsKeyDown(KEY_D)) {rotation += player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED * dt;}
     }
     else if(settings.control_type == 1) {
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= player_data.SHIP_ROT_SPEED * dt;}
-        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += player_data.SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {rotation -= player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED * dt;}
+        if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {rotation += player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED * dt;}
     }
 
     sprite.roataion = rotation;
@@ -165,10 +164,10 @@ void PlayerShip::DoMovement(float dt) {
         StopSound(engine_sound);
     }
 
-    if(IsKeyDown(KEY_SPACE) and !thrusting and player_data.gun_power > player_data.GUN_MAX_POWER * 0.3) {
-        player_data.gun_power -= (player_data.GUN_MAX_POWER * 0.3);
-        speed_cap = player_data.SPEED * 5.0;
-        thrust_cap = player_data.SHIP_THRUST * 8.0f;
+    if(IsKeyDown(KEY_SPACE) and !thrusting and player_data.gun_power > player_data.main_gun_part.GUN_MAX_POWER * 0.3) {
+        player_data.gun_power -= (player_data.main_gun_part.GUN_MAX_POWER * 0.3);
+        speed_cap = player_data.thrusters_part.THRUSTER_SPEED * 5.0;
+        thrust_cap = player_data.thrusters_part.THRUSTER_SHIP_THRUST * 8.0f;
         thrusting = true;
         thrust_timer->Start();
     }
@@ -220,10 +219,10 @@ void PlayerShip::DoWeapons() {
 
     if(settings.control_type == 0) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            if(gun_can_shoot and player_data.gun_power > player_data.GUN_POWER_USE ) {
+            if(gun_can_shoot and player_data.gun_power > player_data.main_gun_part.GUN_POWER_USE ) {
                 gun_can_shoot = false;
                 AddToDrawList(bullet_list, new Bullet(position, turret.roataion, id));
-                player_data.gun_power -= player_data.GUN_POWER_USE;
+                player_data.gun_power -= player_data.main_gun_part.GUN_POWER_USE;
                 shoot.EmitSignal();
                 player_data.shots++;
                 PlaySound(gun_sound);
@@ -251,8 +250,8 @@ void PlayerShip::OnGunTimerTimeout() {
 
 void PlayerShip::OnThrustTimerTimeout() {
     thrusting = false;
-    speed_cap = player_data.SPEED;
-    thrust_cap = player_data.SHIP_THRUST;
+    speed_cap = player_data.thrusters_part.THRUSTER_SPEED;
+    thrust_cap = player_data.thrusters_part.THRUSTER_SHIP_THRUST;
 }
 
 
@@ -279,10 +278,10 @@ PlayerShip::~PlayerShip()
 }
 
 void PlayerShip::Reset() {
-    speed_cap = player_data.SPEED;
-    thrust_cap = player_data.SHIP_THRUST;
+    speed_cap = player_data.thrusters_part.THRUSTER_SPEED;
+    thrust_cap = player_data.thrusters_part.THRUSTER_SHIP_THRUST;
     player_data.health = player_data.MAX_HEALTH;
-    player_data.gun_power = player_data.GUN_MAX_POWER;
+    player_data.gun_power = player_data.main_gun_part.GUN_MAX_POWER;
     player_data.points = 0;
     player_data.shots = 0;
     player_data.scrap_amount = 0;

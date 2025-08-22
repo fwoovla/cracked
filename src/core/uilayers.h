@@ -38,9 +38,14 @@ enum SHIPLOCATIONS {
     ~PartsMenu() override;
     void Update() override;
     void Draw() override;
+    void DrawMainGunPurchaseStats(int index);
+    void DrawThrusterPurchaseStats(int index);
+    //void DrawMainGunPurchaseStats(int index);
     
     Vector2 screen_center;
     
+    Button part_exit_button;
+
     Button exit_button;
     Signal parts_close;
     AnimatedPanel menu_panel;
@@ -52,14 +57,21 @@ enum SHIPLOCATIONS {
     Sprite gun_outline_sprite;
 
     SHIPLOCATIONS selected_location;
+    SHIPLOCATIONS hovered_location;
 
     Rectangle engine_area;
     Rectangle gun_area;
 
+    Label equipped_part_header;
     Label equipped_part_label;
-    //std::string equipped_part_label_text;
-    //Vector2 equipped_part_label_position;
+
     LabelList equipped_part_stat_list;
+
+    Vector2 ppasp;
+    std::vector<Rectangle> purchase_part_areas;
+
+    int hovered_purchase_part_index;
+    int selected_purchase_part_index;
 
     Sound button_sound;
 };

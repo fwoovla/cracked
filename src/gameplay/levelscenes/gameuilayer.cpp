@@ -75,13 +75,13 @@ void GameUILayer::Draw() {
     DrawButton(quit_button);
 
     DrawRectangle(  gun_power_rect.x-2,
-                    GetScreenHeight() -10.0f - player_data.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    GetScreenHeight() -10.0f - player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER,
                     gun_power_rect.width+4,
-                    player_data.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER,
                     DARKGRAY);
 
     DrawRectangleRec(gun_power_rect, gun_power_color);
-    DrawRectangleV( {gun_power_rect.x, (float)GetScreenHeight() - player_data.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
+    DrawRectangleV( {gun_power_rect.x, (float)GetScreenHeight() - player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER * (float)0.3},
                     {gun_power_rect.width, 5},
                     RED);
     
@@ -143,7 +143,7 @@ void GameUILayer::Update()
     float dt = GetFrameTime();
     gun_power_rect.y = GetScreenHeight() -10.0f - player_data.gun_power * GUN_POWER_SCALER;
     gun_power_rect.height = player_data.gun_power * GUN_POWER_SCALER;
-    if(player_data.gun_power < player_data.GUN_MAX_POWER * 0.3f) {
+    if(player_data.gun_power < player_data.main_gun_part.GUN_MAX_POWER * 0.3f) {
         gun_power_color = MAGENTA;
     }
     else {

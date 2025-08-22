@@ -124,7 +124,7 @@ SCENE_ID GameScene::Update() {
     ui->Update();
     
     
-    if( abs(this_player->velocity.x) > player_data.SPEED * 0.7f or abs(this_player->velocity.y) > player_data.SPEED * 0.7f) {
+    if( abs(this_player->velocity.x) > player_data.thrusters_part.THRUSTER_SPEED * 0.7f or abs(this_player->velocity.y) > player_data.thrusters_part.THRUSTER_SPEED * 0.7f) {
         camera.zoom = Lerp(camera.zoom, 1.5f, .005);
     }
     else {
