@@ -8,7 +8,7 @@ ShipyardMenu::ShipyardMenu(){
     float margin = 100.0f;
     CreateLabel(header, {screen_center.x, margin}, 40, GOLD, "Shipyard");
     CreatePanel(menu_panel, {margin, margin}, {settings.resolution.x - (margin*2), settings.resolution.y - (margin*2)}, BLACK, 1.0f) ;;
-    CreateButton(exit_button, { screen_center.x, menu_panel.size.y + margin}, {300, 50}, RED, "back");
+    CreateButton(exit_button, { screen_center.x, menu_panel.size.y + margin}, {300, 50}, ORANGE, "back");
     button_sound = LoadSound("assets/button.wav");
 }
 

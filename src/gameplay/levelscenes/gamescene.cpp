@@ -3,7 +3,9 @@
 #include <raymath.h>
 
 #define MAX_ENEMIES 10
-#define ROUND_TIME 10.0f
+#define ROUND_TIME 20.0f
+#define CAMERA_MIN_ZOOM 1.2f
+#define CAMERA_MAX_ZOOM 2.2f
 
 int* level_array_data;
 BaseEntity *bullet_list[DRAW_LIST_SIZE] = {nullptr};
@@ -72,6 +74,7 @@ GameScene::GameScene(char level_data[]) {
     menu = new GameMenu();
     menu->exit.Connect( [&](){OnMenuExit();} );
     menu->reset.Connect( [&](){OnMenuRestart();} );
+    menu->to_staging.Connect( [&](){OnMenuToStaging();} );
     show_menu = false;
     
 //LOAD PLAYER------------------------------------
@@ -124,11 +127,11 @@ SCENE_ID GameScene::Update() {
     ui->Update();
     
      
-    if( abs(this_player->velocity.x) > player_data.thrusters_part.THRUSTER_SPEED * 0.7f or abs(this_player->velocity.y) > player_data.thrusters_part.THRUSTER_SPEED * 0.7f) {
-        camera.zoom = Lerp(camera.zoom, 1.5f, .005);
+    if( abs(this_player->velocity.x) > player_data.thrusters_part.THRUSTER_SPEED * 0.6f or abs(this_player->velocity.y) > player_data.thrusters_part.THRUSTER_SPEED * 0.6f) {
+        camera.zoom = Lerp(camera.zoom, CAMERA_MIN_ZOOM, .005);
     }
     else {
-        camera.zoom = Lerp(camera.zoom, 2.2f, .01);
+        camera.zoom = Lerp(camera.zoom, CAMERA_MAX_ZOOM, .005);
     }
      
     if(show_menu) {
@@ -141,6 +144,9 @@ SCENE_ID GameScene::Update() {
         if(game_time >= ROUND_TIME) {
             time_running = false;
             ClearEntitiesExceptPlayer();
+            enemy_spawn_timer->Stop();
+            menu->player_won = true;
+            show_menu = true;
         }
     }
     return return_scene;
@@ -287,6 +293,7 @@ void GameScene::OnPlayerDead(){
     AddToDrawList(effects_list, new ExplosionEffect(this_player->position));
     enemy_spawn_timer->Stop();
     show_menu = true;
+    time_running = false;
 }
 
 void GameScene::ClearEntitiesExceptPlayer(){
@@ -321,4 +328,7 @@ void GameScene::OnMenuRestart(){
     AddToDrawList(entity_list, np);
     np->pickedup.Connect( [&](){OnHealthPickedUp();} );
     ui->StartCountdown();
+}
+void GameScene::OnMenuToStaging(){
+    return_scene = STAGING_SCENE;
 }

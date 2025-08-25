@@ -9,41 +9,58 @@
 
     "part_main_gun": [
         {
+            "part_name":"P.Ea SHOOTER",
+            "weight":2.6,
+            "GUN_MAX_POWER":5.0,
+            "GUN_POWER_USE":1.0,
+            "GUN_REGEN":2.0,
+            "GUN_DELAY":0.3,
+            "cost":0
+        },
+        {
             "part_name":"S.A.D1k PUNCHER",
             "weight":4.6,
             "GUN_MAX_POWER":10.0,
             "GUN_POWER_USE":1.0,
             "GUN_REGEN":3.0,
-            "GUN_DELAY":0.2,
-            "cost":1
+            "GUN_DELAY":0.25,
+            "cost":5
         },
         {
             "part_name":"S.A.D2k PUNCHER",
             "weight":4.6,
-            "GUN_MAX_POWER":10.0,
-            "GUN_POWER_USE":1.0,
-            "GUN_REGEN":2.0,
+            "GUN_MAX_POWER":15.0,
+            "GUN_POWER_USE":1.5,
+            "GUN_REGEN":4.0,
             "GUN_DELAY":0.2,
-            "cost":1
+            "cost":10
         }
 
     ],
     "part_thrusters": [
         {
+            "part_name":"P.uTT 1.0Mw",
+            "weight":5.6,
+            "THRUSTER_SPEED":2.5,
+            "THRUSTER_SHIP_THRUST":0.08,
+            "THRUSTER_SHIP_ROT_SPEED":90.0,
+            "cost":0
+        },
+        {
             "part_name":"ForWARD 20.1 kV",
             "weight":10.6,
             "THRUSTER_SPEED":3.0,
             "THRUSTER_SHIP_THRUST":0.1,
-            "THRUSTER_SHIP_ROT_SPEED":180.0,
-            "cost":1
+            "THRUSTER_SHIP_ROT_SPEED":150.0,
+            "cost":4
         },
         {
             "part_name":"ForWARD 20.2 kV",
-            "weight":10.6,
-            "THRUSTER_SPEED":3.0,
-            "THRUSTER_SHIP_THRUST":0.1,
+            "weight":15.3,
+            "THRUSTER_SPEED":3.5,
+            "THRUSTER_SHIP_THRUST":0.15,
             "THRUSTER_SHIP_ROT_SPEED":180.0,
-            "cost":1
+            "cost":10
         }
     ]
 }

@@ -127,14 +127,14 @@ inline void InitPlayerShip(PlayerData &_player_data) {
     _player_data.shots = 0;
     _player_data.points = 0;
     _player_data.scrap_amount = 0;
-    _player_data.gun_power;
-
+    
     _player_data.main_gun_part.part_name = main_gun_data[0].part_name;
     _player_data.main_gun_part.weight = main_gun_data[0].weight;
     _player_data.main_gun_part.GUN_MAX_POWER = main_gun_data[0].GUN_MAX_POWER;
     _player_data.main_gun_part.GUN_POWER_USE = main_gun_data[0].GUN_POWER_USE;
     _player_data.main_gun_part.GUN_REGEN = main_gun_data[0].GUN_REGEN;
     _player_data.main_gun_part.GUN_DELAY = main_gun_data[0].GUN_DELAY;
+    _player_data.gun_power = _player_data.main_gun_part.GUN_MAX_POWER;
 
     _player_data.thrusters_part.part_name = thrusters_data[0].part_name;
     _player_data.thrusters_part.weight = thrusters_data[0].weight;

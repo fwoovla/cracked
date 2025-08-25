@@ -4,11 +4,13 @@
 
 GameMenu::GameMenu(){
 
-    screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
+    player_won = false;
 
-    CreateButton(exit_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2}, {300, 50}, RED, "exit");
+    screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
+
+    CreateButton(exit_button, {screen_center.x, screen_center.y}, {300, 50}, RED, "exit");
     
-    CreateButton(continue_button, { (float)GetScreenWidth() / 2, (float)GetScreenHeight() /2 + 200 }, {300, 50}, GREEN, "retry");
+    CreateButton(continue_button, {screen_center.x, screen_center.y + 200 }, {300, 50}, GREEN, "retry");
 
     button_sound = LoadSound("assets/button.wav");
 
@@ -47,9 +49,19 @@ void GameMenu::Update()
             PlaySound(button_sound);
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            reset.EmitSignal();
+            if(player_won){
+                to_staging.EmitSignal();
+            }
+            else {
+                reset.EmitSignal();
+            }
             
             CreatePanel(menu_panel, {screen_center.x - 300, screen_center.y - 100}, {600, 400}, Fade(WHITE, 0.0f), 5.0f);
         }
+    }
+
+    if(player_won) {
+        continue_button.text = "continue";
+        //CreateButton(continue_button, {screen_center.x, screen_center.y + 200 }, {300, 50}, GREEN, "continue");
     }
 }

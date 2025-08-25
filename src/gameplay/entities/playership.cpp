@@ -285,7 +285,7 @@ void PlayerShip::Reset() {
     player_data.gun_power = player_data.main_gun_part.GUN_MAX_POWER;
     player_data.points = 0;
     player_data.shots = 0;
-    player_data.scrap_amount = 0;
+    //player_data.scrap_amount = 0;
     position = settings.starting_position;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, player_data.SIZE, player_data.SIZE };
     velocity = {0,0};

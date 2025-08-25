@@ -18,6 +18,7 @@ enum SHIPLOCATIONS {
     void Update() override;
     void Draw() override;
     
+    bool player_won;
     Vector2 screen_center;
     
     Button exit_button;
@@ -25,6 +26,7 @@ enum SHIPLOCATIONS {
 
     Button continue_button;
     Signal reset;
+    Signal to_staging;
 
     Sound button_sound;
 
@@ -42,6 +44,7 @@ enum SHIPLOCATIONS {
     void DrawThrusterPurchaseStats(int index);
         void DrawMainGunStats(int index);
     void DrawThrusterStats(int index);
+    void ClearAll();
     //void DrawMainGunPurchaseStats(int index);
     
     Vector2 screen_center;

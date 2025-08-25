@@ -98,6 +98,7 @@ class GameScene : public  BaseScene{
     void OnPlayerDead();
     void OnMenuExit();
     void OnMenuRestart();
+    void OnMenuToStaging();
     void ClearEntitiesExceptPlayer();
 
     GameUILayer *ui;

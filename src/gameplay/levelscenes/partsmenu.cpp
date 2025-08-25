@@ -4,14 +4,16 @@
 
 PartsMenu::PartsMenu(){
 
+    //player_data.scrap_amount = 10;
+
     screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
     float margin = 100.0f;
 
-    CreateLabel(header, {screen_center.x, margin}, 40, GOLD, "Parts Shop");
+    CreateLabel(header, {screen_center.x, margin + 20}, 40, GOLD, "Parts Shop");
 
     CreatePanel(menu_panel, {margin, margin}, {settings.resolution.x - (margin*2), settings.resolution.y - (margin*2)}, BLACK, 1.0f) ;
 
-    CreateButton(exit_button, { screen_center.x, menu_panel.size.y + margin}, {300, 50}, RED, "back");
+    CreateButton(exit_button, { screen_center.x, menu_panel.size.y + margin}, {300, 50}, ORANGE, "back");
 
     button_sound = LoadSound("assets/button.wav");
     
@@ -107,7 +109,7 @@ void PartsMenu::Update()
     float dt = GetFrameTime();
     float sc = settings.game_scale;
     UpdatePanel(menu_panel);
-
+//===========================================
     if(IsButtonHovered(exit_button, settings.game_scale)) {
         if(exit_button.already_hovered == false) {
             PlaySound(button_sound);
@@ -115,46 +117,48 @@ void PartsMenu::Update()
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             parts_close.EmitSignal();
             ResetPanel(menu_panel);
+            ClearAll();
         }
     }
+//============================================
 
     if(IsButtonHovered(part_exit_button, settings.game_scale)) {
         if(part_exit_button.already_hovered == false) {
             PlaySound(button_sound);
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            selected_location = NONE;
-            hovered_location = NONE;
-            equipped_part_stat_list.header_text = "";
-            ClearLabelList(equipped_part_stat_list);
-            equipped_part_label.text = "";
-            gun_outline_sprite.modulate = GRAY;
-            engine_outline_sprite.modulate = GRAY;
-            purchase_part_areas.clear();
-            hovered_purchase_part_index = -1;
-            selected_purchase_part_index = -1;
+            ClearAll();
         }
     }
+//============================================
     
 
     if(selected_location != NONE) {
         hovered_purchase_part_index = -1;
+
         for(int i = 0; i < purchase_part_areas.size(); i++) {
             if(CheckCollisionPointRec(GetMousePosition(), { purchase_part_areas[i].x*sc, purchase_part_areas[i].y*sc, purchase_part_areas[i].width*sc, purchase_part_areas[i].height*sc } )) {
                 hovered_purchase_part_index =i;
                 if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    TraceLog(LOG_INFO, "part clicked %i", i);
+                    //TraceLog(LOG_INFO, "part clicked %i", i);
                     selected_purchase_part_index = i;
                 }
             }
         }
+
         if(selected_purchase_part_index != -1) {
-            if(IsButtonHovered(part_buy_button, settings.game_scale)) {
+            int cost = 1000000;
+
+            if(selected_location == MAIN_GUN) { cost = main_gun_data[selected_purchase_part_index].cost;}
+            if(selected_location == THRUSTERS) { cost = thrusters_data[selected_purchase_part_index].cost;}
+
+            if(IsButtonHovered(part_buy_button, settings.game_scale) and player_data.scrap_amount >= cost) {
+                part_buy_button.focus_color = GREEN;
                 if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    TraceLog(LOG_INFO, "BUY PART");
+                    //TraceLog(LOG_INFO, "BUY PART");
+
                     if(selected_location == MAIN_GUN and player_data.scrap_amount >= main_gun_data[selected_purchase_part_index].cost) {
                         ClearLabelList(equipped_part_stat_list);
-                        selected_purchase_part_index = -1;
                         player_data.scrap_amount -= main_gun_data[selected_purchase_part_index].cost;
                         
                         player_data.main_gun_part.part_name = main_gun_data[selected_purchase_part_index].part_name;
@@ -168,15 +172,14 @@ void PartsMenu::Update()
                         AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.main_gun_part.weight) );
                         AddLabelToList(equipped_part_stat_list, TextFormat("power %.2f", player_data.main_gun_part.GUN_POWER_USE) );
                         AddLabelToList(equipped_part_stat_list, TextFormat("shot delay %.2f", player_data.main_gun_part.GUN_DELAY) );
-                    }
-                    else if (player_data.scrap_amount < main_gun_data[selected_purchase_part_index].cost) {
-                        TraceLog(LOG_INFO, "NOT ENOUGHT SCRAP");
-                    }
-                    if(selected_location == THRUSTERS) {
-                        ClearLabelList(equipped_part_stat_list);
-                        selected_purchase_part_index = -1;
-                        player_data.scrap_amount -= thrusters_data[selected_purchase_part_index].cost;
 
+                        selected_purchase_part_index = -1;
+                    }
+
+                    if(selected_location == THRUSTERS and player_data.scrap_amount >= thrusters_data[selected_purchase_part_index].cost) {
+                        ClearLabelList(equipped_part_stat_list);
+                        player_data.scrap_amount -= thrusters_data[selected_purchase_part_index].cost;
+                        
                         player_data.thrusters_part.part_name = thrusters_data[selected_purchase_part_index].part_name;
                         player_data.thrusters_part.cost =  thrusters_data[selected_purchase_part_index].cost;
                         player_data.thrusters_part.THRUSTER_SHIP_THRUST =  thrusters_data[selected_purchase_part_index].THRUSTER_SHIP_THRUST;
@@ -187,10 +190,12 @@ void PartsMenu::Update()
                         AddLabelToList(equipped_part_stat_list, TextFormat("top speed %.2f", player_data.thrusters_part.THRUSTER_SPEED) );
                         AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.thrusters_part.weight) );
                         
+                        selected_purchase_part_index = -1;
                     }
-                    else if (player_data.scrap_amount < main_gun_data[selected_purchase_part_index].cost) {
-                        TraceLog(LOG_INFO, "NOT ENOUGHT SCRAP");
                 }
+            }
+            else if(player_data.scrap_amount < cost) {
+                part_buy_button.focus_color = RED;
             }
         }
     }
@@ -209,6 +214,7 @@ void PartsMenu::Update()
             for(int i = 0; i < thrusters_data.size(); i++) {
                 Rectangle new_rect = {ppasp.x, (ppasp.y + (i*PURCHASE_HEIGHT)), 300, PURCHASE_HEIGHT};
                 purchase_part_areas.push_back(new_rect);
+                //TraceLog(LOG_INFO, "ITEM %i", i);
             }
         }
     }
@@ -231,24 +237,29 @@ void PartsMenu::Update()
         }
     }
     else if(selected_location == NONE){
-        hovered_location = NONE;
-        equipped_part_stat_list.header_text = "";
-        ClearLabelList(equipped_part_stat_list);
-        equipped_part_label.text = "";
-        gun_outline_sprite.modulate = GRAY;
-        engine_outline_sprite.modulate = GRAY;
-        purchase_part_areas.clear();
-        hovered_purchase_part_index = -1;
-        selected_purchase_part_index = -1;
+        ClearAll();
     }
 
+}
+
+void PartsMenu::ClearAll() {
+    selected_location = NONE;
+    hovered_location = NONE;
+    equipped_part_stat_list.header_text = "";
+    ClearLabelList(equipped_part_stat_list);
+    equipped_part_label.text = "";
+    gun_outline_sprite.modulate = GRAY;
+    engine_outline_sprite.modulate = GRAY;
+    purchase_part_areas.clear();
+    hovered_purchase_part_index = -1;
+    selected_purchase_part_index = -1;
 }
 
 //================================================
 
 void PartsMenu::DrawMainGunPurchaseStats(int index) {
     int cost = main_gun_data[index].cost;
-    DrawText( TextFormat("cost\n%iscrap", cost), ppasp.x + 5,  (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, GREEN);
+    DrawText( TextFormat("cost\n%i scrap", cost), ppasp.x + 5,  (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, GREEN);
 
     std::string name = main_gun_data[index].part_name;
     DrawText( TextFormat("%s", name.c_str()), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT) + 5), 20, YELLOW);
@@ -274,7 +285,7 @@ void PartsMenu::DrawMainGunPurchaseStats(int index) {
 
 void PartsMenu::DrawThrusterPurchaseStats(int index) {
     int cost = thrusters_data[index].cost;
-    DrawText( TextFormat("cost\n%iscrap", cost), ppasp.x + 5,  (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, GREEN);
+    DrawText( TextFormat("cost\n%i scrap", cost), ppasp.x + 5,  (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, GREEN);
 
     std::string name = thrusters_data[index].part_name;
     DrawText( TextFormat("%s", name.c_str()), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, YELLOW);

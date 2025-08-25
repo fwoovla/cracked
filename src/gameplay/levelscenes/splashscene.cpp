@@ -28,7 +28,7 @@ SCENE_ID SplashScreen::Update() {
 void SplashScreen::Draw() {
     ClearBackground(RAYWHITE);
     DrawSprite(logo);
-    DrawCircle(settings.resolution.x/2, settings.resolution.y/2, 50, RED);
+    //DrawCircle(settings.resolution.x/2, settings.resolution.y/2, 50, RED);
     DrawRectangle( 0,0, settings.resolution.x, settings.resolution.y, {0, 0, 0, (unsigned char)alpha_value} );
     //DrawText("SPLASH SCENE", 200, 200, 40, BLACK);
 }
