@@ -29,7 +29,7 @@ StagingUILayer::StagingUILayer() {
     parts_menu.parts_close.Connect( [&](){OnPartsClosed();} );
     shipyard_menu.shipyard_close.Connect( [&](){OnShipyardClosed();} );
 
-    CreateLabel(scrap_label, {50, 20}, 50, PURPLE, "SCRAP:");
+    CreateLabel(scrap_label, {50, 20}, 50, GOLD, "SCRAP:");
     top_bar_rect = {0,0, settings.resolution.x, 50};
     
 }

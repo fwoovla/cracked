@@ -4,11 +4,11 @@
 
 ShipyardMenu::ShipyardMenu(){
 
-    screen_center = { (float)GetScreenWidth()/2, (float)GetScreenHeight() /2 };
+    screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
     float margin = 100.0f;
-    CreateLabel(header, {screen_center.x, 50 + margin}, 50, RAYWHITE, "Shipyard");
+    CreateLabel(header, {screen_center.x, margin}, 40, GOLD, "Shipyard");
     CreatePanel(menu_panel, {margin, margin}, {settings.resolution.x - (margin*2), settings.resolution.y - (margin*2)}, BLACK, 1.0f) ;;
-    CreateButton(exit_button, { screen_center.x, screen_center.y + 400}, {300, 50}, RED, "back");
+    CreateButton(exit_button, { screen_center.x, menu_panel.size.y + margin}, {300, 50}, RED, "back");
     button_sound = LoadSound("assets/button.wav");
 }
 
@@ -19,7 +19,7 @@ ShipyardMenu::~ShipyardMenu() {
 void ShipyardMenu::Draw() {
     DrawPanel(menu_panel);
     DrawButton(exit_button);
-    DrawLabel(header);
+    DrawLabelCentered(header);
 }
 
 

@@ -40,6 +40,8 @@ enum SHIPLOCATIONS {
     void Draw() override;
     void DrawMainGunPurchaseStats(int index);
     void DrawThrusterPurchaseStats(int index);
+        void DrawMainGunStats(int index);
+    void DrawThrusterStats(int index);
     //void DrawMainGunPurchaseStats(int index);
     
     Vector2 screen_center;
@@ -67,8 +69,12 @@ enum SHIPLOCATIONS {
 
     LabelList equipped_part_stat_list;
 
-    Vector2 ppasp;
+    Label shop_header;
+    Vector2 ppasp; //purchase part area start position
     std::vector<Rectangle> purchase_part_areas;
+
+    Panel part_detail_panel;
+    Button part_buy_button;
 
     int hovered_purchase_part_index;
     int selected_purchase_part_index;
