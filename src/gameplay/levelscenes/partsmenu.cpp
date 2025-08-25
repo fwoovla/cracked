@@ -133,12 +133,11 @@ void PartsMenu::Update()
             purchase_part_areas.clear();
             hovered_purchase_part_index = -1;
             selected_purchase_part_index = -1;
-
         }
     }
     
+
     if(selected_location != NONE) {
-        
         hovered_purchase_part_index = -1;
         for(int i = 0; i < purchase_part_areas.size(); i++) {
             if(CheckCollisionPointRec(GetMousePosition(), { purchase_part_areas[i].x*sc, purchase_part_areas[i].y*sc, purchase_part_areas[i].width*sc, purchase_part_areas[i].height*sc } )) {
@@ -153,12 +152,44 @@ void PartsMenu::Update()
             if(IsButtonHovered(part_buy_button, settings.game_scale)) {
                 if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     TraceLog(LOG_INFO, "BUY PART");
-                    if(selected_location == MAIN_GUN) {
+                    if(selected_location == MAIN_GUN and player_data.scrap_amount >= main_gun_data[selected_purchase_part_index].cost) {
+                        ClearLabelList(equipped_part_stat_list);
+                        selected_purchase_part_index = -1;
                         player_data.scrap_amount -= main_gun_data[selected_purchase_part_index].cost;
+                        
+                        player_data.main_gun_part.part_name = main_gun_data[selected_purchase_part_index].part_name;
+                        player_data.main_gun_part.cost =  main_gun_data[selected_purchase_part_index].cost;
+                        player_data.main_gun_part.GUN_MAX_POWER =  main_gun_data[selected_purchase_part_index].GUN_MAX_POWER;
+                        player_data.main_gun_part.GUN_POWER_USE =  main_gun_data[selected_purchase_part_index].GUN_POWER_USE;
+                        player_data.main_gun_part.GUN_DELAY =  main_gun_data[selected_purchase_part_index].GUN_DELAY;
+                        player_data.main_gun_part.GUN_REGEN =  main_gun_data[selected_purchase_part_index].GUN_REGEN;
+                        
+                        equipped_part_stat_list.header_text = player_data.main_gun_part.part_name.c_str();
+                        AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.main_gun_part.weight) );
+                        AddLabelToList(equipped_part_stat_list, TextFormat("power %.2f", player_data.main_gun_part.GUN_POWER_USE) );
+                        AddLabelToList(equipped_part_stat_list, TextFormat("shot delay %.2f", player_data.main_gun_part.GUN_DELAY) );
+                    }
+                    else if (player_data.scrap_amount < main_gun_data[selected_purchase_part_index].cost) {
+                        TraceLog(LOG_INFO, "NOT ENOUGHT SCRAP");
                     }
                     if(selected_location == THRUSTERS) {
+                        ClearLabelList(equipped_part_stat_list);
+                        selected_purchase_part_index = -1;
                         player_data.scrap_amount -= thrusters_data[selected_purchase_part_index].cost;
+
+                        player_data.thrusters_part.part_name = thrusters_data[selected_purchase_part_index].part_name;
+                        player_data.thrusters_part.cost =  thrusters_data[selected_purchase_part_index].cost;
+                        player_data.thrusters_part.THRUSTER_SHIP_THRUST =  thrusters_data[selected_purchase_part_index].THRUSTER_SHIP_THRUST;
+                        player_data.thrusters_part.THRUSTER_SPEED =  thrusters_data[selected_purchase_part_index].THRUSTER_SPEED;
+                        player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED =  thrusters_data[selected_purchase_part_index].THRUSTER_SHIP_ROT_SPEED;
+                        
+                        equipped_part_stat_list.header_text = player_data.thrusters_part.part_name.c_str();
+                        AddLabelToList(equipped_part_stat_list, TextFormat("top speed %.2f", player_data.thrusters_part.THRUSTER_SPEED) );
+                        AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.thrusters_part.weight) );
+                        
                     }
+                    else if (player_data.scrap_amount < main_gun_data[selected_purchase_part_index].cost) {
+                        TraceLog(LOG_INFO, "NOT ENOUGHT SCRAP");
                 }
             }
         }
