@@ -4,7 +4,7 @@
 
 PartsMenu::PartsMenu(){
 
-    //player_data.scrap_amount = 10;
+    player_data.scrap_amount = 10;
 
     screen_center = { settings.resolution.x/2, settings.resolution.y/2 };
     float margin = 100.0f;
@@ -56,9 +56,16 @@ PartsMenu::PartsMenu(){
 
     CreateButton(part_buy_button, { part_detail_panel.position.x + (part_detail_panel.size.x/2), part_detail_panel.position.y + part_detail_panel.size.y - 50}, {200, 50}, GREEN, "buy");
 
+    CreateLabel(buy_info_label, {part_detail_panel.position.x + (part_detail_panel.size.x/2), part_detail_panel.position.y + part_detail_panel.size.y - 100}, 20, ORANGE, "");
+    info_label_timer = new Timer(2.5, false, true);
+    info_label_timer->timout.Connect( [&](){OnInfoLabelTimerTimeout();} );
+
+    CreateLabel(armor_label, {margin + 50, margin + 300}, 24, RAYWHITE, "Armor: ");
+    CreateLabel(capacity_label, {margin + 50, margin + 340}, 24, RAYWHITE, "Ship Capacity: ");
 }
 
 PartsMenu::~PartsMenu() {
+    delete info_label_timer;
     UnloadSound(button_sound);
     UnloadTexture(ship_outline_sprite.texture);
     UnloadTexture(gun_outline_sprite.texture);
@@ -75,6 +82,9 @@ void PartsMenu::Draw() {
     
     DrawButton(exit_button);
     DrawLabelCentered(header);
+
+    DrawLabel(armor_label);
+    DrawLabel(capacity_label);
     
     DrawLabel(equipped_part_header);
     DrawLabel(equipped_part_label);
@@ -133,6 +143,7 @@ void PartsMenu::Draw() {
         }
         DrawButton(part_buy_button);
     }
+    DrawLabelCentered(buy_info_label);
 }
 
 
@@ -142,6 +153,9 @@ void PartsMenu::Update()
     float dt = GetFrameTime();
     float sc = settings.game_scale;
     UpdatePanel(menu_panel);
+    info_label_timer->Update();
+    armor_label.text = TextFormat("Armor: %i", player_data.health);
+    capacity_label.text = TextFormat("Ship Capacity: %0.2f", player_data.capacity);
 
     if(IsButtonHovered(exit_button, settings.game_scale)) {
         if(exit_button.already_hovered == false) {
@@ -178,16 +192,33 @@ void PartsMenu::Update()
 
         if(selected_purchase_part_index != -1) {
             int cost = 1000000;
+            float weight = 0.0;
 
-            if(selected_location == MAIN_GUN_LOCATION) { cost = main_gun_data[selected_purchase_part_index].cost;}
-            if(selected_location == THRUSTERS_LOCATION) { cost = thrusters_data[selected_purchase_part_index].cost;}
+            if(selected_location == MAIN_GUN_LOCATION) { 
+                cost = main_gun_data[selected_purchase_part_index].cost;
+                weight = main_gun_data[selected_purchase_part_index].weight;
+            }
+            if(selected_location == THRUSTERS_LOCATION) {
+                cost = thrusters_data[selected_purchase_part_index].cost;
+                weight = thrusters_data[selected_purchase_part_index].weight;
+            }
+            if(selected_location == ARMOR_LOCATION) {
+                cost = armors_data[selected_purchase_part_index].cost;
+                weight = armors_data[selected_purchase_part_index].weight;
+            }
 
-            if(IsButtonHovered(part_buy_button, settings.game_scale) and player_data.scrap_amount >= cost) {
+            if(player_data.scrap_amount >= cost) {
                 part_buy_button.focus_color = GREEN;
+            }
+            else {
+                part_buy_button.focus_color = RED;
+            }
+
+            if(IsButtonHovered(part_buy_button, settings.game_scale)) {
                 if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     //TraceLog(LOG_INFO, "BUY PART");
-
-                    if(selected_location == MAIN_GUN_LOCATION and player_data.scrap_amount >= main_gun_data[selected_purchase_part_index].cost) {
+//================================================main gun===============================================
+                    if(selected_location == MAIN_GUN_LOCATION and player_data.scrap_amount >= cost and player_data.capacity > weight) {
                         ClearLabelList(equipped_part_stat_list);
                         player_data.scrap_amount -= main_gun_data[selected_purchase_part_index].cost;
                         
@@ -197,6 +228,7 @@ void PartsMenu::Update()
                         player_data.main_gun_part.GUN_POWER_USE =  main_gun_data[selected_purchase_part_index].GUN_POWER_USE;
                         player_data.main_gun_part.GUN_DELAY =  main_gun_data[selected_purchase_part_index].GUN_DELAY;
                         player_data.main_gun_part.GUN_REGEN =  main_gun_data[selected_purchase_part_index].GUN_REGEN;
+                        player_data.main_gun_part.weight =  main_gun_data[selected_purchase_part_index].weight;
                         
                         equipped_part_stat_list.header_text = player_data.main_gun_part.part_name.c_str();
                         AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.main_gun_part.weight) );
@@ -205,8 +237,17 @@ void PartsMenu::Update()
 
                         selected_purchase_part_index = -1;
                     }
+                    else if(selected_location == MAIN_GUN_LOCATION and player_data.scrap_amount < cost) {
+                        buy_info_label.text = "NOT ENOUGH SCRAP";
+                        info_label_timer->Start();
+                    }
+                    else if(selected_location == MAIN_GUN_LOCATION and player_data.capacity < weight) {
+                        buy_info_label.text = "NOT ENOUGH ROOM";
+                        info_label_timer->Start();
+                    }
 
-                    if(selected_location == THRUSTERS_LOCATION and player_data.scrap_amount >= thrusters_data[selected_purchase_part_index].cost) {
+//================================================thrusters===============================================
+                    if(selected_location == THRUSTERS_LOCATION and player_data.scrap_amount >= cost and player_data.capacity > weight) {
                         ClearLabelList(equipped_part_stat_list);
                         player_data.scrap_amount -= thrusters_data[selected_purchase_part_index].cost;
                         
@@ -215,6 +256,7 @@ void PartsMenu::Update()
                         player_data.thrusters_part.THRUSTER_SHIP_THRUST =  thrusters_data[selected_purchase_part_index].THRUSTER_SHIP_THRUST;
                         player_data.thrusters_part.THRUSTER_SPEED =  thrusters_data[selected_purchase_part_index].THRUSTER_SPEED;
                         player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED =  thrusters_data[selected_purchase_part_index].THRUSTER_SHIP_ROT_SPEED;
+                        player_data.thrusters_part.weight =  thrusters_data[selected_purchase_part_index].weight;
                         
                         equipped_part_stat_list.header_text = player_data.thrusters_part.part_name.c_str();
                         AddLabelToList(equipped_part_stat_list, TextFormat("top speed %.2f", player_data.thrusters_part.THRUSTER_SPEED) );
@@ -222,10 +264,40 @@ void PartsMenu::Update()
                         
                         selected_purchase_part_index = -1;
                     }
+                    else if(selected_location == THRUSTERS_LOCATION and cost) {
+                        buy_info_label.text = "NOT ENOUGH SCRAP";
+                        info_label_timer->Start();
+                    }
+                    else if(selected_location == THRUSTERS_LOCATION and weight) {
+                        buy_info_label.text = "NOT ENOUGH ROOM";
+                        info_label_timer->Start();
+                    }
+//================================================armor===============================================
+                    if(selected_location == ARMOR_LOCATION and player_data.scrap_amount >= cost and player_data.capacity > weight) {
+                        ClearLabelList(equipped_part_stat_list);
+                        player_data.scrap_amount -= armors_data[selected_purchase_part_index].cost;
+                        
+                        player_data.armor_part.part_name = armors_data[selected_purchase_part_index].part_name;
+                        player_data.armor_part.cost =  armors_data[selected_purchase_part_index].cost;
+                        player_data.armor_part.ARMOR =  armors_data[selected_purchase_part_index].ARMOR;
+                        player_data.armor_part.weight =  armors_data[selected_purchase_part_index].weight;
+                        
+                        
+                        equipped_part_stat_list.header_text = player_data.thrusters_part.part_name.c_str();
+                        AddLabelToList(equipped_part_stat_list, TextFormat("armor %i", player_data.armor_part.ARMOR) );
+                        AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.armor_part.weight) );
+                        
+                        selected_purchase_part_index = -1;
+                    }
+                    else if(selected_location == ARMOR_LOCATION and player_data.scrap_amount < cost) {
+                        buy_info_label.text = "NOT ENOUGH SCRAP";
+                        info_label_timer->Start();
+                    }
+                    else if(selected_location == ARMOR_LOCATION and player_data.capacity < weight) {
+                        buy_info_label.text = "NOT ENOUGH ROOM";
+                        info_label_timer->Start();
+                    }
                 }
-            }
-            else if(player_data.scrap_amount < cost) {
-                part_buy_button.focus_color = RED;
             }
         }
     }
@@ -376,7 +448,7 @@ void PartsMenu::DrawThrusterStats(int index) {
     DrawText( TextFormat("max thrust: %0.2f", speed), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 150, 20, YELLOW);
 
     float weight = thrusters_data[index].weight;
-    DrawText( TextFormat("wight: %0.2f", weight), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 175, 20, YELLOW);
+    DrawText( TextFormat("weight: %0.2f", weight), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 175, 20, YELLOW);
 }
 
 void PartsMenu::DrawArmorStats(int index) {
@@ -387,9 +459,13 @@ void PartsMenu::DrawArmorStats(int index) {
     DrawText( TextFormat("cost: %i scrap", cost), part_detail_panel.position.x + 5,  part_detail_panel.position.y + 35, 24, GREEN);
 
     int armor = armors_data[index].ARMOR;
-    DrawText( TextFormat("max speed: %i", armor), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 100, 20, YELLOW);
+    DrawText( TextFormat("max armor: %i", armor), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 100, 20, YELLOW);
 
     float weight = armors_data[index].weight;
     DrawText( TextFormat("weight: %0.2f", weight), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 125, 20, YELLOW);
 
+}
+
+void PartsMenu::OnInfoLabelTimerTimeout() {
+    buy_info_label.text = "";
 }

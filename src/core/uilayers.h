@@ -48,6 +48,7 @@ enum SHIPLOCATIONS {
     void DrawMainGunStats(int index);
     void DrawThrusterStats(int index);
     void DrawArmorStats(int index);
+    void OnInfoLabelTimerTimeout();
 
     void ClearAll();
     //void DrawMainGunPurchaseStats(int index);
@@ -78,6 +79,9 @@ enum SHIPLOCATIONS {
     Label equipped_part_header;
     Label equipped_part_label;
 
+    Label armor_label;
+    Label capacity_label;
+
     LabelList equipped_part_stat_list;
 
     Label shop_header;
@@ -86,6 +90,8 @@ enum SHIPLOCATIONS {
 
     Panel part_detail_panel;
     Button part_buy_button;
+    Label buy_info_label;
+    Timer *info_label_timer;
 
     int hovered_purchase_part_index;
     int selected_purchase_part_index;

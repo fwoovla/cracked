@@ -3,8 +3,8 @@
         "size":30,
         "air_friction":0.99,
         "max_health":10,
-        "gun_power":10
-
+        "gun_power":10,
+        "capacity":0.0
     },
 
     "part_main_gun": [

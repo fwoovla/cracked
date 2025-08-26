@@ -123,10 +123,10 @@ inline void InitPlayerShip(PlayerData &_player_data) {
 
     _player_data.MAX_HEALTH = 10;
 
-    _player_data.health = _player_data.MAX_HEALTH;
     _player_data.shots = 0;
     _player_data.points = 0;
     _player_data.scrap_amount = 0;
+    _player_data.capacity = 2.0;
     
     _player_data.main_gun_part.part_name = main_gun_data[0].part_name;
     _player_data.main_gun_part.weight = main_gun_data[0].weight;
@@ -137,19 +137,20 @@ inline void InitPlayerShip(PlayerData &_player_data) {
     _player_data.main_gun_part.cost = main_gun_data[0].cost;
     _player_data.gun_power = _player_data.main_gun_part.GUN_MAX_POWER;
     
-
+    
     _player_data.thrusters_part.part_name = thrusters_data[0].part_name;
     _player_data.thrusters_part.weight = thrusters_data[0].weight;
     _player_data.thrusters_part.THRUSTER_SPEED = thrusters_data[0].THRUSTER_SPEED;
     _player_data.thrusters_part.THRUSTER_SHIP_THRUST = thrusters_data[0].THRUSTER_SHIP_THRUST;
     _player_data.thrusters_part.THRUSTER_SHIP_ROT_SPEED = thrusters_data[0].THRUSTER_SHIP_ROT_SPEED;
     _player_data.thrusters_part.cost = thrusters_data[0].cost;
-
+    
     _player_data.armor_part.part_name = armors_data[0].part_name;
     _player_data.armor_part.weight = armors_data[0].weight;
     _player_data.armor_part.ARMOR = armors_data[0].ARMOR;
     _player_data.armor_part.cost = armors_data[0].cost;
-
+    
+    _player_data.health = _player_data.armor_part.ARMOR;
 }
 
 

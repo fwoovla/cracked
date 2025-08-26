@@ -62,6 +62,7 @@ struct PlayerData {
     int points;
     int scrap_amount;
     float gun_power;
+    float capacity;
 
     PartMainGun main_gun_part;
     PartThrusters thrusters_part;
