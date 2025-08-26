@@ -5,8 +5,9 @@
 
 enum SHIPLOCATIONS {
     NONE,
-    THRUSTERS,
-    MAIN_GUN,
+    THRUSTERS_LOCATION,
+    MAIN_GUN_LOCATION,
+    ARMOR_LOCATION
 };
 
 
@@ -42,8 +43,12 @@ enum SHIPLOCATIONS {
     void Draw() override;
     void DrawMainGunPurchaseStats(int index);
     void DrawThrusterPurchaseStats(int index);
-        void DrawMainGunStats(int index);
+    void DrawArmorPurchaseStats(int index);
+
+    void DrawMainGunStats(int index);
     void DrawThrusterStats(int index);
+    void DrawArmorStats(int index);
+
     void ClearAll();
     //void DrawMainGunPurchaseStats(int index);
     
@@ -60,12 +65,15 @@ enum SHIPLOCATIONS {
     Sprite ship_outline_sprite;
     Sprite engine_outline_sprite;
     Sprite gun_outline_sprite;
+    Sprite armor_outline_sprite;
+
 
     SHIPLOCATIONS selected_location;
     SHIPLOCATIONS hovered_location;
 
     Rectangle engine_area;
     Rectangle gun_area;
+    Rectangle armor_area;
 
     Label equipped_part_header;
     Label equipped_part_label;

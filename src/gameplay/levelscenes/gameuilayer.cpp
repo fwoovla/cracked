@@ -1,6 +1,6 @@
 #include "../../core/global_def.h"
 
-#define GUN_POWER_SCALER 50.0f
+#define GUN_POWER_SCALER 20.0f
 
 GameUILayer::GameUILayer(){
     CreateButton(quit_button, { settings.resolution.x - 40, 20 }, {30, 30}, RED, "X");
@@ -75,7 +75,7 @@ void GameUILayer::Draw() {
     DrawButton(quit_button);
 
     DrawRectangle(  gun_power_rect.x-2,
-                    GetScreenHeight() -10.0f - player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER,
+                    settings.resolution.y -10.0f - player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER,
                     gun_power_rect.width+4,
                     player_data.main_gun_part.GUN_MAX_POWER * GUN_POWER_SCALER,
                     DARKGRAY);
@@ -87,7 +87,7 @@ void GameUILayer::Draw() {
     
     Vector2 health_center = {(settings.resolution.x - 20 ) * 0.5f , 100 };
 
-    for(int i = 0; i < player_data.health; i++) {
+    for(int i = 0; i < player_data.armor_part.ARMOR; i++) {
         DrawRectangle(health_center.x-1 + (i * 25) , health_center.y-1, 22, 22, WHITE );
         DrawRectangle(health_center.x + (i * 25) , health_center.y, 20, 20, RED );
         DrawRectangle(health_center.x-1 - (i * 25) , health_center.y-1, 22, 22, WHITE );
@@ -142,7 +142,7 @@ void GameUILayer::Update()
     scrap_value_label.text = TextFormat("%i", player_data.scrap_amount);
 
     float dt = GetFrameTime();
-    gun_power_rect.y = GetScreenHeight() -10.0f - player_data.gun_power * GUN_POWER_SCALER;
+    gun_power_rect.y = settings.resolution.y -10.0f - player_data.gun_power * GUN_POWER_SCALER;
     gun_power_rect.height = player_data.gun_power * GUN_POWER_SCALER;
     if(player_data.gun_power < player_data.main_gun_part.GUN_MAX_POWER * 0.3f) {
         gun_power_color = MAGENTA;

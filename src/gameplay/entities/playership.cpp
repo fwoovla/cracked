@@ -79,7 +79,8 @@ void PlayerShip::Update() {
         if(bullet->shooter_id != id) {
             PlaySound(hit_sound);
             player_hit.EmitSignal();
-            result.collider->should_delete = true;
+            bullet->should_delete = true;
+            //player_data.armor_part.ARMOR -= 1;
             player_data.health -=1;
             if(player_data.health <= 0) {
                 dead.EmitSignal();
@@ -281,7 +282,7 @@ PlayerShip::~PlayerShip()
 void PlayerShip::Reset() {
     speed_cap = player_data.thrusters_part.THRUSTER_SPEED;
     thrust_cap = player_data.thrusters_part.THRUSTER_SHIP_THRUST;
-    player_data.health = player_data.MAX_HEALTH;
+    player_data.health = player_data.armor_part.ARMOR;
     player_data.gun_power = player_data.main_gun_part.GUN_MAX_POWER;
     player_data.points = 0;
     player_data.shots = 0;

@@ -31,6 +31,12 @@ PartsMenu::PartsMenu(){
     engine_area = engine_outline_sprite.dest;
     engine_area.x -= (engine_area.width * 0.5f);
     engine_area.y -= (engine_area.height * 0.5f);
+
+    LoadSpriteCentered(armor_outline_sprite, LoadTexture("assets/armoroutline.png"), {screen_center.x, screen_center.y-150});
+    ScaleSprite(armor_outline_sprite, {2,2});
+    armor_area = armor_outline_sprite.dest;
+    armor_area.x -= (armor_area.width * 0.5f);
+    armor_area.y -= (armor_area.height * 0.5f);
     
     CreateButton(part_exit_button, {margin + 300, margin + 60}, {30, 30}, RED, "X");
 
@@ -65,6 +71,7 @@ void PartsMenu::Draw() {
     DrawSprite(ship_outline_sprite);
     DrawSprite(engine_outline_sprite);
     DrawSprite(gun_outline_sprite);
+    DrawSprite(armor_outline_sprite);
     
     DrawButton(exit_button);
     DrawLabelCentered(header);
@@ -78,25 +85,51 @@ void PartsMenu::Draw() {
         DrawButton(part_exit_button);
 
         for(int i = 0; i < purchase_part_areas.size(); i++) {
-            DrawRectangleLines(purchase_part_areas[i].x, purchase_part_areas[i].y, purchase_part_areas[i].width, purchase_part_areas[i].height, WHITE);
-            if(hovered_purchase_part_index == i) {
-                DrawRectangleRec( purchase_part_areas[i], Fade(GRAY, 0.2) );
-            }
-            if(selected_location == MAIN_GUN) {
+            if(selected_location == MAIN_GUN_LOCATION) {
+                if(hovered_purchase_part_index == i) {
+                    if(player_data.scrap_amount >= main_gun_data[i].cost) {
+                         DrawRectangleRec( purchase_part_areas[i], Fade(GREEN, 0.2) );
+                    }
+                    else {
+                         DrawRectangleRec( purchase_part_areas[i], Fade(RED, 0.2) );
+                    }
+                }
                 DrawMainGunPurchaseStats(i);
             }
-            if(selected_location == THRUSTERS) {
+            if(selected_location == THRUSTERS_LOCATION) {
+                if(hovered_purchase_part_index == i) {
+                    if(player_data.scrap_amount >= thrusters_data[i].cost) {
+                         DrawRectangleRec( purchase_part_areas[i], Fade(GREEN, 0.2) );
+                    }
+                    else {
+                         DrawRectangleRec( purchase_part_areas[i], Fade(RED, 0.2) );
+                    }
+                }
                 DrawThrusterPurchaseStats(i);
+            }
+            if(selected_location == ARMOR_LOCATION) {
+                if(hovered_purchase_part_index == i) {
+                    if(player_data.scrap_amount >= armors_data[i].cost) {
+                         DrawRectangleRec( purchase_part_areas[i], Fade(GREEN, 0.2) );
+                    }
+                    else {
+                         DrawRectangleRec( purchase_part_areas[i], Fade(RED, 0.2) );
+                    }
+                }
+                DrawArmorPurchaseStats(i);
             }
         }
     }
     if(selected_purchase_part_index != -1) {
         DrawPanel(part_detail_panel);
-        if(selected_location == MAIN_GUN) {
+        if(selected_location == MAIN_GUN_LOCATION) {
             DrawMainGunStats(selected_purchase_part_index);
         }
-        if(selected_location == THRUSTERS) {
+        if(selected_location == THRUSTERS_LOCATION) {
             DrawThrusterStats(selected_purchase_part_index);
+        }
+        if(selected_location == ARMOR_LOCATION) {
+            DrawArmorStats(selected_purchase_part_index);
         }
         DrawButton(part_buy_button);
     }
@@ -109,7 +142,7 @@ void PartsMenu::Update()
     float dt = GetFrameTime();
     float sc = settings.game_scale;
     UpdatePanel(menu_panel);
-//===========================================
+
     if(IsButtonHovered(exit_button, settings.game_scale)) {
         if(exit_button.already_hovered == false) {
             PlaySound(button_sound);
@@ -120,7 +153,6 @@ void PartsMenu::Update()
             ClearAll();
         }
     }
-//============================================
 
     if(IsButtonHovered(part_exit_button, settings.game_scale)) {
         if(part_exit_button.already_hovered == false) {
@@ -129,9 +161,7 @@ void PartsMenu::Update()
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             ClearAll();
         }
-    }
-//============================================
-    
+    } 
 
     if(selected_location != NONE) {
         hovered_purchase_part_index = -1;
@@ -149,15 +179,15 @@ void PartsMenu::Update()
         if(selected_purchase_part_index != -1) {
             int cost = 1000000;
 
-            if(selected_location == MAIN_GUN) { cost = main_gun_data[selected_purchase_part_index].cost;}
-            if(selected_location == THRUSTERS) { cost = thrusters_data[selected_purchase_part_index].cost;}
+            if(selected_location == MAIN_GUN_LOCATION) { cost = main_gun_data[selected_purchase_part_index].cost;}
+            if(selected_location == THRUSTERS_LOCATION) { cost = thrusters_data[selected_purchase_part_index].cost;}
 
             if(IsButtonHovered(part_buy_button, settings.game_scale) and player_data.scrap_amount >= cost) {
                 part_buy_button.focus_color = GREEN;
                 if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     //TraceLog(LOG_INFO, "BUY PART");
 
-                    if(selected_location == MAIN_GUN and player_data.scrap_amount >= main_gun_data[selected_purchase_part_index].cost) {
+                    if(selected_location == MAIN_GUN_LOCATION and player_data.scrap_amount >= main_gun_data[selected_purchase_part_index].cost) {
                         ClearLabelList(equipped_part_stat_list);
                         player_data.scrap_amount -= main_gun_data[selected_purchase_part_index].cost;
                         
@@ -176,7 +206,7 @@ void PartsMenu::Update()
                         selected_purchase_part_index = -1;
                     }
 
-                    if(selected_location == THRUSTERS and player_data.scrap_amount >= thrusters_data[selected_purchase_part_index].cost) {
+                    if(selected_location == THRUSTERS_LOCATION and player_data.scrap_amount >= thrusters_data[selected_purchase_part_index].cost) {
                         ClearLabelList(equipped_part_stat_list);
                         player_data.scrap_amount -= thrusters_data[selected_purchase_part_index].cost;
                         
@@ -201,8 +231,8 @@ void PartsMenu::Update()
     }
 
     if(CheckCollisionPointRec(GetMousePosition(), {engine_area.x*sc, engine_area.y*sc, engine_area.width*sc, engine_area.height*sc })) {
-        if(hovered_location != THRUSTERS and selected_location == NONE) {
-            hovered_location = THRUSTERS;
+        if(hovered_location != THRUSTERS_LOCATION and selected_location == NONE) {
+            hovered_location = THRUSTERS_LOCATION;
             engine_outline_sprite.modulate = ORANGE;
             equipped_part_label.text = "THRUSTERS";
             equipped_part_stat_list.header_text = player_data.thrusters_part.part_name.c_str();
@@ -210,7 +240,7 @@ void PartsMenu::Update()
             AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.thrusters_part.weight) );
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) and selected_location == NONE) {
-            selected_location = THRUSTERS;
+            selected_location = THRUSTERS_LOCATION;
             for(int i = 0; i < thrusters_data.size(); i++) {
                 Rectangle new_rect = {ppasp.x, (ppasp.y + (i*PURCHASE_HEIGHT)), 300, PURCHASE_HEIGHT};
                 purchase_part_areas.push_back(new_rect);
@@ -219,8 +249,8 @@ void PartsMenu::Update()
         }
     }
     else if(CheckCollisionPointRec(GetMousePosition(), {gun_area.x*sc, gun_area.y*sc, gun_area.width*sc, gun_area.height*sc })) {
-        if(hovered_location != MAIN_GUN and selected_location == NONE) {
-            hovered_location = MAIN_GUN;
+        if(hovered_location != MAIN_GUN_LOCATION and selected_location == NONE) {
+            hovered_location = MAIN_GUN_LOCATION;
             gun_outline_sprite.modulate = ORANGE;
             equipped_part_label.text = "MAIN GUN";
             equipped_part_stat_list.header_text = player_data.main_gun_part.part_name.c_str();
@@ -229,8 +259,25 @@ void PartsMenu::Update()
             AddLabelToList(equipped_part_stat_list, TextFormat("shot delay %.2f", player_data.main_gun_part.GUN_DELAY) );
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) and selected_location == NONE) {
-            selected_location = MAIN_GUN;
+            selected_location = MAIN_GUN_LOCATION;
             for(int i = 0; i < main_gun_data.size(); i++) {
+                Rectangle new_rect = {ppasp.x, (ppasp.y + (i*PURCHASE_HEIGHT)), 300, PURCHASE_HEIGHT};
+                purchase_part_areas.push_back(new_rect);
+            }
+        }
+    }
+    else if(CheckCollisionPointRec(GetMousePosition(), {armor_area.x*sc, armor_area.y*sc, armor_area.width*sc, armor_area.height*sc })) {
+        if(hovered_location != ARMOR_LOCATION and selected_location == NONE) {
+            hovered_location = ARMOR_LOCATION;
+            armor_outline_sprite.modulate = ORANGE;
+            equipped_part_label.text = "ARMOR";
+            equipped_part_stat_list.header_text = player_data.armor_part.part_name.c_str();
+            AddLabelToList(equipped_part_stat_list, TextFormat("weight %.2f", player_data.armor_part.weight) );
+            AddLabelToList(equipped_part_stat_list, TextFormat("power %.2f", player_data.armor_part.ARMOR) );
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) and selected_location == NONE) {
+            selected_location = ARMOR_LOCATION;
+            for(int i = 0; i < armors_data.size(); i++) {
                 Rectangle new_rect = {ppasp.x, (ppasp.y + (i*PURCHASE_HEIGHT)), 300, PURCHASE_HEIGHT};
                 purchase_part_areas.push_back(new_rect);
             }
@@ -239,7 +286,6 @@ void PartsMenu::Update()
     else if(selected_location == NONE){
         ClearAll();
     }
-
 }
 
 void PartsMenu::ClearAll() {
@@ -250,6 +296,7 @@ void PartsMenu::ClearAll() {
     equipped_part_label.text = "";
     gun_outline_sprite.modulate = GRAY;
     engine_outline_sprite.modulate = GRAY;
+    armor_outline_sprite.modulate = GRAY;
     purchase_part_areas.clear();
     hovered_purchase_part_index = -1;
     selected_purchase_part_index = -1;
@@ -264,21 +311,6 @@ void PartsMenu::DrawMainGunPurchaseStats(int index) {
     std::string name = main_gun_data[index].part_name;
     DrawText( TextFormat("%s", name.c_str()), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT) + 5), 20, YELLOW);
 
-/* 
-    float max_power = main_gun_data[index].GUN_MAX_POWER;
-    DrawText( TextFormat("max power: %0.2f", max_power), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 30, 16, YELLOW);
-    float use = main_gun_data[index].GUN_POWER_USE;
-    DrawText( TextFormat("power use: %0.2f", use), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 55, 16, YELLOW);
-
-    float delay = main_gun_data[index].GUN_DELAY;
-    DrawText( TextFormat("shot delay: %0.2f", delay), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 80, 16, YELLOW);
-
-    float regen = main_gun_data[index].GUN_REGEN;
-    DrawText( TextFormat("power regen: %0.2f", regen), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 110, 16, YELLOW);
-
-    float weight = main_gun_data[index].weight;
-    DrawText( TextFormat("weight: %0.2f", weight), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 140, 16, YELLOW);
-*/
 }
 
 //========================================================
@@ -289,19 +321,17 @@ void PartsMenu::DrawThrusterPurchaseStats(int index) {
 
     std::string name = thrusters_data[index].part_name;
     DrawText( TextFormat("%s", name.c_str()), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, YELLOW);
-/* 
-    float speed = thrusters_data[index].THRUSTER_SPEED;
-    DrawText( TextFormat("max speed: %0.2f", speed), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 30, 16, YELLOW);
 
-    float turn = thrusters_data[index].THRUSTER_SHIP_ROT_SPEED;
-    DrawText( TextFormat("turn speed: %0.2f", turn), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 55, 16, YELLOW);
+}
 
-    float thrust = thrusters_data[index].THRUSTER_SHIP_THRUST;
-    DrawText( TextFormat("max thrust: %0.2f", speed), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 80, 16, YELLOW);
+//========================================================
 
-    float weight = thrusters_data[index].weight;
-    DrawText( TextFormat("wight: %0.2f", weight), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 110, 16, YELLOW);
- */
+void PartsMenu::DrawArmorPurchaseStats(int index) {
+    int cost = armors_data[index].cost;
+    DrawText( TextFormat("cost\n%i scrap", cost), ppasp.x + 5,  (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, GREEN);
+
+    std::string name = armors_data[index].part_name;
+    DrawText( TextFormat("%s", name.c_str()), ppasp.x+100, (ppasp.y + (index*PURCHASE_HEIGHT)) + 5, 20, YELLOW);
 
 }
 
@@ -322,7 +352,7 @@ void PartsMenu::DrawMainGunStats(int index) {
     DrawText( TextFormat("shot delay: %0.2f", delay), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 150, 20, YELLOW);
 
     float regen = main_gun_data[index].GUN_REGEN;
-    DrawText( TextFormat("power regen: %0.2f", regen), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 175, 20, YELLOW);
+    DrawText( TextFormat("power regen: %0.2f /s", regen), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 175, 20, YELLOW);
 
     float weight = main_gun_data[index].weight;
     DrawText( TextFormat("weight: %0.2f", weight), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 200, 20, YELLOW);
@@ -336,17 +366,30 @@ void PartsMenu::DrawThrusterStats(int index) {
     int cost = thrusters_data[index].cost;
     DrawText( TextFormat("cost: %i scrap", cost), part_detail_panel.position.x + 5,  part_detail_panel.position.y + 35, 24, GREEN);
 
-
-    
     float speed = thrusters_data[index].THRUSTER_SPEED;
     DrawText( TextFormat("max speed: %0.2f", speed), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 100, 20, YELLOW);
 
     float turn = thrusters_data[index].THRUSTER_SHIP_ROT_SPEED;
-    DrawText( TextFormat("turn speed: %0.2f", turn), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 125, 20, YELLOW);
+    DrawText( TextFormat("turn speed: %0.2f /s", turn), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 125, 20, YELLOW);
 
     float thrust = thrusters_data[index].THRUSTER_SHIP_THRUST;
     DrawText( TextFormat("max thrust: %0.2f", speed), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 150, 20, YELLOW);
 
     float weight = thrusters_data[index].weight;
     DrawText( TextFormat("wight: %0.2f", weight), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 175, 20, YELLOW);
+}
+
+void PartsMenu::DrawArmorStats(int index) {
+    std::string name = armors_data[index].part_name;
+    DrawText( TextFormat("%s", name.c_str()), part_detail_panel.position.x + 5, part_detail_panel.position.y + 5, 30, YELLOW);
+
+    int cost = armors_data[index].cost;
+    DrawText( TextFormat("cost: %i scrap", cost), part_detail_panel.position.x + 5,  part_detail_panel.position.y + 35, 24, GREEN);
+
+    int armor = armors_data[index].ARMOR;
+    DrawText( TextFormat("max speed: %i", armor), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 100, 20, YELLOW);
+
+    float weight = armors_data[index].weight;
+    DrawText( TextFormat("weight: %0.2f", weight), part_detail_panel.position.x + 15,  part_detail_panel.position.y + 125, 20, YELLOW);
+
 }

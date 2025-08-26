@@ -4,6 +4,7 @@ PlayerData player_data;
 
 std::unordered_map<int, PartMainGun> main_gun_data;
 std::unordered_map<int, PartThrusters> thrusters_data;
+std::unordered_map<int, PartArmor> armors_data;
 
 
 Game::Game(){

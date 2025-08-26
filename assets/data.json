@@ -43,7 +43,7 @@
             "weight":5.6,
             "THRUSTER_SPEED":2.5,
             "THRUSTER_SHIP_THRUST":0.08,
-            "THRUSTER_SHIP_ROT_SPEED":90.0,
+            "THRUSTER_SHIP_ROT_SPEED":120.0,
             "cost":0
         },
         {
@@ -60,6 +60,26 @@
             "THRUSTER_SPEED":3.5,
             "THRUSTER_SHIP_THRUST":0.15,
             "THRUSTER_SHIP_ROT_SPEED":180.0,
+            "cost":10
+        }
+    ],
+    "part_armor": [
+        {
+            "part_name":"Armor 1",
+            "weight":5.6,
+            "ARMOR":3,
+            "cost":0
+        },
+        {
+            "part_name":"Armor 2",
+            "weight":10.6,
+            "ARMOR":6,
+            "cost":4
+        },
+        {
+            "part_name":"Armor 3",
+            "weight":15.3,
+            "ARMOR":10,
             "cost":10
         }
     ]

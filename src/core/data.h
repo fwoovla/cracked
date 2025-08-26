@@ -39,6 +39,13 @@ struct PartThrusters{
     int cost;
 };
 
+struct PartArmor{
+    std::string part_name = "";
+    float weight;
+    int ARMOR;
+    int cost;
+};
+
 
 struct PlayerData {
     int id;
@@ -58,6 +65,7 @@ struct PlayerData {
 
     PartMainGun main_gun_part;
     PartThrusters thrusters_part;
+    PartArmor armor_part;
 
 };
 
@@ -92,6 +100,7 @@ struct EnemyData {
 
 extern std::unordered_map<int, PartMainGun> main_gun_data;
 extern std::unordered_map<int, PartThrusters> thrusters_data;
+extern std::unordered_map<int, PartArmor> armors_data;
 
 inline void LoadGameData() {
     TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
@@ -186,6 +195,45 @@ inline void LoadGameData() {
     }
 
     TraceLog(LOG_INFO, "==========end thrusters================");
+
+
+
+
+
+    for(int i = 0; i < j["part_armor"].size(); i++) {
+
+        std::string armor_name = "";
+        float weight;
+        int armor;
+        int cost;
+
+        armor_name = j["part_armor"][i]["part_name"];
+        weight = j["part_armor"][i]["weight"];
+        armor =  j["part_armor"][i]["ARMOR"];
+        cost = j["part_armor"][i]["cost"];
+
+
+        TraceLog(LOG_INFO, "-armor %i %s", i, armor_name.c_str());
+        TraceLog(LOG_INFO, "-armor weight %f", weight);
+        TraceLog(LOG_INFO, "-armor speed %i", armor);
+        TraceLog(LOG_INFO, "-armor cost %i\n", cost);
+
+        PartArmor armor_data = {
+            .part_name = armor_name,
+            .weight = weight,
+            .ARMOR = armor,
+            .cost = cost
+        };
+
+        armors_data[i] = armor_data;
+    }
+
+    TraceLog(LOG_INFO, "==========end armor================");
+
+
+
+
+
 
     TraceLog(LOG_INFO, "DATA LOADED");
 }
